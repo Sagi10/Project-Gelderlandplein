@@ -9,4 +9,6 @@
     <string name="event_title">Event title</string>
     <string name="event_extra_info">Event info</string>
     <string name="event_logo">itemEventLogo</string>
+    <string name="search_hint">Search store or product</string>
+    <string name="logo">Logo</string>
 </resources>
