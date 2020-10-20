@@ -7,7 +7,7 @@
     android:background="#FFFFFF">
 
     <View
-        android:id="@+id/logoBackground"
+        android:id="@+id/logo_background"
         android:layout_width="match_parent"
         android:layout_height="180dp"
         android:background="#EFEBE9"
@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
-        android:id="@+id/searchBackground"
+        android:id="@+id/search_background"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_marginTop="100dp"
@@ -27,15 +27,15 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <SearchView
-        android:id="@+id/svHome"
+        android:id="@+id/sv_home"
         android:layout_width="360dp"
         android:layout_height="50dp"
         android:background="@drawable/searchview_rounded"
         android:queryHint="@string/search_hint"
-        app:layout_constraintBottom_toBottomOf="@id/searchBackground"
+        app:layout_constraintBottom_toBottomOf="@id/search_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/searchBackground" />
+        app:layout_constraintTop_toTopOf="@+id/search_background" />
 
     <View
         android:layout_width="match_parent"
@@ -46,14 +46,14 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/ivLogo"
+        android:id="@+id/iv_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/logo"
-        app:layout_constraintBottom_toTopOf="@+id/searchBackground"
+        app:layout_constraintBottom_toTopOf="@+id/search_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/logoBackground"
+        app:layout_constraintTop_toTopOf="@+id/logo_background"
         app:srcCompat="@drawable/ic_logo" />
 
 
