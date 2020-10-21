@@ -10,6 +10,7 @@
     <include
         layout="@layout/fragment_overview_items"
 
+        android:theme="@style/ThemeOverlay.AppCompat.Light"
         android:layout_width="match_parent"
         android:layout_height="480dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -43,6 +44,7 @@
         android:layout_height="50dp"
         android:background="@drawable/searchview_rounded"
         android:queryHint="@string/search_hint"
+        android:theme="@style/ThemeOverlay.AppCompat.Light"
         app:layout_constraintBottom_toBottomOf="@id/search_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
