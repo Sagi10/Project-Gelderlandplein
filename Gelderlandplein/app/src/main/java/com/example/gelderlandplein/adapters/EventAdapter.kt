@@ -9,7 +9,7 @@ import com.example.gelderlandplein.R
 class EventAdapter() : RecyclerView.Adapter<EventAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_event, parent, false))
+        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_event_carousel_content, parent, false))
     }
 
     override fun onBindViewHolder(holder: EventAdapter.ViewHolder, position: Int) {

@@ -2,6 +2,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:fillViewport="false">
 
     <LinearLayout
@@ -21,7 +23,10 @@
             android:id="@+id/rv_shops"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp">
+            android:layout_margin="5dp"
+            app:layoutManager="LinearLayoutManager"
+            android:orientation="horizontal"
+            tools:listitem="@layout/item_shop_carousel_content">
 
         </androidx.recyclerview.widget.RecyclerView>
 
@@ -37,7 +42,10 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_events"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:layoutManager="LinearLayoutManager"
+            android:orientation="horizontal"
+            tools:listitem="@layout/item_event_carousel_content"/>
 
         <TextView
             android:id="@+id/tv_titel_arts"
@@ -52,7 +60,10 @@
             android:id="@+id/rv_arts"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"/>
+            android:layout_margin="5dp"
+            app:layoutManager="LinearLayoutManager"
+            android:orientation="horizontal"
+            tools:listitem="@layout/item_art_carousel_content"/>
 
     </LinearLayout>
 </ScrollView>
