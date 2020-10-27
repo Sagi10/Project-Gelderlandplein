@@ -17,7 +17,7 @@
 
 
         <ImageView
-            android:id="@+id/im_shop_logo"
+            android:id="@+id/iv_shop_logo"
             android:layout_width="188dp"
             android:layout_height="154dp"
             android:contentDescription="@string/shoplogo"

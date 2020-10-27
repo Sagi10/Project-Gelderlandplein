@@ -5,23 +5,33 @@
     android:id="@+id/my_nav"
     app:startDestination="@id/homeFragment">
     <fragment
-        android:id="@+id/secondFragment"
+        android:id="@+id/SearchFragment"
         android:name="com.example.gelderlandplein.ui.search.secondFragment"
-        android:label="fragment_second"
+        android:label="fragment_search"
         tools:layout="@layout/fragment_search" />
     <fragment
-        android:id="@+id/thirdFragment"
+        android:id="@+id/ArtOverviewFragment"
         android:name="com.example.gelderlandplein.ui.art.ArtFragment"
-        android:label="fragment_third"
-        tools:layout="@layout/fragment_art_list" />
+        android:label="fragment_art_overview"
+        tools:layout="@layout/fragment_art_list_overview">
+        <action
+            android:id="@+id/action_ArtOverviewFragment_to_ArtDetailFragment"
+            app:destination="@id/ArtDetailFragment" />
+    </fragment>
     <fragment
-        android:id="@+id/fourthFragment"
-        android:name="com.example.gelderlandplein.ui.event.fourthFragment"
-        android:label="fragment_fourth"
+        android:id="@+id/ArtDetailFragment"
+        android:name="com.example.gelderlandplein.ui.art.ArtDetailFragment"
+        android:label="fragment_art_detail"
+        tools:layout="@layout/fragment_art_list_detail">
+    </fragment>
+    <fragment
+        android:id="@+id/EventFragment"
+        android:name="com.example.gelderlandplein.ui.event.EventFragment"
+        android:label="fragment_event"
         tools:layout="@layout/fragment_event" />
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.gelderlandplein.ui.home.firstFragment"
+        android:name="com.example.gelderlandplein.ui.home.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home"/>
 </navigation>

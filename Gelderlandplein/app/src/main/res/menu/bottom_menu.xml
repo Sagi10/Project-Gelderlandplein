@@ -6,15 +6,15 @@
         android:title="Home"
         android:icon="@drawable/ic_home_logo" />
     <item
-        android:id="@+id/secondFragment"
+        android:id="@+id/SearchFragment"
         android:title="Search"
         android:icon="@drawable/ic_search_logo" />
     <item
-        android:id="@+id/thirdFragment"
+        android:id="@+id/ArtOverviewFragment"
         android:title="Arts"
         android:icon="@drawable/ic_arts_logo" />
     <item
-        android:id="@+id/fourthFragment"
+        android:id="@+id/EventFragment"
         android:title="Events"
         android:icon="@drawable/ic_events_logo" />
 </menu>

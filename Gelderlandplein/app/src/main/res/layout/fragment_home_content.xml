@@ -9,12 +9,13 @@
 
     <include
         layout="@layout/fragment_items_overview_carousel"
-        android:theme="@style/ThemeOverlay.AppCompat.Light"
         android:layout_width="match_parent"
-        android:layout_height="480dp"
+        android:layout_height="547dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Light"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logo_background" />
+        app:layout_constraintTop_toBottomOf="@+id/search_background" />
 
 
     <View

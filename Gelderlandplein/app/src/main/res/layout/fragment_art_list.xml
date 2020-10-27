@@ -8,5 +8,6 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
+    android:orientation="vertical"
     tools:listitem="@layout/item_art_list_content"/>
 
