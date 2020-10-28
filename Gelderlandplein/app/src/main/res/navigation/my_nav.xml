@@ -39,14 +39,12 @@
         android:label="fragment_home"
         tools:layout="@layout/fragment_home"/>
     <fragment
-<<<<<<< HEAD
-        android:id="@+id/shopDetailFragment"
-        android:name="com.example.gelderlandplein.ui.search.ShopDetailFragment"
-        android:label="ShopDetailFragment" />
-=======
         android:id="@+id/eventDetailFragment"
         android:name="com.example.gelderlandplein.ui.event.EventDetailFragment"
         android:label="EventDetailFragment"
         tools:layout="@layout/fragment_event_detail"/>
->>>>>>> origin/feature/H2QT1-31-Layout-opzetten-(Art-pagina)-als-mogelijk-1-of-meer-dummy-items-toevoegen
+    <fragment
+        android:id="@+id/shopDetailFragment"
+        android:name="com.example.gelderlandplein.ui.search.ShopDetailFragment"
+        android:label="ShopDetailFragment" />
 </navigation>
