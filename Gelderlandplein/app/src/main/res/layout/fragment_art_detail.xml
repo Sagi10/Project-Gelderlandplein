@@ -8,12 +8,12 @@
     tools:ignore="MergeRootFrame">
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/item_detail_container"
+        android:id="@+id/item_art_detail_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <include layout="@layout/item_detail" />
+        <include layout="@layout/item_detail_art" />
 
     </androidx.core.widget.NestedScrollView>
 

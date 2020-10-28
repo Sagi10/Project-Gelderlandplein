@@ -16,7 +16,7 @@
 
 
         <ImageView
-            android:id="@+id/iv_art"
+            android:id="@+id/iv_event"
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_marginStart="20dp"
@@ -30,13 +30,23 @@
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
-            android:id="@+id/tv_art_title"
+            android:id="@+id/tv_event_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="@string/art_titel"
+            android:text="Event titel"
             android:textSize="24sp"
-            app:layout_constraintStart_toEndOf="@+id/iv_art"
-            app:layout_constraintTop_toTopOf="@+id/iv_art" />
+            app:layout_constraintStart_toEndOf="@+id/iv_event"
+            app:layout_constraintTop_toTopOf="@+id/iv_event" />
+
+        <TextView
+            android:id="@+id/tv_event_extrainfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Geldig van 16/10/20 tot 16/10/21"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/tv_event_title"
+            app:layout_constraintTop_toBottomOf="@+id/tv_event_title" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

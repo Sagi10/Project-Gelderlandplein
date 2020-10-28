@@ -13,7 +13,7 @@
         android:id="@+id/ArtOverviewFragment"
         android:name="com.example.gelderlandplein.ui.art.ArtFragment"
         android:label="fragment_art_overview"
-        tools:layout="@layout/fragment_art_list_overview">
+        tools:layout="@layout/fragment_art_list">
         <action
             android:id="@+id/action_ArtOverviewFragment_to_ArtDetailFragment"
             app:destination="@id/ArtDetailFragment" />
@@ -22,16 +22,25 @@
         android:id="@+id/ArtDetailFragment"
         android:name="com.example.gelderlandplein.ui.art.ArtDetailFragment"
         android:label="fragment_art_detail"
-        tools:layout="@layout/fragment_art_list_detail">
+        tools:layout="@layout/fragment_art_detail">
     </fragment>
     <fragment
         android:id="@+id/EventFragment"
         android:name="com.example.gelderlandplein.ui.event.EventFragment"
         android:label="fragment_event"
-        tools:layout="@layout/fragment_event_list_overview" />
+        tools:layout="@layout/fragment_event_list" >
+        <action
+            android:id="@+id/action_EventFragment_to_eventDetailFragment"
+            app:destination="@id/eventDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.gelderlandplein.ui.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home"/>
+    <fragment
+        android:id="@+id/eventDetailFragment"
+        android:name="com.example.gelderlandplein.ui.event.EventDetailFragment"
+        android:label="EventDetailFragment"
+        tools:layout="@layout/fragment_event_detail"/>
 </navigation>

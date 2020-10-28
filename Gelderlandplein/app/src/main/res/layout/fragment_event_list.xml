@@ -10,4 +10,4 @@
     app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
     app:layoutManager="LinearLayoutManager"
     android:orientation="vertical"
-    tools:listitem="@layout/item_art_list_content"/>
+    tools:listitem="@layout/item_event_list_content" />
