@@ -13,7 +13,5 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
 
-        <!-- setting window actionbar to false to use toolbar -->
-<!--        <item name="windowActionBar">false</item>-->
     </style>
 </resources>

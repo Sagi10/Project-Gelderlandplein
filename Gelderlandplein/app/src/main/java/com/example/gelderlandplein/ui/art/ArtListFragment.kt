@@ -1,6 +1,5 @@
 package com.example.gelderlandplein.ui.art
 
-import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
@@ -12,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.gelderlandplein.R
 import com.example.gelderlandplein.adapters.ArtAdapter
 import com.example.gelderlandplein.dummy.Art
-import kotlinx.android.synthetic.main.fragment_art_list_overview.*
+import kotlinx.android.synthetic.main.fragment_art_list.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -27,7 +26,7 @@ const val BUNDLE_ART_KEY = "bundle_art"
  * Use the [ArtFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ArtFragment : Fragment(), ArtAdapter.OnCardViewClickListener {
+class ArtFragment : Fragment(), ArtAdapter.OnArtCardViewClickListener {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -52,7 +51,7 @@ class ArtFragment : Fragment(), ArtAdapter.OnCardViewClickListener {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_art_list_overview, container, false)
+        return inflater.inflate(R.layout.fragment_art_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

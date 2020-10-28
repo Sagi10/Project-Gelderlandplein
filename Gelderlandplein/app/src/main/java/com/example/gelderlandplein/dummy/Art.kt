@@ -21,10 +21,10 @@ class Art(
             "Title 8",
         )
         val artImages = arrayListOf<Int>(
-            R.drawable.artimage1, R.drawable.artimage2,
-            R.drawable.artimage1, R.drawable.artimage2,
-            R.drawable.artimage1, R.drawable.artimage2,
-            R.drawable.artimage1, R.drawable.artimage2
+            R.drawable.example_art1, R.drawable.example_art2,
+            R.drawable.example_art1, R.drawable.example_art2,
+            R.drawable.example_art1, R.drawable.example_art2,
+            R.drawable.example_art1, R.drawable.example_art2
         )
     }
 }
