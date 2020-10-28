@@ -11,14 +11,6 @@ import kotlinx.android.synthetic.main.item_art_list_content.view.*
 class ArtAdapter(private val arts: List<Art>, private val onClick: OnCardViewClickListener
 ) : RecyclerView.Adapter<ArtAdapter.ViewHolder>() {
 
-//    private val onClickListener: View.OnClickListener
-//
-//    init {
-//        onClickListener = View.OnClickListener {
-//
-//        }
-//    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_art_list_content, parent, false))
     }

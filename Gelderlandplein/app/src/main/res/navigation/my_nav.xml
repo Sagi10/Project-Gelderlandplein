@@ -28,7 +28,7 @@
         android:id="@+id/EventFragment"
         android:name="com.example.gelderlandplein.ui.event.EventFragment"
         android:label="fragment_event"
-        tools:layout="@layout/fragment_event" />
+        tools:layout="@layout/fragment_event_list_overview" />
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.gelderlandplein.ui.home.HomeFragment"
