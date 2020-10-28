@@ -12,7 +12,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.gelderlandplein.R
 import com.example.gelderlandplein.adapters.ArtAdapter
 import com.example.gelderlandplein.dummy.Art
-import kotlinx.android.synthetic.main.fragment_art_list.*
 import kotlinx.android.synthetic.main.fragment_art_list_overview.*
 
 // TODO: Rename parameter arguments, choose names that match
