@@ -6,16 +6,15 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF">
 
-
     <include
-        layout="@layout/fragment_overview_items"
-
-        android:theme="@style/ThemeOverlay.AppCompat.Light"
+        layout="@layout/fragment_items_overview_carousel"
         android:layout_width="match_parent"
-        android:layout_height="480dp"
+        android:layout_height="547dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Light"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logo_background" />
+        app:layout_constraintTop_toBottomOf="@+id/search_background" />
 
 
     <View
@@ -60,7 +59,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/logo_background"
         app:srcCompat="@drawable/ic_logo" />
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

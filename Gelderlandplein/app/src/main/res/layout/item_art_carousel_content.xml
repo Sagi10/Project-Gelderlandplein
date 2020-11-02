@@ -17,42 +17,30 @@
 
 
         <ImageView
-            android:id="@+id/im_item_event"
-            android:layout_width="102dp"
-            android:layout_height="89dp"
+            android:id="@+id/iv_item_art"
+            android:layout_width="185dp"
+            android:layout_height="107dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:contentDescription="@string/art_logo"
+            card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars"
-            android:contentDescription="@string/event_logo" />
+            tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
-            android:id="@+id/tv_item_event_title"
-            android:layout_width="167dp"
-            android:layout_height="36dp"
-            android:layout_marginStart="10dp"
+            android:id="@+id/tv_item_art_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
-            android:text="@string/event_title"
+            android:text="@string/art_title"
             android:textSize="18sp"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintStart_toStartOf="parent"
-            card_view:layout_constraintTop_toBottomOf="@+id/im_item_event" />
-
-        <TextView
-            android:id="@+id/tv_item_event_info"
-            android:layout_width="59dp"
-            android:layout_height="88dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:text="@string/event_extra_info"
-            card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintStart_toEndOf="@+id/im_item_event"
-            card_view:layout_constraintTop_toTopOf="parent" />
+            card_view:layout_constraintTop_toBottomOf="@+id/iv_item_art" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
