@@ -6,9 +6,9 @@
     app:startDestination="@id/homeFragment">
     <fragment
         android:id="@+id/SearchFragment"
-        android:name="com.example.gelderlandplein.ui.search.secondFragment"
+        android:name="com.example.gelderlandplein.ui.search.SearchListFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search_list" />
     <fragment
         android:id="@+id/ArtOverviewFragment"
         android:name="com.example.gelderlandplein.ui.art.ArtFragment"
