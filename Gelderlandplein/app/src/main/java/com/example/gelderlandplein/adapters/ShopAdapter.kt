@@ -5,23 +5,29 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gelderlandplein.R
+import com.example.gelderlandplein.dummy.Shop
+import kotlinx.android.synthetic.main.item_shop_list_content.view.*
 
-class ShopAdapter() : RecyclerView.Adapter<ShopAdapter.ViewHolder>() {
+class ShopAdapter(private val shops: List<Shop>) : RecyclerView.Adapter<ShopAdapter.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopAdapter.ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_shop_carousel_content, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_shop_list_content, parent, false))
     }
 
-    override fun onBindViewHolder(holder: ShopAdapter.ViewHolder, position: Int) {
-        //TODO
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.dataBind(shops[position])
     }
 
     override fun getItemCount(): Int {
-        //TODO
-        return 0
+        return shops.size
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        //TODO
+
+        fun dataBind(shop: Shop){
+            itemView.iv_shop.setImageResource(shop.image)
+            itemView.tv_shop_title.text = shop.name
+            itemView.tv_shop_tag.text = shop.tag
+        }
     }
 }
