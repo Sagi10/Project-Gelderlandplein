@@ -15,4 +15,7 @@
 
     //the toolbar name of the pages
     <string name="page_art_title">Art</string>
+    <string name="shop_title">Shop 1</string>
+    <string name="shop_tag">tag</string>
+    <string name="shop_description">shopImage</string>
 </resources>
