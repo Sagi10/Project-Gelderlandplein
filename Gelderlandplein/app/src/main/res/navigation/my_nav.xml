@@ -43,4 +43,8 @@
         android:name="com.example.gelderlandplein.ui.event.EventDetailFragment"
         android:label="EventDetailFragment"
         tools:layout="@layout/fragment_event_detail"/>
+    <fragment
+        android:id="@+id/shopDetailFragment"
+        android:name="com.example.gelderlandplein.ui.search.ShopDetailFragment"
+        android:label="ShopDetailFragment" />
 </navigation>
