@@ -1,13 +1,23 @@
 package com.example.gelderlandplein.ui.search
 
+import android.content.ContentValues.TAG
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.example.gelderlandplein.R
 import com.example.gelderlandplein.adapters.ShopAdapter
 import com.example.gelderlandplein.dummy.Shop
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.database.ktx.getValue
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_search_list.*
 
 // TODO: Rename parameter arguments, choose names that match
@@ -24,6 +34,8 @@ class SearchListFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private lateinit var database: DatabaseReference
+    private var storeListener: ValueEventListener? = null
 
     private val shops = arrayListOf<Shop>()
     private val shopsAdapter = ShopAdapter(shops)
@@ -35,10 +47,7 @@ class SearchListFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
 
-        //fill the RV with the shop dummy data
-        for(i in Shop.shopTitles.indices){
-            shops.add(Shop(Shop.shopTitles[i], Shop.shopTags[i], Shop.shopImages[i]))
-        }
+        database = Firebase.database.reference.child("stores")
     }
 
     override fun onCreateView(
@@ -51,8 +60,27 @@ class SearchListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        getAllStores()
         rv_search_list.adapter = shopsAdapter
+    }
+
+    private fun getAllStores(){
+         val storeListener = object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for(child: DataSnapshot in snapshot.children){
+                    val shop = Shop(child.child("title").value.toString(), child.child("shop_tag").value.toString(), child.child("logo").value.toString())
+                    shops.add(shop)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+        }
+        database.addValueEventListener(storeListener)
+
+        this.storeListener = storeListener
+        shopsAdapter.notifyDataSetChanged()
     }
 
     companion object {
