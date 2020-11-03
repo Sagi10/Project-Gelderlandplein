@@ -11,8 +11,7 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.google.android.gms.maps.*
 import com.example.gelderlandplein.R
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.*
 
 
 class ShopDetailFragment: Fragment(), OnMapReadyCallback{
@@ -58,6 +57,8 @@ class ShopDetailFragment: Fragment(), OnMapReadyCallback{
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap ?: return
 
+        map.setMapStyle(MapStyleOptions.loadRawResourceStyle(context, R.raw.style))
+
         //Sets the bound on what the user can see
         map.setMinZoomPreference(17f)
         map.setMaxZoomPreference(20f)
@@ -74,10 +75,10 @@ class ShopDetailFragment: Fragment(), OnMapReadyCallback{
             }
         }
 
-        /*val gelderlandOverlay = GroundOverlayOptions()
-            .image(images[0]).anchor(0f, 1f)
+        val gelderlandOverlay = GroundOverlayOptions()
+            .image(BitmapDescriptorFactory.fromResource(R.drawable.map)).anchor(0f, 1f)
             .positionFromBounds(mapBound)
-        map.addGroundOverlay(gelderlandOverlay)*/
+        map.addGroundOverlay(gelderlandOverlay)
     }
 
     override fun onPause() {
