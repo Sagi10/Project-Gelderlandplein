@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import com.example.gelderlandplein.R
 import com.example.gelderlandplein.adapters.ShopAdapter
 import com.example.gelderlandplein.dummy.Shop
@@ -73,6 +74,7 @@ class SearchListFragment : Fragment() {
                     shops.add(shop)
                 }
             shopsAdapter.notifyDataSetChanged()
+                pb_loading.isVisible = false
             }
 
             override fun onCancelled(error: DatabaseError) {
