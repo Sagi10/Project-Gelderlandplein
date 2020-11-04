@@ -17,13 +17,11 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/maps_api_key" />
         <activity android:name=".ui.MainActivity"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan">
 
-        <activity
-            android:name=".ui.SplashScreenActivity"
-            android:theme="@style/SplashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
