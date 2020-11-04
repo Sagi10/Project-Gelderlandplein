@@ -51,8 +51,8 @@ class SearchListFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_search_list, container, false)
@@ -60,17 +60,19 @@ class SearchListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getAllStores()
         rv_search_list.adapter = shopsAdapter
+        getAllStores()
     }
 
-    private fun getAllStores(){
-         val storeListener = object : ValueEventListener{
+    private fun getAllStores() {
+        this.storeListener = null
+        val storeListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                for(child: DataSnapshot in snapshot.children){
+                for (child: DataSnapshot in snapshot.children) {
                     val shop = Shop(child.child("title").value.toString(), child.child("shop_tag").value.toString(), child.child("logo").value.toString())
                     shops.add(shop)
                 }
+            shopsAdapter.notifyDataSetChanged()
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -78,9 +80,7 @@ class SearchListFragment : Fragment() {
 
         }
         database.addValueEventListener(storeListener)
-
         this.storeListener = storeListener
-        shopsAdapter.notifyDataSetChanged()
     }
 
     companion object {
@@ -95,11 +95,11 @@ class SearchListFragment : Fragment() {
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            SearchListFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                SearchListFragment().apply {
+                    arguments = Bundle().apply {
+                        putString(ARG_PARAM1, param1)
+                        putString(ARG_PARAM2, param2)
+                    }
                 }
-            }
     }
 }
