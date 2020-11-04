@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "114894464482",
+    "firebase_url": "https://gelderlandplein-app.firebaseio.com",
+    "project_id": "gelderlandplein-app",
+    "storage_bucket": "gelderlandplein-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:114894464482:android:6d586b1b00c8da6ee685bb",
+        "android_client_info": {
+          "package_name": "com.example.gelderlandplein"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "114894464482-fcp74ff6sktplf4qk7cefr53tsr1m29d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNCG4pZp9epFA-sRFIGB9e0DDg2kWN0KI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "114894464482-fcp74ff6sktplf4qk7cefr53tsr1m29d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
