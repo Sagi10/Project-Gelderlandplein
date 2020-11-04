@@ -18,6 +18,7 @@ class ShopDetailFragment: Fragment(), OnMapReadyCallback{
     private lateinit var mapView : MapView
     private lateinit var map: GoogleMap
 
+    private var REQUEST_LOCATION = 1
     private val gelderlandLatLng = LatLng(52.331164, 4.877550)
     private val mapBound = LatLngBounds(LatLng(52.330440, 4.875695), LatLng(52.332053, 4.879335))
 
@@ -67,12 +68,13 @@ class ShopDetailFragment: Fragment(), OnMapReadyCallback{
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(gelderlandLatLng, 17f))
 
         //To see the location of the user
-        if(ActivityCompat.checkSelfPermission(requireContext() ,ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+        if(context?.let { ActivityCompat.checkSelfPermission(it,ACCESS_FINE_LOCATION) } == PackageManager.PERMISSION_GRANTED){
             map.isMyLocationEnabled = true
         } else {
             if (shouldShowRequestPermissionRationale(ACCESS_FINE_LOCATION)){
-                Toast.makeText(requireContext(), "Location permission is needed to use the map", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Location permission is needed to see your location on the map", Toast.LENGTH_SHORT).show()
             }
+            activity?.let { ActivityCompat.requestPermissions(it, arrayOf(ACCESS_FINE_LOCATION), REQUEST_LOCATION) }
         }
 
         val gelderlandOverlay = GroundOverlayOptions()
