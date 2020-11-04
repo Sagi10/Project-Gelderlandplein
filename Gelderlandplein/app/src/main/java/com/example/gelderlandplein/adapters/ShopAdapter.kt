@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gelderlandplein.R
 import com.example.gelderlandplein.dummy.Shop
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_shop_list_content.view.*
 
 class ShopAdapter(private val shops: List<Shop>) : RecyclerView.Adapter<ShopAdapter.ViewHolder>() {
@@ -25,7 +26,7 @@ class ShopAdapter(private val shops: List<Shop>) : RecyclerView.Adapter<ShopAdap
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun dataBind(shop: Shop){
-            itemView.iv_shop.setImageResource(shop.image)
+            Picasso.get().load(shop.image).into(itemView.iv_shop)
             itemView.tv_shop_title.text = shop.name
             itemView.tv_shop_tag.text = shop.tag
         }
