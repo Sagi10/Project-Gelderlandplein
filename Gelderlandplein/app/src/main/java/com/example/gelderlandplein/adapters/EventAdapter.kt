@@ -5,7 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gelderlandplein.R
-import com.example.gelderlandplein.dummy.Event
+import com.example.gelderlandplein.models.Event
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.item_art_list_content.view.*
 import kotlinx.android.synthetic.main.item_event_list_content.view.*
 
 /**
@@ -29,12 +31,13 @@ class EventAdapter(private val events: List<Event>, private val onClick: OnEvent
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
 
         fun dataBind(event: Event, action: OnEventCardViewClickListener){
-            itemView.iv_event.setImageResource(event.image)
+            Picasso.get().load(event.image).into(itemView.iv_event)
             itemView.tv_event_title.text = event.title
 
             itemView.setOnClickListener {
                 action.onCardViewClick(event, adapterPosition)
             }
+            itemView.tv_event_beschrijving.text = event.beschrijving
         }
     }
 

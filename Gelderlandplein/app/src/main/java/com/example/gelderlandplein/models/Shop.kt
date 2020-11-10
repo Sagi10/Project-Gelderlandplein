@@ -1,6 +1,5 @@
-package com.example.gelderlandplein.dummy
+package com.example.gelderlandplein.models
 
-import com.google.firebase.database.Exclude
 import com.google.firebase.database.IgnoreExtraProperties
 
 @IgnoreExtraProperties

@@ -1,17 +1,27 @@
 package com.example.gelderlandplein.ui.event
 
+import android.content.ContentValues
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import com.example.gelderlandplein.R
 import com.example.gelderlandplein.adapters.EventAdapter
-import com.example.gelderlandplein.dummy.Art
-import com.example.gelderlandplein.dummy.Event
+import com.example.gelderlandplein.models.Art
+import com.example.gelderlandplein.models.Event
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
+import kotlinx.android.synthetic.main.fragment_art_list.*
 import kotlinx.android.synthetic.main.fragment_event_list.*
 import kotlinx.android.synthetic.main.item_event_list_content.*
 
@@ -36,6 +46,9 @@ class EventFragment : Fragment(), EventAdapter.OnEventCardViewClickListener {
     private val events = arrayListOf<Event>()
     private val eventAdapter = EventAdapter(events, this)
 
+    private lateinit var database: DatabaseReference
+    private var eventListener: ValueEventListener? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -43,9 +56,8 @@ class EventFragment : Fragment(), EventAdapter.OnEventCardViewClickListener {
             param2 = it.getString(ARG_PARAM2)
         }
 
-        for (i in Event.titles.indices){
-            events.add(Event(Event.titles[i], Event.images[i], null))
-        }
+        database = Firebase.database.reference.child("events")
+
     }
 
     override fun onCreateView(
@@ -58,8 +70,30 @@ class EventFragment : Fragment(), EventAdapter.OnEventCardViewClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         rv_events_list.adapter = eventAdapter
+        getAllEvents()
+    }
+
+    private fun getAllEvents(){
+        this.eventListener = null
+        val eventListener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                events.clear()
+                for (child: DataSnapshot in snapshot.children) {
+                    var event = Event(child.child("name").value.toString(), child.child("image").value.toString(), child.child("geldigheid").value.toString(), child.child("beschrijving").value.toString(), child.child("link").value.toString())
+                    events.add(event)
+                }
+                eventAdapter.notifyDataSetChanged()
+                pb_loading_event.isVisible = false
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.d(ContentValues.TAG, "Er gaat iets mis met het ophalen van de arts")
+            }
+
+        }
+        database.addValueEventListener(eventListener)
+        this.eventListener = eventListener
     }
 
     override fun onCardViewClick(dummyEvent: Event, position: Int) {
@@ -67,7 +101,7 @@ class EventFragment : Fragment(), EventAdapter.OnEventCardViewClickListener {
     }
 
     private fun goToDetail(event: Event){
-        setFragmentResult(REQ_EVENT_KEY, bundleOf(Pair(BUNDLE_EVENT_KEY, Event(event.title, event.image, tv_event_extrainfo.text.toString()))))
+        setFragmentResult(REQ_EVENT_KEY, bundleOf(Pair(BUNDLE_EVENT_KEY, Event(event.title, event.image, event.actieGeldig, event.beschrijving, event.link))))
         findNavController().navigate(R.id.action_EventFragment_to_eventDetailFragment)
     }
 

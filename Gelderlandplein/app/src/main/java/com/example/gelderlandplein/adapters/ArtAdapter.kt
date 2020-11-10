@@ -5,11 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gelderlandplein.R
-import com.example.gelderlandplein.dummy.Art
-import com.example.gelderlandplein.ui.art.ArtFragment
+import com.example.gelderlandplein.models.Art
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_art_list_content.view.*
-import kotlinx.android.synthetic.main.item_shop_list_content.view.*
 
 /**
  * This adapter is using dummy data
@@ -34,10 +32,10 @@ class ArtAdapter(private val arts: List<Art>, private val onArtClick: OnArtCardV
         fun dataBind(art: Art, action: OnArtCardViewClickListener){
             itemView.tv_art_title.text = art.name
             Picasso.get().load(art.image).into(itemView.iv_art)
-
             itemView.setOnClickListener {
                 action.onCardViewClick(art, adapterPosition)
             }
+            itemView.tv_art_beschrijving.text = art.beschrijving
         }
     }
 

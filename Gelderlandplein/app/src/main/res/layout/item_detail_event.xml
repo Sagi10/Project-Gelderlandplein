@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:text="TextView"
+        android:text="Geldigheid wordt hier weergeven"
         app:layout_constraintStart_toStartOf="@+id/iv_detail_event"
         app:layout_constraintTop_toBottomOf="@+id/iv_detail_event" />
 
@@ -29,8 +29,29 @@
         android:id="@+id/tv_detail_event_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="TextView"
+        android:layout_marginTop="10dp"
+        android:text="De titel wordt hier weergeven"
         app:layout_constraintStart_toStartOf="@+id/tv_event_geldig"
         app:layout_constraintTop_toBottomOf="@+id/tv_event_geldig" />
+
+    <TextView
+        android:id="@+id/tv_detail_event_beschrijving"
+        android:layout_width="0dp"
+        app:layout_constraintWidth_percent="0.9"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Hier komen de details"
+        app:layout_constraintStart_toStartOf="@+id/tv_detail_event_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_detail_event_title" />
+
+    <TextView
+        android:id="@+id/tv_detail_event_link"
+        android:layout_width="0dp"
+        app:layout_constraintWidth_percent="0.9"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:autoLink="web"
+        android:text="Hier komt de linkt"
+        app:layout_constraintStart_toStartOf="@+id/tv_detail_event_beschrijving"
+        app:layout_constraintTop_toBottomOf="@+id/tv_detail_event_beschrijving" />
 </androidx.constraintlayout.widget.ConstraintLayout>
