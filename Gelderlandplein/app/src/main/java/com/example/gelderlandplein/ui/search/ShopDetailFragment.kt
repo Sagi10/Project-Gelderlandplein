@@ -3,7 +3,9 @@ package com.example.gelderlandplein.ui.search
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.Location
+import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,10 +16,15 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.google.android.gms.maps.*
 import com.example.gelderlandplein.R
+import com.example.gelderlandplein.ui.GoogleMapDTO
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.*
 import kotlinx.android.synthetic.main.item_shop_detail.*
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import java.lang.Exception
+import com.google.gson.Gson
 
 
 class ShopDetailFragment: Fragment(), OnMapReadyCallback{
@@ -58,7 +65,8 @@ class ShopDetailFragment: Fragment(), OnMapReadyCallback{
         bt_nav.setOnClickListener{
             Log.d("PRESSED", "Button is pressed")
             getDeviceLocation()
-            startNav(deviceLocation, etosLatLng)
+            //Log.d("NAV", deviceLocation.toString())
+            //GetDirection(startNav(deviceLocation, etosLatLng)).execute()
         }
     }
 
@@ -99,10 +107,6 @@ class ShopDetailFragment: Fragment(), OnMapReadyCallback{
 
         //To see the location of the user
         map.addGroundOverlay(gelderlandOverlay)
-        map.myLocation
-        getDeviceLocation()
-        //Log.d("Latitude", lastKnownLocation?.latitude.toString())
-        Log.d("Longitude", lastKnownLocation?.longitude.toString())
     }
 
     override fun onPause() {
@@ -145,9 +149,10 @@ class ShopDetailFragment: Fragment(), OnMapReadyCallback{
                 activity?.let {
                     locationResult.addOnCompleteListener(it) { task ->
                         if (task.isSuccessful) {
-                            // Set the map's camera position to the current location of the device.
                             lastKnownLocation = task.result
                             deviceLocation = LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude)
+                            GetDirection(startNav(deviceLocation, etosLatLng)).execute()
+                            //Log.d("NAV", deviceLocation.toString())
                             Log.d("Latitude", lastKnownLocation!!.latitude.toString())
                             Log.d("Success", "SUCCESS")
                         } else {
@@ -162,11 +167,86 @@ class ShopDetailFragment: Fragment(), OnMapReadyCallback{
         }
     }
 
-    inner class GetDirection()
+    private inner class GetDirection(val url : String) : AsyncTask<Void,Void,List<List<LatLng>>>(){
+        override fun doInBackground(vararg params: Void?): List<List<LatLng>> {
+            val client = OkHttpClient()
+            val request = Request.Builder().url(url).build()
+            val response = client.newCall(request).execute()
+            val data = response.body!!.string()
+            Log.d("GoogleMap" , " data : $data")
+            val result =  ArrayList<List<LatLng>>()
+            try{
+                val respObj = Gson().fromJson(data,GoogleMapDTO::class.java)
+
+                val path =  ArrayList<LatLng>()
+
+                for (i in 0..(respObj.routes[0].legs[0].steps.size-1)){
+//                    val startLatLng = LatLng(respObj.routes[0].legs[0].steps[i].start_location.lat.toDouble()
+//                            ,respObj.routes[0].legs[0].steps[i].start_location.lng.toDouble())
+//                    path.add(startLatLng)
+//                    val endLatLng = LatLng(respObj.routes[0].legs[0].steps[i].end_location.lat.toDouble()
+//                            ,respObj.routes[0].legs[0].steps[i].end_location.lng.toDouble())
+                    path.addAll(decodePolyline(respObj.routes[0].legs[0].steps[i].polyline.points))
+                }
+                result.add(path)
+            }catch (e:Exception){
+                e.printStackTrace()
+            }
+            return result
+        }
+
+        override fun onPostExecute(result: List<List<LatLng>>) {
+            val lineoption = PolylineOptions()
+            for (i in result.indices){
+                lineoption.addAll(result[i])
+                lineoption.width(10f)
+                lineoption.color(Color.BLUE)
+                lineoption.geodesic(true)
+            }
+            map.addPolyline(lineoption)
+        }
+    }
+
+    public fun decodePolyline(encoded: String): List<LatLng> {
+
+        val poly = ArrayList<LatLng>()
+        var index = 0
+        val len = encoded.length
+        var lat = 0
+        var lng = 0
+
+        while (index < len) {
+            var b: Int
+            var shift = 0
+            var result = 0
+            do {
+                b = encoded[index++].toInt() - 63
+                result = result or (b and 0x1f shl shift)
+                shift += 5
+            } while (b >= 0x20)
+            val dlat = if (result and 1 != 0) (result shr 1).inv() else result shr 1
+            lat += dlat
+
+            shift = 0
+            result = 0
+            do {
+                b = encoded[index++].toInt() - 63
+                result = result or (b and 0x1f shl shift)
+                shift += 5
+            } while (b >= 0x20)
+            val dlng = if (result and 1 != 0) (result shr 1).inv() else result shr 1
+            lng += dlng
+
+            val latLng = LatLng((lat.toDouble() / 1E5),(lng.toDouble() / 1E5))
+            poly.add(latLng)
+        }
+
+        return poly
+    }
 
     private fun startNav(origin: LatLng, dest: LatLng) : String{
-        Log.d("Adres", "https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${dest.latitude},${dest.longitude}&mode=walking&key=${R.string.maps_api_key}")
-        return "https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${dest.latitude},${dest.longitude}&mode=walking&key=${R.string.maps_api_key}"
+        //Log.d("Adres", "https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${dest.latitude},${dest.longitude}&mode=walking&key=${R.string.maps_api_key}")
+        return "https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${dest.latitude},${dest.longitude}&mode=walking&key=AIzaSyAhZYpkf0DvXWtlNCYFAW15KOxghYTHcUs"
     }
 
     companion object {
