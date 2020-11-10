@@ -48,7 +48,7 @@ class SearchListFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
 
-        database = Firebase.database.reference.child("stores")
+        database = Firebase.database.reference.child("shops")
     }
 
     override fun onCreateView(
@@ -69,8 +69,17 @@ class SearchListFragment : Fragment() {
         this.storeListener = null
         val storeListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                shops.clear()
                 for (child: DataSnapshot in snapshot.children) {
-                    val shop = Shop(child.child("title").value.toString(), child.child("shop_tag").value.toString(), child.child("logo").value.toString())
+                    // Code voor het ophalen van de openingstijden
+                    var openingstijden = arrayOf("Maandag: " + child.child("openingstijden").child("maandag").value,
+                            "Dinsdag: " + child.child("openingstijden").child("dinsdag").value,
+                    "Woensdag: " + child.child("openingstijden").child("woensdag").value,
+                    "Donderdag: " + child.child("openingstijden").child("donderdag").value,
+                    "Vrijdag: " + child.child("openingstijden").child("vrijdag").value,
+                    "Zaterdag: " + child.child("openingstijden").child("zaterdag").value,
+                    "Zondag: " + child.child("openingstijden").child("zondag").value)
+                    val shop = Shop(child.child("name").value.toString(), child.child("tag").value.toString(), child.child("logo").value.toString(), openingstijden, child.child("latitude").value.toString().toFloat(), child.child("longitude").value.toString().toFloat(), null)
                     shops.add(shop)
                 }
             shopsAdapter.notifyDataSetChanged()
@@ -78,6 +87,7 @@ class SearchListFragment : Fragment() {
             }
 
             override fun onCancelled(error: DatabaseError) {
+                Log.d(TAG, "Er gaat iets mis met het ophalen van de stores")
             }
 
         }

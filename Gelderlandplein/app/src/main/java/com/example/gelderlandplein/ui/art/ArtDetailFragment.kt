@@ -1,6 +1,7 @@
 package com.example.gelderlandplein.ui.art
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import com.example.gelderlandplein.R
 import com.example.gelderlandplein.dummy.Art
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.item_art_list_content.view.*
 import kotlinx.android.synthetic.main.item_detail_art.*
 
 class ArtDetailFragment : Fragment() {
@@ -34,8 +37,10 @@ class ArtDetailFragment : Fragment() {
     private fun observeFragmentResult(){
         setFragmentResultListener(REQ_ART_KEY) { key, bundle ->
             bundle.getParcelable<Art>(BUNDLE_ART_KEY)?.let {
-                iv_item_detail.setImageResource(it.image)
-                tv_item_detail.text = it.title
+                if (it.image.isNullOrEmpty()){
+                    iv_item_detail.setImageResource(R.drawable.example_art1)
+                } else Picasso.get().load(it.image).into(iv_item_detail)
+                tv_item_detail.text = it.name
             }
         }
     }
