@@ -1,8 +1,11 @@
 package com.example.gelderlandplein.ui.search
 
 import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,19 +14,28 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.google.android.gms.maps.*
 import com.example.gelderlandplein.R
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.*
+import kotlinx.android.synthetic.main.item_shop_detail.*
 
 
 class ShopDetailFragment: Fragment(), OnMapReadyCallback{
     private lateinit var mapView : MapView
     private lateinit var map: GoogleMap
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
+    private var lastKnownLocation: Location? = null
+    private lateinit var deviceLocation: LatLng
+    private var locationPermissionGranted = false
     private var REQUEST_LOCATION = 1
     private val gelderlandLatLng = LatLng(52.331164, 4.877550)
+    private val etosLatLng = LatLng(52.330646, 4.876459)
     private val mapBound = LatLngBounds(LatLng(52.330440, 4.875695), LatLng(52.332053, 4.879335))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        fusedLocationProviderClient = activity?.let { LocationServices.getFusedLocationProviderClient(it) }!!
     }
 
     override fun onCreateView(
@@ -40,9 +52,20 @@ class ShopDetailFragment: Fragment(), OnMapReadyCallback{
         return v
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        bt_nav.setOnClickListener{
+            Log.d("PRESSED", "Button is pressed")
+            getDeviceLocation()
+            startNav(deviceLocation, etosLatLng)
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         mapView.onResume()
+
     }
 
     override fun onStart() {
@@ -55,32 +78,31 @@ class ShopDetailFragment: Fragment(), OnMapReadyCallback{
         mapView.onStop()
     }
 
+    @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap ?: return
+        map.uiSettings.isMyLocationButtonEnabled = false
+        getLocationPermission()
+
+        val gelderlandOverlay = GroundOverlayOptions()
+                .image(BitmapDescriptorFactory.fromResource(R.drawable.map)).anchor(0f, 1f)
+                .positionFromBounds(mapBound)
 
         map.setMapStyle(MapStyleOptions.loadRawResourceStyle(context, R.raw.style))
 
         //Sets the bound on what the user can see
-        map.setMinZoomPreference(17f)
+        map.setMinZoomPreference(10f)
         map.setMaxZoomPreference(20f)
         map.setLatLngBoundsForCameraTarget(mapBound)
         //Sets the camera on gelderlandplein
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(gelderlandLatLng, 17f))
 
         //To see the location of the user
-        if(context?.let { ActivityCompat.checkSelfPermission(it,ACCESS_FINE_LOCATION) } == PackageManager.PERMISSION_GRANTED){
-            map.isMyLocationEnabled = true
-        } else {
-            if (shouldShowRequestPermissionRationale(ACCESS_FINE_LOCATION)){
-                Toast.makeText(requireContext(), "Location permission is needed to see your location on the map", Toast.LENGTH_SHORT).show()
-            }
-            activity?.let { ActivityCompat.requestPermissions(it, arrayOf(ACCESS_FINE_LOCATION), REQUEST_LOCATION) }
-        }
-
-        val gelderlandOverlay = GroundOverlayOptions()
-            .image(BitmapDescriptorFactory.fromResource(R.drawable.map)).anchor(0f, 1f)
-            .positionFromBounds(mapBound)
         map.addGroundOverlay(gelderlandOverlay)
+        map.myLocation
+        getDeviceLocation()
+        //Log.d("Latitude", lastKnownLocation?.latitude.toString())
+        Log.d("Longitude", lastKnownLocation?.longitude.toString())
     }
 
     override fun onPause() {
@@ -96,6 +118,55 @@ class ShopDetailFragment: Fragment(), OnMapReadyCallback{
     override fun onLowMemory() {
         super.onLowMemory()
         mapView.onLowMemory()
+    }
+
+    private fun getLocationPermission(){
+        if(context?.let { ActivityCompat.checkSelfPermission(it,ACCESS_FINE_LOCATION) } == PackageManager.PERMISSION_GRANTED){
+            locationPermissionGranted = true
+            map.isMyLocationEnabled = true
+        } else {
+            if (shouldShowRequestPermissionRationale(ACCESS_FINE_LOCATION)){
+                locationPermissionGranted = false
+                Toast.makeText(requireContext(), "Location permission is needed to see your location on the map", Toast.LENGTH_SHORT).show()
+            }
+            activity?.let { ActivityCompat.requestPermissions(it, arrayOf(ACCESS_FINE_LOCATION), REQUEST_LOCATION) }
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun getDeviceLocation() {
+        /*
+         * Get the best and most recent location of the device, which may be null in rare
+         * cases when a location is not available.
+         */
+        try {
+            if (locationPermissionGranted) {
+                val locationResult = fusedLocationProviderClient.lastLocation
+                activity?.let {
+                    locationResult.addOnCompleteListener(it) { task ->
+                        if (task.isSuccessful) {
+                            // Set the map's camera position to the current location of the device.
+                            lastKnownLocation = task.result
+                            deviceLocation = LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude)
+                            Log.d("Latitude", lastKnownLocation!!.latitude.toString())
+                            Log.d("Success", "SUCCESS")
+                        } else {
+                            Log.d("Location", "Current location is null. Using defaults.")
+                            Log.e("Error", "Exception: %s", task.exception)
+                        }
+                    }
+                }
+            }
+        } catch (e: SecurityException) {
+            Log.e("Exception: %s", e.message, e)
+        }
+    }
+
+    inner class GetDirection()
+
+    private fun startNav(origin: LatLng, dest: LatLng) : String{
+        Log.d("Adres", "https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${dest.latitude},${dest.longitude}&mode=walking&key=${R.string.maps_api_key}")
+        return "https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${dest.latitude},${dest.longitude}&mode=walking&key=${R.string.maps_api_key}"
     }
 
     companion object {
