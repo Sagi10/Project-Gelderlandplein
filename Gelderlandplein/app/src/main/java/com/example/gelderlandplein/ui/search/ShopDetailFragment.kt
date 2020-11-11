@@ -13,7 +13,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.*
 import com.example.gelderlandplein.R
 import com.example.gelderlandplein.ui.GoogleMapDTO
@@ -26,6 +29,8 @@ import okhttp3.Request
 import java.lang.Exception
 import com.google.gson.Gson
 
+const val REQ_SHOP_KEY = "req_shop"
+const val BUNDLE_SHOP_KEY = "bundle_shop"
 
 class ShopDetailFragment: Fragment(), OnMapReadyCallback{
     private lateinit var mapView : MapView
@@ -63,10 +68,7 @@ class ShopDetailFragment: Fragment(), OnMapReadyCallback{
         super.onViewCreated(view, savedInstanceState)
 
         bt_nav.setOnClickListener{
-            Log.d("PRESSED", "Button is pressed")
-            getDeviceLocation()
-            //Log.d("NAV", deviceLocation.toString())
-            //GetDirection(startNav(deviceLocation, etosLatLng)).execute()
+            goToRoute(etosLatLng)
         }
     }
 
@@ -90,6 +92,7 @@ class ShopDetailFragment: Fragment(), OnMapReadyCallback{
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap ?: return
         map.uiSettings.isMyLocationButtonEnabled = false
+        //asks for location permission
         getLocationPermission()
 
         val gelderlandOverlay = GroundOverlayOptions()
@@ -105,7 +108,6 @@ class ShopDetailFragment: Fragment(), OnMapReadyCallback{
         //Sets the camera on gelderlandplein
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(gelderlandLatLng, 17f))
 
-        //To see the location of the user
         map.addGroundOverlay(gelderlandOverlay)
     }
 
@@ -137,116 +139,9 @@ class ShopDetailFragment: Fragment(), OnMapReadyCallback{
         }
     }
 
-    @SuppressLint("MissingPermission")
-    private fun getDeviceLocation() {
-        /*
-         * Get the best and most recent location of the device, which may be null in rare
-         * cases when a location is not available.
-         */
-        try {
-            if (locationPermissionGranted) {
-                val locationResult = fusedLocationProviderClient.lastLocation
-                activity?.let {
-                    locationResult.addOnCompleteListener(it) { task ->
-                        if (task.isSuccessful) {
-                            lastKnownLocation = task.result
-                            deviceLocation = LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude)
-                            GetDirection(startNav(deviceLocation, etosLatLng)).execute()
-                            //Log.d("NAV", deviceLocation.toString())
-                            Log.d("Latitude", lastKnownLocation!!.latitude.toString())
-                            Log.d("Success", "SUCCESS")
-                        } else {
-                            Log.d("Location", "Current location is null. Using defaults.")
-                            Log.e("Error", "Exception: %s", task.exception)
-                        }
-                    }
-                }
-            }
-        } catch (e: SecurityException) {
-            Log.e("Exception: %s", e.message, e)
-        }
-    }
-
-    private inner class GetDirection(val url : String) : AsyncTask<Void,Void,List<List<LatLng>>>(){
-        override fun doInBackground(vararg params: Void?): List<List<LatLng>> {
-            val client = OkHttpClient()
-            val request = Request.Builder().url(url).build()
-            val response = client.newCall(request).execute()
-            val data = response.body!!.string()
-            Log.d("GoogleMap" , " data : $data")
-            val result =  ArrayList<List<LatLng>>()
-            try{
-                val respObj = Gson().fromJson(data,GoogleMapDTO::class.java)
-
-                val path =  ArrayList<LatLng>()
-
-                for (i in 0..(respObj.routes[0].legs[0].steps.size-1)){
-//                    val startLatLng = LatLng(respObj.routes[0].legs[0].steps[i].start_location.lat.toDouble()
-//                            ,respObj.routes[0].legs[0].steps[i].start_location.lng.toDouble())
-//                    path.add(startLatLng)
-//                    val endLatLng = LatLng(respObj.routes[0].legs[0].steps[i].end_location.lat.toDouble()
-//                            ,respObj.routes[0].legs[0].steps[i].end_location.lng.toDouble())
-                    path.addAll(decodePolyline(respObj.routes[0].legs[0].steps[i].polyline.points))
-                }
-                result.add(path)
-            }catch (e:Exception){
-                e.printStackTrace()
-            }
-            return result
-        }
-
-        override fun onPostExecute(result: List<List<LatLng>>) {
-            val lineoption = PolylineOptions()
-            for (i in result.indices){
-                lineoption.addAll(result[i])
-                lineoption.width(10f)
-                lineoption.color(Color.BLUE)
-                lineoption.geodesic(true)
-            }
-            map.addPolyline(lineoption)
-        }
-    }
-
-    public fun decodePolyline(encoded: String): List<LatLng> {
-
-        val poly = ArrayList<LatLng>()
-        var index = 0
-        val len = encoded.length
-        var lat = 0
-        var lng = 0
-
-        while (index < len) {
-            var b: Int
-            var shift = 0
-            var result = 0
-            do {
-                b = encoded[index++].toInt() - 63
-                result = result or (b and 0x1f shl shift)
-                shift += 5
-            } while (b >= 0x20)
-            val dlat = if (result and 1 != 0) (result shr 1).inv() else result shr 1
-            lat += dlat
-
-            shift = 0
-            result = 0
-            do {
-                b = encoded[index++].toInt() - 63
-                result = result or (b and 0x1f shl shift)
-                shift += 5
-            } while (b >= 0x20)
-            val dlng = if (result and 1 != 0) (result shr 1).inv() else result shr 1
-            lng += dlng
-
-            val latLng = LatLng((lat.toDouble() / 1E5),(lng.toDouble() / 1E5))
-            poly.add(latLng)
-        }
-
-        return poly
-    }
-
-    private fun startNav(origin: LatLng, dest: LatLng) : String{
-        //Log.d("Adres", "https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${dest.latitude},${dest.longitude}&mode=walking&key=${R.string.maps_api_key}")
-        return "https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${dest.latitude},${dest.longitude}&mode=walking&key=AIzaSyAhZYpkf0DvXWtlNCYFAW15KOxghYTHcUs"
+    private fun goToRoute(shopLatLng: LatLng){
+        setFragmentResult(REQ_SHOP_KEY, bundleOf(Pair(BUNDLE_SHOP_KEY, shopLatLng)))
+        findNavController().navigate(R.id.action_shopDetailFragment_to_mapRouteFragment)
     }
 
     companion object {
