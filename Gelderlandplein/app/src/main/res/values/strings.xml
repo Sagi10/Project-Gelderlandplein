@@ -18,4 +18,5 @@
     <string name="shop_title">Shop 1</string>
     <string name="shop_tag">tag</string>
     <string name="shop_description">shopImage</string>
+    <string name="toolbar_title">placeholder</string>
 </resources>
