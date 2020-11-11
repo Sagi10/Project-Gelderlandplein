@@ -21,6 +21,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_art_list.*
+import kotlinx.android.synthetic.main.fragment_event_list.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -52,6 +53,10 @@ class ArtFragment : Fragment(), ArtAdapter.OnArtCardViewClickListener {
             param2 = it.getString(ARG_PARAM2)
         }
         database = Firebase.database.reference.child("arts")
+
+        if (artItems.isNotEmpty()){
+            pb_loading_art.isVisible = false
+        }
     }
 
     override fun onCreateView(

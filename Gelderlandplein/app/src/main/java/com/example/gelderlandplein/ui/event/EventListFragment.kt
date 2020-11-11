@@ -55,9 +55,11 @@ class EventFragment : Fragment(), EventAdapter.OnEventCardViewClickListener {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-
         database = Firebase.database.reference.child("events")
 
+        if (events.isNotEmpty()){
+            pb_loading_event.isVisible = false
+        }
     }
 
     override fun onCreateView(

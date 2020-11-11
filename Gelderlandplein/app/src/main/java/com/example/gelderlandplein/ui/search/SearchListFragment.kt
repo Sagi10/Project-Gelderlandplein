@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import kotlinx.android.synthetic.main.fragment_event_list.*
 import kotlinx.android.synthetic.main.fragment_search_list.*
 
 // TODO: Rename parameter arguments, choose names that match
@@ -47,6 +48,10 @@ class SearchListFragment : Fragment() {
         }
 
         database = Firebase.database.reference.child("shops")
+
+        if (shops.isNotEmpty()){
+            pb_loading.isVisible = false
+        }
     }
 
     override fun onCreateView(
