@@ -102,7 +102,7 @@ class ShopDetailFragment: Fragment(), OnMapReadyCallback{
         map.setMapStyle(MapStyleOptions.loadRawResourceStyle(context, R.raw.style))
 
         //Sets the bound on what the user can see
-        map.setMinZoomPreference(10f)
+        map.setMinZoomPreference(17f)
         map.setMaxZoomPreference(20f)
         map.setLatLngBoundsForCameraTarget(mapBound)
         //Sets the camera on gelderlandplein

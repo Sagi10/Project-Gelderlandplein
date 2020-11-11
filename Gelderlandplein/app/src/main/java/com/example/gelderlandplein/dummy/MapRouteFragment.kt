@@ -66,13 +66,6 @@ class MapRouteFragment: Fragment(), OnMapReadyCallback {
         return v
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        //observeShopResult()
-        //Log.d("START","START NAV")
-    }
-
     @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap ?: return
@@ -128,6 +121,8 @@ class MapRouteFragment: Fragment(), OnMapReadyCallback {
             Log.e("Exception: %s", e.message, e)
         }
     }
+    //START
+    //From here the code is copy/paste
 
     private inner class GetDirection(val url : String) : AsyncTask<Void, Void, List<List<LatLng>>>(){
         override fun doInBackground(vararg params: Void?): List<List<LatLng>> {
@@ -164,6 +159,7 @@ class MapRouteFragment: Fragment(), OnMapReadyCallback {
         }
     }
 
+    //CODE For drawing route
     private fun decodePolyline(encoded: String): List<LatLng> {
 
         val poly = ArrayList<LatLng>()
@@ -204,6 +200,7 @@ class MapRouteFragment: Fragment(), OnMapReadyCallback {
     private fun getAPI(origin: LatLng, dest: LatLng) : String{
         return "https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${dest.latitude},${dest.longitude}&mode=walking&key=AIzaSyAhZYpkf0DvXWtlNCYFAW15KOxghYTHcUs"
     }
+    //END
 
     private fun getLocationPermission(){
         if(context?.let { ActivityCompat.checkSelfPermission(it, Manifest.permission.ACCESS_FINE_LOCATION) } == PackageManager.PERMISSION_GRANTED){
