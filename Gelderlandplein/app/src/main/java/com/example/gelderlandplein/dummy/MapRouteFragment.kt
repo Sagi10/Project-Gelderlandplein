@@ -17,11 +17,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import com.example.gelderlandplein.R
 import com.example.gelderlandplein.ui.GoogleMapDTO
-import com.example.gelderlandplein.ui.event.BUNDLE_EVENT_KEY
-import com.example.gelderlandplein.ui.event.REQ_EVENT_KEY
 import com.example.gelderlandplein.ui.search.BUNDLE_SHOP_KEY
 import com.example.gelderlandplein.ui.search.REQ_SHOP_KEY
-import com.example.gelderlandplein.ui.search.ShopDetailFragment
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -87,7 +84,6 @@ class MapRouteFragment: Fragment(), OnMapReadyCallback {
 
         map.addGroundOverlay(gelderlandOverlay)
         observeShopResult()
-        Log.d("START","START NAV")
     }
 
     @SuppressLint("MissingPermission")
@@ -99,17 +95,12 @@ class MapRouteFragment: Fragment(), OnMapReadyCallback {
         try {
             if (locationPermissionGranted) {
                 val locationResult = fusedLocationProviderClient.lastLocation
-                Log.d("TEST", "Here")
                 activity?.let {
                     locationResult.addOnCompleteListener(it) { task ->
                         if (task.isSuccessful) {
                             lastKnownLocation = task.result
                             deviceLocation = LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude)
-                            Log.d("LATLNG", shopLatLng.toString())
-                            Log.d("DEVICE", deviceLocation.toString())
                             GetDirection(getAPI(deviceLocation, shopLatLng)).execute()
-                            Log.d("Latitude", lastKnownLocation!!.latitude.toString())
-                            Log.d("Success", "SUCCESS")
                         } else {
                             Log.d("Location", "Current location is null. Using defaults.")
                             Log.e("Error", "Exception: %s", task.exception)
@@ -254,7 +245,6 @@ class MapRouteFragment: Fragment(), OnMapReadyCallback {
         setFragmentResultListener(REQ_SHOP_KEY) { Key, bundle ->
             bundle.getParcelable<LatLng>(BUNDLE_SHOP_KEY)?.let {
                 startNavigation(it)
-                Log.d("START", "START")
             }
         }
     }
