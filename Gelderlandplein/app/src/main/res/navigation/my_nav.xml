@@ -46,5 +46,13 @@
     <fragment
         android:id="@+id/shopDetailFragment"
         android:name="com.example.gelderlandplein.ui.search.ShopDetailFragment"
-        android:label="ShopDetailFragment" />
+        android:label="ShopDetailFragment" >
+        <action
+            android:id="@+id/action_shopDetailFragment_to_mapRouteFragment"
+            app:destination="@id/mapRouteFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapRouteFragment"
+        android:name="com.example.gelderlandplein.dummy.MapRouteFragment"
+        android:label="MapRouteFragment" />
 </navigation>
