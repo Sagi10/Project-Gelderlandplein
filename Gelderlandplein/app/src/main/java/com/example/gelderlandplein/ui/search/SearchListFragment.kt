@@ -48,6 +48,7 @@ class SearchListFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
         database = Firebase.database.reference.child("shops")
+        database.keepSynced(true)
 
         if (shops.isNotEmpty()) {
             pb_loading.isVisible = false

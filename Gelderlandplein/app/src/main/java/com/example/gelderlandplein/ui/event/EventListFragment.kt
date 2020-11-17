@@ -57,6 +57,7 @@ class EventFragment : Fragment(), EventAdapter.OnEventCardViewClickListener {
             param2 = it.getString(ARG_PARAM2)
         }
         database = Firebase.database.reference.child("events")
+        database.keepSynced(true)
 
         if (events.isNotEmpty()){
             pb_loading_event.isVisible = false
