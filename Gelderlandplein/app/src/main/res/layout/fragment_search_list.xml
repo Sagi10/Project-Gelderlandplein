@@ -14,7 +14,6 @@
         android:layout_marginRight="5dp"
         android:orientation="vertical"
         android:paddingTop="55dp"
-        android:paddingBottom="55dp"
         app:layoutManager="LinearLayoutManager"
         tools:listitem="@layout/item_shop_list_content" />
 
