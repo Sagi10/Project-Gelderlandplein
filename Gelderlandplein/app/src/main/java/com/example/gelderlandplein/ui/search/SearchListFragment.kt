@@ -74,23 +74,23 @@ class SearchListFragment : Fragment() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 shops.clear()
                 for (currentShop: DataSnapshot in snapshot.children) {
-                    val openingstijden = arrayOf("Maandag: " + currentShop.child("openingstijden").child("maandag").value,
+                    val openingstijden = arrayListOf("Maandag: " + currentShop.child("openingstijden").child("maandag").value,
                             "Dinsdag: " + currentShop.child("openingstijden").child("dinsdag").value,
                             "Woensdag: " + currentShop.child("openingstijden").child("woensdag").value,
                             "Donderdag: " + currentShop.child("openingstijden").child("donderdag").value,
                             "Vrijdag: " + currentShop.child("openingstijden").child("vrijdag").value,
                             "Zaterdag: " + currentShop.child("openingstijden").child("zaterdag").value,
                             "Zondag: " + currentShop.child("openingstijden").child("zondag").value)
-
+                    val inventory =  ArrayList<String>()
                     for (inventoryItem: DataSnapshot in currentShop.child("inventory").children){
-                        inventoryItem
+                        inventory.add(inventoryItem.value.toString())
                     }
                     try {
                         val shop = Shop(currentShop.child("name").value.toString(),
                                 currentShop.child("tag").value.toString(),
                                 currentShop.child("logo").value.toString(),
                                 openingstijden, currentShop.child("latitude").value.toString().toFloat(),
-                                currentShop.child("longitude").value.toString().toFloat(), null)
+                                currentShop.child("longitude").value.toString().toFloat(), inventory)
                         shops.add(shop)
                     } catch (exception: Exception){
                         Log.e(TAG, exception.toString())

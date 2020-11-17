@@ -7,10 +7,10 @@ data class Shop(
     var name: String? = "",
     var tag: String? = "",
     var image: String? = "",
-    var openingstijden: Array<String>?,
+    var openingstijden: ArrayList<String>?,
     var latitude: Float,
     var longitude: Float,
-    var inventory: Array<String>?
+    var inventory: ArrayList<String>?
 
 ) {
 
