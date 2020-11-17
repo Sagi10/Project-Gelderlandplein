@@ -1,8 +1,11 @@
 package com.example.gelderlandplein.models
 
+import android.os.Parcelable
 import com.google.firebase.database.IgnoreExtraProperties
+import kotlinx.android.parcel.Parcelize
 
 @IgnoreExtraProperties
+@Parcelize
 data class Shop(
     var name: String? = "",
     var tag: String? = "",
@@ -12,7 +15,7 @@ data class Shop(
     var longitude: Float,
     var inventory: ArrayList<String>?
 
-) {
+) : Parcelable {
 
 //    @Exclude
 //    fun toMap(): Map<String, Any?>{
