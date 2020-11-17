@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.AsyncTask
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,12 +40,10 @@ class ShopDetailFragment: Fragment(), OnMapReadyCallback{
     private lateinit var map: GoogleMap
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
-    private var lastKnownLocation: Location? = null
-    private lateinit var deviceLocation: LatLng
     private var locationPermissionGranted = false
     private var REQUEST_LOCATION = 1
     private val gelderlandLatLng = LatLng(52.331164, 4.877550)
-    private val etosLatLng = LatLng(52.330646, 4.876459)
+    private var destinationLatLng: LatLng? = null
     private val mapBound = LatLngBounds(LatLng(52.330440, 4.875695), LatLng(52.332053, 4.879335))
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,7 +70,7 @@ class ShopDetailFragment: Fragment(), OnMapReadyCallback{
 
         observeShopFragmentResult()
         bt_nav.setOnClickListener{
-            goToRoute(etosLatLng)
+            destinationLatLng?.let { it1 -> goToRoute(it1) }
         }
     }
 
@@ -82,6 +81,7 @@ class ShopDetailFragment: Fragment(), OnMapReadyCallback{
                     iv_detail_event.setImageResource(R.drawable.image_not_found)
                 } else Picasso.get().load(it.image).into(iv_shop_detail)
                 tv_shop_name_detail.text = it.name
+                destinationLatLng = LatLng(it.latitude, it.longitude)
             }
         }
     }
