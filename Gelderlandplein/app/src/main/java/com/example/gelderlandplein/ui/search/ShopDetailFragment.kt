@@ -14,9 +14,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.*
 import com.example.gelderlandplein.R
+import com.example.gelderlandplein.models.Shop
 import com.example.gelderlandplein.ui.GoogleMapDTO
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -26,6 +28,8 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.lang.Exception
 import com.google.gson.Gson
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.item_detail_event.*
 
 const val REQ_SHOP_KEY = "req_shop"
 const val BUNDLE_SHOP_KEY = "bundle_shop"
@@ -65,8 +69,20 @@ class ShopDetailFragment: Fragment(), OnMapReadyCallback{
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        observeShopFragmentResult()
         bt_nav.setOnClickListener{
             goToRoute(etosLatLng)
+        }
+    }
+
+    private fun observeShopFragmentResult(){
+        setFragmentResultListener(REQ_INFO_SHOP_KEY) { key, bundle ->
+            bundle.getParcelable<Shop>(BUNDLE_INFO_SHOP_KEY)?.let {
+                if (it.image.isNullOrEmpty()){
+                    iv_detail_event.setImageResource(R.drawable.image_not_found)
+                } else Picasso.get().load(it.image).into(iv_shop_detail)
+                tv_shop_name_detail.text = it.name
+            }
         }
     }
 

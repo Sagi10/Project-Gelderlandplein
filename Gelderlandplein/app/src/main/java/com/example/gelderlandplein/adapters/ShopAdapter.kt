@@ -9,14 +9,18 @@ import com.example.gelderlandplein.models.Shop
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_shop_list_content.view.*
 
-class ShopAdapter(private val shops: List<Shop>) : RecyclerView.Adapter<ShopAdapter.ViewHolder>() {
+class ShopAdapter(private val shops: List<Shop>, private val onClick: OnShopsEventClickListener) :
+    RecyclerView.Adapter<ShopAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_shop_list_content, parent, false))
+        return ViewHolder(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_shop_list_content, parent, false)
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.dataBind(shops[position])
+        holder.dataBind(shops[position], onClick)
     }
 
     override fun getItemCount(): Int {
@@ -25,10 +29,18 @@ class ShopAdapter(private val shops: List<Shop>) : RecyclerView.Adapter<ShopAdap
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun dataBind(shop: Shop){
+        fun dataBind(shop: Shop, action: OnShopsEventClickListener) {
             Picasso.get().load(shop.image).into(itemView.iv_shop)
             itemView.tv_shop_title.text = shop.name
             itemView.tv_shop_tag.text = shop.tag
+
+            itemView.setOnClickListener {
+                action.onCardViewClick(shop, adapterPosition)
+            }
         }
+    }
+
+    interface OnShopsEventClickListener {
+        fun onCardViewClick(shop: Shop, position: Int)
     }
 }

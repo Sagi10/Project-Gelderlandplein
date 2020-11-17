@@ -8,7 +8,11 @@
         android:id="@+id/SearchFragment"
         android:name="com.example.gelderlandplein.ui.search.SearchListFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search_list" />
+        tools:layout="@layout/fragment_search_list" >
+        <action
+            android:id="@+id/action_SearchFragment_to_shopDetailFragment"
+            app:destination="@id/shopDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/ArtOverviewFragment"
         android:name="com.example.gelderlandplein.ui.art.ArtFragment"
@@ -46,7 +50,8 @@
     <fragment
         android:id="@+id/shopDetailFragment"
         android:name="com.example.gelderlandplein.ui.search.ShopDetailFragment"
-        android:label="ShopDetailFragment" >
+        android:label="ShopDetailFragment"
+        tools:layout="@layout/item_shop_detail">
         <action
             android:id="@+id/action_shopDetailFragment_to_mapRouteFragment"
             app:destination="@id/mapRouteFragment" />
