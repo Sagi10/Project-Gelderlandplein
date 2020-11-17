@@ -7,7 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import com.example.gelderlandplein.R
-import com.example.gelderlandplein.dummy.Art
+import com.example.gelderlandplein.models.Art
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_detail_art.*
 
 class ArtDetailFragment : Fragment() {
@@ -34,8 +35,12 @@ class ArtDetailFragment : Fragment() {
     private fun observeFragmentResult(){
         setFragmentResultListener(REQ_ART_KEY) { key, bundle ->
             bundle.getParcelable<Art>(BUNDLE_ART_KEY)?.let {
-                iv_item_detail.setImageResource(it.image)
-                tv_item_detail.text = it.title
+                if (it.image.isNullOrEmpty()){
+                    iv_item_detail.setImageResource(R.drawable.example_art1)
+                } else Picasso.get().load(it.image).into(iv_item_detail)
+                tv_item_detail_title.text = it.name
+                tv_item_detail_beschrijving.text = it.beschrijving
+                tv_item_detail_artist.text = it.artist
             }
         }
     }

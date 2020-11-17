@@ -7,19 +7,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
 import com.example.gelderlandplein.R
 import com.example.gelderlandplein.adapters.ShopAdapter
-import com.example.gelderlandplein.dummy.Shop
+import com.example.gelderlandplein.models.Shop
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
-import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
+import kotlinx.android.synthetic.main.fragment_event_list.*
 import kotlinx.android.synthetic.main.fragment_search_list.*
+import java.lang.Exception
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -47,8 +47,11 @@ class SearchListFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+        database = Firebase.database.reference.child("shops")
 
-        database = Firebase.database.reference.child("stores")
+        if (shops.isNotEmpty()) {
+            pb_loading.isVisible = false
+        }
     }
 
     override fun onCreateView(
@@ -69,15 +72,36 @@ class SearchListFragment : Fragment() {
         this.storeListener = null
         val storeListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                for (child: DataSnapshot in snapshot.children) {
-                    val shop = Shop(child.child("title").value.toString(), child.child("shop_tag").value.toString(), child.child("logo").value.toString())
-                    shops.add(shop)
+                shops.clear()
+                for (currentShop: DataSnapshot in snapshot.children) {
+                    val openingstijden = arrayListOf("Maandag: " + currentShop.child("openingstijden").child("maandag").value,
+                            "Dinsdag: " + currentShop.child("openingstijden").child("dinsdag").value,
+                            "Woensdag: " + currentShop.child("openingstijden").child("woensdag").value,
+                            "Donderdag: " + currentShop.child("openingstijden").child("donderdag").value,
+                            "Vrijdag: " + currentShop.child("openingstijden").child("vrijdag").value,
+                            "Zaterdag: " + currentShop.child("openingstijden").child("zaterdag").value,
+                            "Zondag: " + currentShop.child("openingstijden").child("zondag").value)
+                    val inventory =  ArrayList<String>()
+                    for (inventoryItem: DataSnapshot in currentShop.child("inventory").children){
+                        inventory.add(inventoryItem.value.toString())
+                    }
+                    try {
+                        val shop = Shop(currentShop.child("name").value.toString(),
+                                currentShop.child("tag").value.toString(),
+                                currentShop.child("logo").value.toString(),
+                                openingstijden, currentShop.child("latitude").value.toString().toFloat(),
+                                currentShop.child("longitude").value.toString().toFloat(), inventory)
+                        shops.add(shop)
+                    } catch (exception: Exception){
+                        Log.e(TAG, exception.toString())
+                    }
                 }
-            shopsAdapter.notifyDataSetChanged()
+                shopsAdapter.notifyDataSetChanged()
                 pb_loading.isVisible = false
             }
 
             override fun onCancelled(error: DatabaseError) {
+                Log.d(TAG, "Er gaat iets mis met het ophalen van de stores")
             }
 
         }
