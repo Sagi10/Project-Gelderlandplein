@@ -87,6 +87,8 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
                 // Denk dat het ligt aan hoe het is ingevoerd in firebase?
                 tv_openingstijden.text = it.openingstijden.toString()
                 tv_productenlijst.text = it.inventory.toString()
+
+                //TODO adres van winkels in Firebase plaatsen
             }
         }
     }
