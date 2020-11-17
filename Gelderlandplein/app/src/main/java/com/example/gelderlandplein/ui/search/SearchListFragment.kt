@@ -19,6 +19,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_event_list.*
 import kotlinx.android.synthetic.main.fragment_search_list.*
+import java.lang.Exception
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -80,12 +81,20 @@ class SearchListFragment : Fragment() {
                             "Vrijdag: " + currentShop.child("openingstijden").child("vrijdag").value,
                             "Zaterdag: " + currentShop.child("openingstijden").child("zaterdag").value,
                             "Zondag: " + currentShop.child("openingstijden").child("zondag").value)
-                    val shop = Shop(currentShop.child("name").value.toString(),
-                            currentShop.child("tag").value.toString(),
-                            currentShop.child("logo").value.toString(),
-                            openingstijden, currentShop.child("latitude").value.toString().toFloat(),
-                            currentShop.child("longitude").value.toString().toFloat(), null)
-                    shops.add(shop)
+
+                    for (inventoryItem: DataSnapshot in currentShop.child("inventory").children){
+                        inventoryItem
+                    }
+                    try {
+                        val shop = Shop(currentShop.child("name").value.toString(),
+                                currentShop.child("tag").value.toString(),
+                                currentShop.child("logo").value.toString(),
+                                openingstijden, currentShop.child("latitude").value.toString().toFloat(),
+                                currentShop.child("longitude").value.toString().toFloat(), null)
+                        shops.add(shop)
+                    } catch (exception: Exception){
+                        Log.e(TAG, exception.toString())
+                    }
                 }
                 shopsAdapter.notifyDataSetChanged()
                 pb_loading.isVisible = false

@@ -22,6 +22,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_art_list.*
 import kotlinx.android.synthetic.main.fragment_event_list.*
+import java.lang.Exception
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -79,8 +80,12 @@ class ArtFragment : Fragment(), ArtAdapter.OnArtCardViewClickListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 artItems.clear()
                 for (currentArt: DataSnapshot in snapshot.children) {
-                    var art = Art(currentArt.child("name").value.toString(), currentArt.child("logo").value.toString(), currentArt.child("beschrijving").value.toString(), currentArt.child("artist").value.toString())
-                    artItems.add(art)
+                    try {
+                        var art = Art(currentArt.child("name").value.toString(), currentArt.child("logo").value.toString(), currentArt.child("beschrijving").value.toString(), currentArt.child("artist").value.toString())
+                        artItems.add(art)
+                    } catch (exception: Exception){
+                        Log.e(ContentValues.TAG, exception.toString())
+                    }
                 }
                 artAdapter.notifyDataSetChanged()
                 pb_loading_art.isVisible = false

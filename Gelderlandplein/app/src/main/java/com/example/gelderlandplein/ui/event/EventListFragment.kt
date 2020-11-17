@@ -24,6 +24,7 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_art_list.*
 import kotlinx.android.synthetic.main.fragment_event_list.*
 import kotlinx.android.synthetic.main.item_event_list_content.*
+import java.lang.Exception
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -82,8 +83,12 @@ class EventFragment : Fragment(), EventAdapter.OnEventCardViewClickListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 events.clear()
                 for (currentEvent: DataSnapshot in snapshot.children) {
-                    var event = Event(currentEvent.child("name").value.toString(), currentEvent.child("image").value.toString(), currentEvent.child("geldigheid").value.toString(), currentEvent.child("beschrijving").value.toString(), currentEvent.child("link").value.toString())
-                    events.add(event)
+                    try {
+                        var event = Event(currentEvent.child("name").value.toString(), currentEvent.child("image").value.toString(), currentEvent.child("geldigheid").value.toString(), currentEvent.child("beschrijving").value.toString(), currentEvent.child("link").value.toString())
+                        events.add(event)
+                    }catch (exception: Exception){
+                        Log.e(ContentValues.TAG, exception.toString())
+                    }
                 }
                 eventAdapter.notifyDataSetChanged()
                 pb_loading_event.isVisible = false
