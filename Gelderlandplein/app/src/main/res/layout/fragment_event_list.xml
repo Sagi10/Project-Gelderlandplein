@@ -7,7 +7,9 @@
     android:layout_height="match_parent"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
-    app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
-    app:layoutManager="LinearLayoutManager"
     android:orientation="vertical"
+    android:paddingTop="55dp"
+    android:paddingBottom="55dp"
+    app:layoutManager="LinearLayoutManager"
+    app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
     tools:listitem="@layout/item_event_list_content" />

@@ -12,9 +12,11 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        app:layoutManager="LinearLayoutManager"
         android:orientation="vertical"
-        tools:listitem="@layout/item_shop_list_content"/>
+        android:paddingTop="55dp"
+        android:paddingBottom="55dp"
+        app:layoutManager="LinearLayoutManager"
+        tools:listitem="@layout/item_shop_list_content" />
 
     <ProgressBar
         android:id="@+id/pb_loading"
