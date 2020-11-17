@@ -36,7 +36,7 @@ class ArtDetailFragment : Fragment() {
         setFragmentResultListener(REQ_ART_KEY) { key, bundle ->
             bundle.getParcelable<Art>(BUNDLE_ART_KEY)?.let {
                 if (it.image.isNullOrEmpty()){
-                    iv_item_detail.setImageResource(R.drawable.example_art1)
+                    iv_item_detail.setImageResource(R.drawable.image_not_found)
                 } else Picasso.get().load(it.image).into(iv_item_detail)
                 tv_item_detail_title.text = it.name
                 tv_item_detail_beschrijving.text = it.beschrijving
