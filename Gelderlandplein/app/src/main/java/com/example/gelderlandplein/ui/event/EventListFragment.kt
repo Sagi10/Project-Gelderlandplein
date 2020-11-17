@@ -58,7 +58,7 @@ class EventFragment : Fragment(), EventAdapter.OnEventCardViewClickListener {
         }
         database = Firebase.database.reference.child("events")
 
-        if (events.isNotEmpty()){
+        if (events.isNotEmpty()) {
             pb_loading_event.isVisible = false
         }
     }
@@ -77,21 +77,29 @@ class EventFragment : Fragment(), EventAdapter.OnEventCardViewClickListener {
         getAllEvents()
     }
 
-    private fun getAllEvents(){
+    private fun getAllEvents() {
         this.eventListener = null
         val eventListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 events.clear()
                 for (currentEvent: DataSnapshot in snapshot.children) {
                     try {
-                        var event = Event(currentEvent.child("name").value.toString(), currentEvent.child("image").value.toString(), currentEvent.child("geldigheid").value.toString(), currentEvent.child("beschrijving").value.toString(), currentEvent.child("link").value.toString())
+                        val event = Event(
+                            currentEvent.child("name").value.toString(),
+                            currentEvent.child("image").value.toString(),
+                            currentEvent.child("geldigheid").value.toString(),
+                            currentEvent.child("beschrijving").value.toString(),
+                            currentEvent.child("link").value.toString()
+                        )
                         events.add(event)
-                    }catch (exception: Exception){
+                    } catch (exception: Exception) {
                         Log.e(ContentValues.TAG, exception.toString())
                     }
                 }
                 eventAdapter.notifyDataSetChanged()
-                pb_loading_event.isVisible = false
+                if (pb_loading_event != null){
+                    pb_loading_event.isVisible = false
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -107,8 +115,22 @@ class EventFragment : Fragment(), EventAdapter.OnEventCardViewClickListener {
         goToDetail(dummyEvent)
     }
 
-    private fun goToDetail(event: Event){
-        setFragmentResult(REQ_EVENT_KEY, bundleOf(Pair(BUNDLE_EVENT_KEY, Event(event.title, event.image, event.actieGeldig, event.beschrijving, event.link))))
+    private fun goToDetail(event: Event) {
+        setFragmentResult(
+            REQ_EVENT_KEY,
+            bundleOf(
+                Pair(
+                    BUNDLE_EVENT_KEY,
+                    Event(
+                        event.title,
+                        event.image,
+                        event.actieGeldig,
+                        event.beschrijving,
+                        event.link
+                    )
+                )
+            )
+        )
         findNavController().navigate(R.id.action_EventFragment_to_eventDetailFragment)
     }
 

@@ -8,10 +8,10 @@
 
     <ImageView
         android:id="@+id/iv_shop_detail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="140dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
@@ -20,24 +20,24 @@
         android:id="@+id/tv_shop_name_detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginStart="15dp"
         android:fontFamily="@font/roboto"
+        android:text="@string/shop_name"
         android:textColor="#000000"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.605"
+        android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@+id/iv_shop_detail"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/iv_shop_detail" />
 
     <TextView
         android:id="@+id/tv_shop_address"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_width="173dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="10dp"
         android:fontFamily="@font/roboto"
+        android:text="@string/example_adres"
         android:textColor="#000000"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="@+id/tv_shop_name_detail"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_shop_detail"
         app:layout_constraintStart_toStartOf="@+id/tv_shop_name_detail"
         app:layout_constraintTop_toBottomOf="@+id/tv_shop_name_detail" />
 
@@ -71,20 +71,49 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
+        android:padding="5dp"
         app:layout_constraintBottom_toBottomOf="@+id/view4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/view4"
-        app:layout_constraintTop_toTopOf="@+id/view4"></LinearLayout>
+        app:layout_constraintTop_toTopOf="@+id/view4">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/openingstijden"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_openingstijden"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
+        android:padding="5dp"
         app:layout_constraintBottom_toBottomOf="@+id/view4"
         app:layout_constraintEnd_toStartOf="@+id/view4"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/view4"></LinearLayout>
+        app:layout_constraintTop_toTopOf="@+id/view4">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/productenlijst"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_productenlijst"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/mv_shop_detail"
@@ -100,10 +129,10 @@
         android:id="@+id/bt_nav"
         android:layout_width="129dp"
         android:layout_height="66dp"
-        android:layout_marginEnd="60dp"
+        android:layout_marginTop="10dp"
         android:text="@string/start_navigation"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mv_shop_detail" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

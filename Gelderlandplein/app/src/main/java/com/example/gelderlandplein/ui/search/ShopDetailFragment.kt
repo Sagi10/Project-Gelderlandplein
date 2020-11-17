@@ -34,8 +34,8 @@ import kotlinx.android.synthetic.main.item_detail_event.*
 const val REQ_SHOP_KEY = "req_shop"
 const val BUNDLE_SHOP_KEY = "bundle_shop"
 
-class ShopDetailFragment: Fragment(), OnMapReadyCallback{
-    private lateinit var mapView : MapView
+class ShopDetailFragment : Fragment(), OnMapReadyCallback {
+    private lateinit var mapView: MapView
     private lateinit var map: GoogleMap
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
@@ -49,7 +49,8 @@ class ShopDetailFragment: Fragment(), OnMapReadyCallback{
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        fusedLocationProviderClient = activity?.let { LocationServices.getFusedLocationProviderClient(it) }!!
+        fusedLocationProviderClient =
+            activity?.let { LocationServices.getFusedLocationProviderClient(it) }!!
     }
 
     override fun onCreateView(
@@ -70,18 +71,22 @@ class ShopDetailFragment: Fragment(), OnMapReadyCallback{
         super.onViewCreated(view, savedInstanceState)
 
         observeShopFragmentResult()
-        bt_nav.setOnClickListener{
+        bt_nav.setOnClickListener {
             goToRoute(etosLatLng)
         }
     }
 
-    private fun observeShopFragmentResult(){
+    private fun observeShopFragmentResult() {
         setFragmentResultListener(REQ_INFO_SHOP_KEY) { key, bundle ->
             bundle.getParcelable<Shop>(BUNDLE_INFO_SHOP_KEY)?.let {
-                if (it.image.isNullOrEmpty()){
+                if (it.image.isNullOrEmpty()) {
                     iv_detail_event.setImageResource(R.drawable.image_not_found)
                 } else Picasso.get().load(it.image).into(iv_shop_detail)
                 tv_shop_name_detail.text = it.name
+                // Sommige openingstijden komen niet helemaal goed.
+                // Denk dat het ligt aan hoe het is ingevoerd in firebase?
+                tv_openingstijden.text = it.openingstijden.toString()
+                tv_productenlijst.text = it.inventory.toString()
             }
         }
     }
@@ -110,8 +115,8 @@ class ShopDetailFragment: Fragment(), OnMapReadyCallback{
         getLocationPermission()
 
         val gelderlandOverlay = GroundOverlayOptions()
-                .image(BitmapDescriptorFactory.fromResource(R.drawable.map)).anchor(0f, 1f)
-                .positionFromBounds(mapBound)
+            .image(BitmapDescriptorFactory.fromResource(R.drawable.map)).anchor(0f, 1f)
+            .positionFromBounds(mapBound)
 
         map.setMapStyle(MapStyleOptions.loadRawResourceStyle(context, R.raw.style))
 
@@ -140,20 +145,35 @@ class ShopDetailFragment: Fragment(), OnMapReadyCallback{
         mapView.onLowMemory()
     }
 
-    private fun getLocationPermission(){
-        if(context?.let { ActivityCompat.checkSelfPermission(it,ACCESS_FINE_LOCATION) } == PackageManager.PERMISSION_GRANTED){
+    private fun getLocationPermission() {
+        if (context?.let {
+                ActivityCompat.checkSelfPermission(
+                    it,
+                    ACCESS_FINE_LOCATION
+                )
+            } == PackageManager.PERMISSION_GRANTED) {
             locationPermissionGranted = true
             map.isMyLocationEnabled = true
         } else {
-            if (shouldShowRequestPermissionRationale(ACCESS_FINE_LOCATION)){
+            if (shouldShowRequestPermissionRationale(ACCESS_FINE_LOCATION)) {
                 locationPermissionGranted = false
-                Toast.makeText(requireContext(), "Location permission is needed to see your location on the map", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Location permission is needed to see your location on the map",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
-            activity?.let { ActivityCompat.requestPermissions(it, arrayOf(ACCESS_FINE_LOCATION), REQUEST_LOCATION) }
+            activity?.let {
+                ActivityCompat.requestPermissions(
+                    it,
+                    arrayOf(ACCESS_FINE_LOCATION),
+                    REQUEST_LOCATION
+                )
+            }
         }
     }
 
-    private fun goToRoute(shopLatLng: LatLng){
+    private fun goToRoute(shopLatLng: LatLng) {
         setFragmentResult(REQ_SHOP_KEY, bundleOf(Pair(BUNDLE_SHOP_KEY, shopLatLng)))
         findNavController().navigate(R.id.action_shopDetailFragment_to_mapRouteFragment)
     }

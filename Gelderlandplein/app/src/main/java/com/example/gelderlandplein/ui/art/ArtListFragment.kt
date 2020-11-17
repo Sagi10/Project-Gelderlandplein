@@ -55,7 +55,7 @@ class ArtFragment : Fragment(), ArtAdapter.OnArtCardViewClickListener {
         }
         database = Firebase.database.reference.child("arts")
 
-        if (artItems.isNotEmpty()){
+        if (artItems.isNotEmpty()) {
             pb_loading_art.isVisible = false
         }
     }
@@ -81,15 +81,22 @@ class ArtFragment : Fragment(), ArtAdapter.OnArtCardViewClickListener {
                 artItems.clear()
                 for (currentArt: DataSnapshot in snapshot.children) {
                     try {
-                        var art = Art(currentArt.child("name").value.toString(), currentArt.child("logo").value.toString(), currentArt.child("beschrijving").value.toString(), currentArt.child("artist").value.toString())
+                        val art = Art(
+                            currentArt.child("name").value.toString(),
+                            currentArt.child("logo").value.toString(),
+                            currentArt.child("beschrijving").value.toString(),
+                            currentArt.child("artist").value.toString()
+                        )
                         artItems.add(art)
-                    } catch (exception: Exception){
+                    } catch (exception: Exception) {
                         Log.e(ContentValues.TAG, exception.toString())
                     }
                 }
                 artAdapter.notifyDataSetChanged()
-                pb_loading_art.isVisible = false
+                if (pb_loading_art != null){
+                    pb_loading_art.isVisible = false
                 }
+            }
 
             override fun onCancelled(error: DatabaseError) {
                 Log.d(ContentValues.TAG, "Er gaat iets mis met het ophalen van de arts")
@@ -105,7 +112,10 @@ class ArtFragment : Fragment(), ArtAdapter.OnArtCardViewClickListener {
     }
 
     private fun goToDetail(art: Art) {
-        setFragmentResult(REQ_ART_KEY, bundleOf(Pair(BUNDLE_ART_KEY, Art(art.name, art.image, art.beschrijving, art.artist))))
+        setFragmentResult(
+            REQ_ART_KEY,
+            bundleOf(Pair(BUNDLE_ART_KEY, Art(art.name, art.image, art.beschrijving, art.artist)))
+        )
         findNavController().navigate(R.id.action_ArtOverviewFragment_to_ArtDetailFragment)
     }
 
