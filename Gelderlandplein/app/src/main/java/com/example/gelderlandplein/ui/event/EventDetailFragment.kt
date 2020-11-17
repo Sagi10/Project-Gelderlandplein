@@ -36,7 +36,7 @@ class EventDetailFragment : Fragment() {
         setFragmentResultListener(REQ_EVENT_KEY) { Key, bundle ->
             bundle.getParcelable<Event>(BUNDLE_EVENT_KEY)?.let {
                 if (it.image.isNullOrEmpty()){
-                    iv_detail_event.setImageResource(R.drawable.example_event1)
+                    iv_detail_event.setImageResource(R.drawable.image_not_found)
                 } else Picasso.get().load(it.image).into(iv_detail_event)
                 tv_detail_event_title.text = it.title
                 tv_event_geldig.text = it.actieGeldig
