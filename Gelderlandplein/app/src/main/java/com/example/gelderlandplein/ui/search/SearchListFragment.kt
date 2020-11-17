@@ -46,10 +46,9 @@ class SearchListFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-
         database = Firebase.database.reference.child("shops")
 
-        if (shops.isNotEmpty()){
+        if (shops.isNotEmpty()) {
             pb_loading.isVisible = false
         }
     }
@@ -73,19 +72,22 @@ class SearchListFragment : Fragment() {
         val storeListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 shops.clear()
-                for (child: DataSnapshot in snapshot.children) {
-                    // Code voor het ophalen van de openingstijden
-                    var openingstijden = arrayOf("Maandag: " + child.child("openingstijden").child("maandag").value,
-                            "Dinsdag: " + child.child("openingstijden").child("dinsdag").value,
-                    "Woensdag: " + child.child("openingstijden").child("woensdag").value,
-                    "Donderdag: " + child.child("openingstijden").child("donderdag").value,
-                    "Vrijdag: " + child.child("openingstijden").child("vrijdag").value,
-                    "Zaterdag: " + child.child("openingstijden").child("zaterdag").value,
-                    "Zondag: " + child.child("openingstijden").child("zondag").value)
-                    val shop = Shop(child.child("name").value.toString(), child.child("tag").value.toString(), child.child("logo").value.toString(), openingstijden, child.child("latitude").value.toString().toFloat(), child.child("longitude").value.toString().toFloat(), null)
+                for (currentShop: DataSnapshot in snapshot.children) {
+                    val openingstijden = arrayOf("Maandag: " + currentShop.child("openingstijden").child("maandag").value,
+                            "Dinsdag: " + currentShop.child("openingstijden").child("dinsdag").value,
+                            "Woensdag: " + currentShop.child("openingstijden").child("woensdag").value,
+                            "Donderdag: " + currentShop.child("openingstijden").child("donderdag").value,
+                            "Vrijdag: " + currentShop.child("openingstijden").child("vrijdag").value,
+                            "Zaterdag: " + currentShop.child("openingstijden").child("zaterdag").value,
+                            "Zondag: " + currentShop.child("openingstijden").child("zondag").value)
+                    val shop = Shop(currentShop.child("name").value.toString(),
+                            currentShop.child("tag").value.toString(),
+                            currentShop.child("logo").value.toString(),
+                            openingstijden, currentShop.child("latitude").value.toString().toFloat(),
+                            currentShop.child("longitude").value.toString().toFloat(), null)
                     shops.add(shop)
                 }
-            shopsAdapter.notifyDataSetChanged()
+                shopsAdapter.notifyDataSetChanged()
                 pb_loading.isVisible = false
             }
 

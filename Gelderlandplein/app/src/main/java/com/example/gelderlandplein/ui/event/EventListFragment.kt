@@ -81,8 +81,8 @@ class EventFragment : Fragment(), EventAdapter.OnEventCardViewClickListener {
         val eventListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 events.clear()
-                for (child: DataSnapshot in snapshot.children) {
-                    var event = Event(child.child("name").value.toString(), child.child("image").value.toString(), child.child("geldigheid").value.toString(), child.child("beschrijving").value.toString(), child.child("link").value.toString())
+                for (currentEvent: DataSnapshot in snapshot.children) {
+                    var event = Event(currentEvent.child("name").value.toString(), currentEvent.child("image").value.toString(), currentEvent.child("geldigheid").value.toString(), currentEvent.child("beschrijving").value.toString(), currentEvent.child("link").value.toString())
                     events.add(event)
                 }
                 eventAdapter.notifyDataSetChanged()

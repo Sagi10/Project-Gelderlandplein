@@ -78,8 +78,8 @@ class ArtFragment : Fragment(), ArtAdapter.OnArtCardViewClickListener {
         val artListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 artItems.clear()
-                for (child: DataSnapshot in snapshot.children) {
-                    var art = Art(child.child("name").value.toString(), child.child("logo").value.toString(), child.child("beschrijving").value.toString(), child.child("artist").value.toString())
+                for (currentArt: DataSnapshot in snapshot.children) {
+                    var art = Art(currentArt.child("name").value.toString(), currentArt.child("logo").value.toString(), currentArt.child("beschrijving").value.toString(), currentArt.child("artist").value.toString())
                     artItems.add(art)
                 }
                 artAdapter.notifyDataSetChanged()
