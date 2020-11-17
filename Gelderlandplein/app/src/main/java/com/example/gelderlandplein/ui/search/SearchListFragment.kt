@@ -7,7 +7,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.fragment.app.setFragmentResult
+import androidx.navigation.fragment.findNavController
 import com.example.gelderlandplein.R
 import com.example.gelderlandplein.adapters.ShopAdapter
 import com.example.gelderlandplein.models.Shop
@@ -26,12 +29,15 @@ import java.lang.Exception
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
+const val REQ_INFO_SHOP_KEY = "req_info_shop"
+const val BUNDLE_INFO_SHOP_KEY = "bundle_info_shop"
+
 /**
  * A simple [Fragment] subclass.
  * Use the [SearchListFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class SearchListFragment : Fragment() {
+class SearchListFragment : Fragment(), ShopAdapter.OnShopsEventClickListener {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -39,7 +45,7 @@ class SearchListFragment : Fragment() {
     private var storeListener: ValueEventListener? = null
 
     private val shops = arrayListOf<Shop>()
-    private val shopsAdapter = ShopAdapter(shops)
+    private val shopsAdapter = ShopAdapter(shops, this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,8 +61,8 @@ class SearchListFragment : Fragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_search_list, container, false)
@@ -74,25 +80,31 @@ class SearchListFragment : Fragment() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 shops.clear()
                 for (currentShop: DataSnapshot in snapshot.children) {
-                    val openingstijden = arrayListOf("Maandag: " + currentShop.child("openingstijden").child("maandag").value,
-                            "Dinsdag: " + currentShop.child("openingstijden").child("dinsdag").value,
-                            "Woensdag: " + currentShop.child("openingstijden").child("woensdag").value,
-                            "Donderdag: " + currentShop.child("openingstijden").child("donderdag").value,
-                            "Vrijdag: " + currentShop.child("openingstijden").child("vrijdag").value,
-                            "Zaterdag: " + currentShop.child("openingstijden").child("zaterdag").value,
-                            "Zondag: " + currentShop.child("openingstijden").child("zondag").value)
-                    val inventory =  ArrayList<String>()
-                    for (inventoryItem: DataSnapshot in currentShop.child("inventory").children){
+                    val openingstijden = arrayListOf(
+                        "Maandag: " + currentShop.child("openingstijden").child("maandag").value,
+                        "Dinsdag: " + currentShop.child("openingstijden").child("dinsdag").value,
+                        "Woensdag: " + currentShop.child("openingstijden").child("woensdag").value,
+                        "Donderdag: " + currentShop.child("openingstijden").child("donderdag").value,
+                        "Vrijdag: " + currentShop.child("openingstijden").child("vrijdag").value,
+                        "Zaterdag: " + currentShop.child("openingstijden").child("zaterdag").value,
+                        "Zondag: " + currentShop.child("openingstijden").child("zondag").value
+                    )
+                    val inventory = ArrayList<String>()
+                    for (inventoryItem: DataSnapshot in currentShop.child("inventory").children) {
                         inventory.add(inventoryItem.value.toString())
                     }
                     try {
-                        val shop = Shop(currentShop.child("name").value.toString(),
-                                currentShop.child("tag").value.toString(),
-                                currentShop.child("logo").value.toString(),
-                                openingstijden, currentShop.child("latitude").value.toString().toFloat(),
-                                currentShop.child("longitude").value.toString().toFloat(), inventory)
+                        val shop = Shop(
+                            currentShop.child("name").value.toString(),
+                            currentShop.child("tag").value.toString(),
+                            currentShop.child("logo").value.toString(),
+                            openingstijden,
+                            currentShop.child("latitude").value.toString().toFloat(),
+                            currentShop.child("longitude").value.toString().toFloat(),
+                            inventory
+                        )
                         shops.add(shop)
-                    } catch (exception: Exception){
+                    } catch (exception: Exception) {
                         Log.e(TAG, exception.toString())
                     }
                 }
@@ -109,6 +121,32 @@ class SearchListFragment : Fragment() {
         this.storeListener = storeListener
     }
 
+    override fun onCardViewClick(shop: Shop, position: Int) {
+        goToShopDetail(shop)
+    }
+
+    private fun goToShopDetail(shop: Shop) {
+        setFragmentResult(
+            REQ_INFO_SHOP_KEY,
+            bundleOf(
+                Pair(
+                    BUNDLE_INFO_SHOP_KEY,
+                    Shop(
+                        shop.name,
+                        shop.tag,
+                        shop.image,
+                        shop.openingstijden,
+                        shop.latitude,
+                        shop.longitude,
+                        shop.inventory
+                    )
+                )
+            )
+        )
+        findNavController().navigate(R.id.action_SearchFragment_to_shopDetailFragment)
+    }
+
+
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -121,11 +159,11 @@ class SearchListFragment : Fragment() {
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-                SearchListFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                        putString(ARG_PARAM2, param2)
-                    }
+            SearchListFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+                    putString(ARG_PARAM2, param2)
                 }
+            }
     }
 }
