@@ -54,6 +54,7 @@ class ArtFragment : Fragment(), ArtAdapter.OnArtCardViewClickListener {
             param2 = it.getString(ARG_PARAM2)
         }
         database = Firebase.database.reference.child("arts")
+        database.keepSynced(true)
 
         if (artItems.isNotEmpty()){
             pb_loading_art.isVisible = false
