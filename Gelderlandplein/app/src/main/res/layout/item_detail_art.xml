@@ -3,9 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingTop="55dp"
-    android:paddingBottom="55dp">
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/tv_item_detail_title"
@@ -13,8 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="Titel komt hier"
-        app:layout_constraintEnd_toEndOf="parent"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/iv_item_detail" />
 
@@ -31,13 +29,13 @@
     <TextView
         android:id="@+id/tv_item_detail_beschrijving"
         android:layout_width="0dp"
-        app:layout_constraintWidth_percent="0.9"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:text="beschrijving komt hier"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_item_detail_title" />
+        app:layout_constraintTop_toBottomOf="@id/tv_item_detail_title"
+        app:layout_constraintWidth_percent="0.9" />
 
     <TextView
         android:id="@+id/tv_item_detail_artist"
