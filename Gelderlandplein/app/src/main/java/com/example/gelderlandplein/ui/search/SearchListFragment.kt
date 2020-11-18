@@ -54,6 +54,7 @@ class SearchListFragment : Fragment(), ShopAdapter.OnShopsEventClickListener {
             param2 = it.getString(ARG_PARAM2)
         }
         database = Firebase.database.reference.child("shops")
+        database.keepSynced(true)
 
         if (shops.isNotEmpty()) {
             pb_loading.isVisible = false
@@ -99,8 +100,8 @@ class SearchListFragment : Fragment(), ShopAdapter.OnShopsEventClickListener {
                             currentShop.child("tag").value.toString(),
                             currentShop.child("logo").value.toString(),
                             openingstijden,
-                            currentShop.child("latitude").value.toString().toFloat(),
-                            currentShop.child("longitude").value.toString().toFloat(),
+                            currentShop.child("latitude").value.toString().toDouble(),
+                            currentShop.child("longitude").value.toString().toDouble(),
                             inventory
                         )
                         shops.add(shop)
@@ -109,7 +110,9 @@ class SearchListFragment : Fragment(), ShopAdapter.OnShopsEventClickListener {
                     }
                 }
                 shopsAdapter.notifyDataSetChanged()
-                pb_loading.isVisible = false
+                if (pb_loading != null){
+                    pb_loading.isVisible = false
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {

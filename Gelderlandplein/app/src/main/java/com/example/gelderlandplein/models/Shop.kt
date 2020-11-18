@@ -11,8 +11,8 @@ data class Shop(
     var tag: String? = "",
     var image: String? = "",
     var openingstijden: ArrayList<String>?,
-    var latitude: Float,
-    var longitude: Float,
+    var latitude: Double,
+    var longitude: Double,
     var inventory: ArrayList<String>?
 
 ) : Parcelable {
