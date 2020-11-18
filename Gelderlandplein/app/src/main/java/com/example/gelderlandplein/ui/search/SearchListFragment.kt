@@ -100,8 +100,8 @@ class SearchListFragment : Fragment(), ShopAdapter.OnShopsEventClickListener {
                             currentShop.child("tag").value.toString(),
                             currentShop.child("logo").value.toString(),
                             openingstijden,
-                            currentShop.child("latitude").value.toString().toFloat(),
-                            currentShop.child("longitude").value.toString().toFloat(),
+                            currentShop.child("latitude").value.toString().toDouble(),
+                            currentShop.child("longitude").value.toString().toDouble(),
                             inventory
                         )
                         shops.add(shop)
