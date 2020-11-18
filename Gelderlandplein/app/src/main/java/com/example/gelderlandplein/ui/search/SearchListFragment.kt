@@ -5,8 +5,11 @@ import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResult
@@ -22,6 +25,8 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_event_list.*
 import kotlinx.android.synthetic.main.fragment_search_list.*
+import kotlinx.android.synthetic.main.item_shop_detail.view.*
+import kotlinx.android.synthetic.main.activity_main.*
 import java.lang.Exception
 
 // TODO: Rename parameter arguments, choose names that match
@@ -43,9 +48,10 @@ class SearchListFragment : Fragment(), ShopAdapter.OnShopsEventClickListener {
     private var param2: String? = null
     private lateinit var database: DatabaseReference
     private var storeListener: ValueEventListener? = null
+    private lateinit var searchItem : MenuItem
 
     private val shops = arrayListOf<Shop>()
-    private val shopsAdapter = ShopAdapter(shops, this)
+    private var shopsAdapter = ShopAdapter(shops, this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +65,7 @@ class SearchListFragment : Fragment(), ShopAdapter.OnShopsEventClickListener {
         if (shops.isNotEmpty()) {
             pb_loading.isVisible = false
         }
+
     }
 
     override fun onCreateView(
@@ -73,6 +80,11 @@ class SearchListFragment : Fragment(), ShopAdapter.OnShopsEventClickListener {
         super.onViewCreated(view, savedInstanceState)
         rv_search_list.adapter = shopsAdapter
         getAllStores()
+
+        //geeft aan: 'toolbar must not be null'
+        toolbar.menu.findItem(R.id.btSearch)?.isVisible = true
+        searchItem = toolbar.menu.findItem(R.id.btSearch)
+        val searchView = searchItem.actionView as SearchView
     }
 
     private fun getAllStores() {
