@@ -6,18 +6,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.search.SearchListFragment">
 
-<androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/rv_arts_list"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginLeft="5dp"
-    android:layout_marginRight="5dp"
-    android:orientation="vertical"
-    android:paddingTop="55dp"
-    android:paddingBottom="55dp"
-    app:layoutManager="LinearLayoutManager"
-    app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
-    tools:listitem="@layout/item_art_list_content" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_arts_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:orientation="vertical"
+        android:paddingTop="55dp"
+        app:layoutManager="LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+        tools:listitem="@layout/item_art_list_content" />
 
     <ProgressBar
         android:id="@+id/pb_loading_art"
