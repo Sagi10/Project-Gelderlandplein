@@ -3,6 +3,8 @@ package com.example.gelderlandplein.ui.search
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.location.Location
 import android.os.AsyncTask
 import android.os.Bundle
@@ -40,6 +42,7 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
     private lateinit var map: GoogleMap
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
+    private var shopLogo : Bitmap? = null
     private var locationPermissionGranted = false
     private var REQUEST_LOCATION = 1
     private val gelderlandLatLng = LatLng(52.331164, 4.877550)
@@ -130,6 +133,16 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(gelderlandLatLng, 17f))
 
         map.addGroundOverlay(gelderlandOverlay)
+
+        map.apply {
+            val drawable : BitmapDrawable = iv_shop_detail.drawable as BitmapDrawable
+            shopLogo = drawable.bitmap
+            addMarker(
+                    destinationLatLng?.let {
+                        MarkerOptions().position(it).icon(BitmapDescriptorFactory.fromBitmap(shopLogo))
+                    }
+            )
+        }
     }
 
     override fun onPause() {
