@@ -21,6 +21,8 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_search_list.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -41,7 +43,6 @@ class SearchListFragment : Fragment(), ShopAdapter.OnShopsEventClickListener {
     private var param2: String? = null
     private lateinit var database: DatabaseReference
     private var storeListener: ValueEventListener? = null
-    private lateinit var searchItem : MenuItem
 
     private val shops = arrayListOf<Shop>()
     private var shopsAdapter = ShopAdapter(shops, this)
@@ -54,18 +55,11 @@ class SearchListFragment : Fragment(), ShopAdapter.OnShopsEventClickListener {
         }
         database = Firebase.database.reference.child("shops")
         database.keepSynced(true)
+        setHasOptionsMenu(true)
 
         if (shops.isNotEmpty()) {
             pb_loading.isVisible = false
         }
-
-        setHasOptionsMenu(true)
-
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        val mSearchMenuItem = menu.findItem(R.id.btSearch)
-        val searchView = mSearchMenuItem.actionView as SearchView
     }
 
     override fun onCreateView(
@@ -80,13 +74,44 @@ class SearchListFragment : Fragment(), ShopAdapter.OnShopsEventClickListener {
         super.onViewCreated(view, savedInstanceState)
         rv_search_list.adapter = shopsAdapter
         getAllStores()
-
-        //geeft aan: 'toolbar must not be null'
-        toolbar.menu.findItem(R.id.btSearch)?.isVisible = true
-        searchItem = toolbar.menu.findItem(R.id.btSearch)
-
-        val searchView = searchItem.actionView as SearchView
     }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val searchMenuItem = menu.findItem(R.id.btSearch)
+        val btnSearch = searchMenuItem.actionView as SearchView
+
+        btnSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                //change this is we want to do something when submit is clicked.
+                return false
+            }
+
+            override fun onQueryTextChange(searchText: String): Boolean {
+                search(searchText)
+                return true
+            }
+        })
+    }
+
+    private fun search(searchText: String) {
+        val filterdShops = ArrayList<Shop>()
+        val filterQuery = searchText.trim().toLowerCase(Locale.ROOT)
+
+        for (shop in shops) {
+            val nameSearch = shop.name.toString().trim().toLowerCase(Locale.ROOT)
+            val tagSearch = shop.tag.toString().trim().toLowerCase(Locale.ROOT)
+            val inventorySearch = shop.inventory.toString().trim().toLowerCase(Locale.ROOT)
+
+            if (nameSearch.contains(filterQuery) || tagSearch.contains(filterQuery)
+                || inventorySearch.contains(filterQuery)
+            ) {
+                filterdShops.add(shop)
+            }
+            shopsAdapter = ShopAdapter(filterdShops, this)
+            rv_search_list.adapter = shopsAdapter
+        }
+    }
+
 
     private fun getAllStores() {
         this.storeListener = null
