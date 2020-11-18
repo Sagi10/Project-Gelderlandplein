@@ -110,7 +110,9 @@ class SearchListFragment : Fragment(), ShopAdapter.OnShopsEventClickListener {
                     }
                 }
                 shopsAdapter.notifyDataSetChanged()
-                pb_loading.isVisible = false
+                if (pb_loading != null){
+                    pb_loading.isVisible = false
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {
