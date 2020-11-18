@@ -3,15 +3,11 @@ package com.example.gelderlandplein.ui.search
 import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.SearchView
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import com.example.gelderlandplein.R
@@ -23,11 +19,8 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.fragment_event_list.*
-import kotlinx.android.synthetic.main.fragment_search_list.*
-import kotlinx.android.synthetic.main.item_shop_detail.view.*
 import kotlinx.android.synthetic.main.activity_main.*
-import java.lang.Exception
+import kotlinx.android.synthetic.main.fragment_search_list.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -66,6 +59,13 @@ class SearchListFragment : Fragment(), ShopAdapter.OnShopsEventClickListener {
             pb_loading.isVisible = false
         }
 
+        setHasOptionsMenu(true)
+
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val mSearchMenuItem = menu.findItem(R.id.btSearch)
+        val searchView = mSearchMenuItem.actionView as SearchView
     }
 
     override fun onCreateView(
@@ -84,6 +84,7 @@ class SearchListFragment : Fragment(), ShopAdapter.OnShopsEventClickListener {
         //geeft aan: 'toolbar must not be null'
         toolbar.menu.findItem(R.id.btSearch)?.isVisible = true
         searchItem = toolbar.menu.findItem(R.id.btSearch)
+
         val searchView = searchItem.actionView as SearchView
     }
 
