@@ -1,32 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:fillViewport="false">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fillViewport="false"
+    android:paddingTop="65dp">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/tv_titel_shops"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="4dp"
             android:text="@string/titel_shops"
             android:textSize="24sp"
-            android:textStyle="bold"
-            android:layout_margin="4dp"/>
+            android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_shops_carousel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            app:layoutManager="LinearLayoutManager"
             android:orientation="horizontal"
+            app:layoutManager="LinearLayoutManager"
             tools:listitem="@layout/item_shop_carousel_content">
 
         </androidx.recyclerview.widget.RecyclerView>
@@ -35,26 +36,26 @@
             android:id="@+id/tv_titel_events"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="4dp"
             android:text="@string/titel_events"
             android:textSize="24sp"
-            android:textStyle="bold"
-            android:layout_margin="4dp"/>
+            android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_events_carousel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layoutManager="LinearLayoutManager"
             android:orientation="horizontal"
-            tools:listitem="@layout/item_event_carousel_content"/>
+            app:layoutManager="LinearLayoutManager"
+            tools:listitem="@layout/item_event_carousel_content" />
 
         <TextView
             android:id="@+id/tv_titel_arts"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="4dp"
             android:text="@string/titel_arts"
             android:textSize="24sp"
-            android:layout_margin="4dp"
             android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -62,9 +63,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            app:layoutManager="LinearLayoutManager"
             android:orientation="horizontal"
-            tools:listitem="@layout/item_art_carousel_content"/>
+            app:layoutManager="LinearLayoutManager"
+            tools:listitem="@layout/item_art_carousel_content" />
 
     </LinearLayout>
 </ScrollView>
