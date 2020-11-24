@@ -42,7 +42,6 @@ class MapRouteFragment: Fragment(), OnMapReadyCallback {
     private lateinit var map: GoogleMap
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
-    private var shopLogo : Bitmap? = null
     private var lastKnownLocation: Location? = null
     private lateinit var deviceLocation: LatLng
     private var locationPermissionGranted = false
@@ -259,7 +258,6 @@ class MapRouteFragment: Fragment(), OnMapReadyCallback {
         }
         setFragmentResultListener(REQ_ICON_KEY) { Key, bundle ->
             bundle.getParcelable<Bitmap>(BUNDLE_ICON_KEY)?.let {
-                Log.d("IconSent", it.toString())
                 map.apply {
                     addMarker(
                             destinationLatLng?.let {

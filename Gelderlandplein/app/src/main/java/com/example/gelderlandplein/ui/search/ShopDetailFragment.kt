@@ -79,7 +79,6 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
 
         observeShopFragmentResult()
         bt_nav.setOnClickListener{
-            Log.d("IconShop", shopLogo.toString())
             destinationLatLng?.let { it1 -> shopLogo?.let { it2 -> goToRoute(it1, it2) } }
         }
     }
