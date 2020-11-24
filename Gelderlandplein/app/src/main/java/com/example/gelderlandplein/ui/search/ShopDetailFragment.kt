@@ -36,6 +36,9 @@ import kotlinx.android.synthetic.main.item_detail_event.*
 
 const val REQ_SHOP_KEY = "req_shop"
 const val BUNDLE_SHOP_KEY = "bundle_shop"
+const val REQ_ICON_KEY = "req_icon"
+const val BUNDLE_ICON_KEY = "bundle_icon"
+
 
 class ShopDetailFragment : Fragment(), OnMapReadyCallback {
     private lateinit var mapView: MapView
@@ -48,6 +51,8 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
     private val gelderlandLatLng = LatLng(52.331164, 4.877550)
     private var destinationLatLng: LatLng? = null
     private val mapBound = LatLngBounds(LatLng(52.330440, 4.875695), LatLng(52.332053, 4.879335))
+    private val minZoom = 17f
+    private val maxZoom = 20f
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,7 +79,8 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
 
         observeShopFragmentResult()
         bt_nav.setOnClickListener{
-            destinationLatLng?.let { it1 -> goToRoute(it1) }
+            Log.d("IconShop", shopLogo.toString())
+            destinationLatLng?.let { it1 -> shopLogo?.let { it2 -> goToRoute(it1, it2) } }
         }
     }
 
@@ -126,11 +132,11 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
         map.setMapStyle(MapStyleOptions.loadRawResourceStyle(context, R.raw.style))
 
         //Sets the bound on what the user can see
-        map.setMinZoomPreference(17f)
-        map.setMaxZoomPreference(20f)
+        map.setMinZoomPreference(minZoom)
+        map.setMaxZoomPreference(maxZoom)
         map.setLatLngBoundsForCameraTarget(mapBound)
         //Sets the camera on gelderlandplein
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(gelderlandLatLng, 17f))
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(gelderlandLatLng, minZoom))
 
         map.addGroundOverlay(gelderlandOverlay)
 
@@ -139,7 +145,7 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
             shopLogo = drawable.bitmap
             addMarker(
                     destinationLatLng?.let {
-                        MarkerOptions().position(it).icon(BitmapDescriptorFactory.fromBitmap(shopLogo))
+                        MarkerOptions().position(it).icon(BitmapDescriptorFactory.fromBitmap(shopLogo)).anchor(0f, 1f)
                     }
             )
         }
@@ -188,8 +194,9 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun goToRoute(shopLatLng: LatLng) {
+    private fun goToRoute(shopLatLng: LatLng, shopLogo: Bitmap) {
         setFragmentResult(REQ_SHOP_KEY, bundleOf(Pair(BUNDLE_SHOP_KEY, shopLatLng)))
+        setFragmentResult(REQ_ICON_KEY, bundleOf(Pair(BUNDLE_ICON_KEY, shopLogo)))
         findNavController().navigate(R.id.action_shopDetailFragment_to_mapRouteFragment)
     }
 

@@ -3,7 +3,9 @@ package com.example.gelderlandplein.dummy
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
 import android.location.Location
 import android.os.AsyncTask
 import android.os.Bundle
@@ -17,7 +19,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import com.example.gelderlandplein.R
 import com.example.gelderlandplein.ui.GoogleMapDTO
+import com.example.gelderlandplein.ui.search.BUNDLE_ICON_KEY
 import com.example.gelderlandplein.ui.search.BUNDLE_SHOP_KEY
+import com.example.gelderlandplein.ui.search.REQ_ICON_KEY
 import com.example.gelderlandplein.ui.search.REQ_SHOP_KEY
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -28,6 +32,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.*
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.item_detail_event.*
+import kotlinx.android.synthetic.main.item_shop_detail.*
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.lang.Exception
@@ -37,12 +42,16 @@ class MapRouteFragment: Fragment(), OnMapReadyCallback {
     private lateinit var map: GoogleMap
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
+    private var shopLogo : Bitmap? = null
     private var lastKnownLocation: Location? = null
     private lateinit var deviceLocation: LatLng
     private var locationPermissionGranted = false
     private var REQUEST_LOCATION = 1
+    private var destinationLatLng: LatLng? = null
     private val gelderlandLatLng = LatLng(52.331164, 4.877550)
     private val mapBound = LatLngBounds(LatLng(52.330440, 4.875695), LatLng(52.332053, 4.879335))
+    private val minZoom = 17f
+    private val maxZoom = 20f
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,11 +85,11 @@ class MapRouteFragment: Fragment(), OnMapReadyCallback {
         map.setMapStyle(MapStyleOptions.loadRawResourceStyle(context, R.raw.style))
 
         //Sets the bound on what the user can see
-        map.setMinZoomPreference(17f)
-        map.setMaxZoomPreference(20f)
+        map.setMinZoomPreference(minZoom)
+        map.setMaxZoomPreference(maxZoom)
         map.setLatLngBoundsForCameraTarget(mapBound)
         //Sets the camera on gelderlandplein
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(gelderlandLatLng, 17f))
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(gelderlandLatLng, minZoom))
 
         map.addGroundOverlay(gelderlandOverlay)
         observeShopResult()
@@ -245,6 +254,19 @@ class MapRouteFragment: Fragment(), OnMapReadyCallback {
         setFragmentResultListener(REQ_SHOP_KEY) { Key, bundle ->
             bundle.getParcelable<LatLng>(BUNDLE_SHOP_KEY)?.let {
                 startNavigation(it)
+                destinationLatLng = it
+            }
+        }
+        setFragmentResultListener(REQ_ICON_KEY) { Key, bundle ->
+            bundle.getParcelable<Bitmap>(BUNDLE_ICON_KEY)?.let {
+                Log.d("IconSent", it.toString())
+                map.apply {
+                    addMarker(
+                            destinationLatLng?.let {
+                                it1 -> MarkerOptions().position(it1).icon(BitmapDescriptorFactory.fromBitmap(it)).anchor(0f, 1f)
+                            }
+                    )
+                }
             }
         }
     }
