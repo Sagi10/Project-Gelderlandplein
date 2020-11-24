@@ -31,8 +31,6 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.title = "Test"
         toolbar.title = ""
 
-        Firebase.database.setPersistenceEnabled(true)
-
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         navController = findNavController(R.id.fragment)
         supportActionBar?.setDisplayShowHomeEnabled(true);
