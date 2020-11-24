@@ -7,9 +7,7 @@ import android.location.Location
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
@@ -50,6 +48,7 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         fusedLocationProviderClient =
             activity?.let { LocationServices.getFusedLocationProviderClient(it) }!!
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
@@ -70,8 +69,14 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
 
         observeShopFragmentResult()
-        bt_nav.setOnClickListener{
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val btnStartNavigationMenuItem = menu.findItem(R.id.btn_start_nav)
+
+        btnStartNavigationMenuItem.setOnMenuItemClickListener {
             destinationLatLng?.let { it1 -> goToRoute(it1) }
+            true
         }
     }
 

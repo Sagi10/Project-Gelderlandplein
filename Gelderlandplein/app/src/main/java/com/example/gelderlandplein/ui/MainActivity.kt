@@ -49,44 +49,63 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun switchMenu(menu: Menu) {
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id in arrayOf(R.id.homeFragment)) {
-                toolbar.isVisible = false
-            } else if (destination.id in arrayOf(R.id.SearchFragment)){
-                toolbar_title.text = ""
-                toolbar.isVisible = true
-                toolbar.menu.findItem(R.id.btSearch)?.isVisible = true
-                supportActionBar?.setDisplayHomeAsUpEnabled(false)
+            when (destination.id) {
+                in arrayOf(R.id.homeFragment) -> {
+                    toolbar.isVisible = false
+                }
+                in arrayOf(R.id.SearchFragment) -> {
+                    toolbar_title.text = ""
+                    toolbar.isVisible = true
+                    toolbar.menu.findItem(R.id.btSearch)?.isVisible = true
+                    toolbar.menu.findItem(R.id.btn_start_nav)?.isVisible = false
+                    supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
-                val manager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-                val searchItem = menu.findItem(R.id.btSearch)
-                val searchView = searchItem?.actionView as SearchView
-
-
-            } else if (destination.id in arrayOf(R.id.shopDetailFragment)){
-                toolbar_title.text = ""
-                toolbar.isVisible = true
-                toolbar.menu.findItem(R.id.btSearch)?.isVisible = false
-                supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            } else if (destination.id in arrayOf(R.id.ArtOverviewFragment)){
-                toolbar_title.text = "Art"
-                toolbar.isVisible = true
-                toolbar.menu.findItem(R.id.btSearch)?.isVisible = false
-                supportActionBar?.setDisplayHomeAsUpEnabled(false)
-            } else if(destination.id in arrayOf(R.id.ArtDetailFragment)){
-                toolbar_title.text = "Art"
-                toolbar.isVisible = true
-                toolbar.menu.findItem(R.id.btSearch)?.isVisible = false
-                supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            } else if (destination.id in arrayOf(R.id.EventFragment)){
-                toolbar_title.text = "News & Events"
-                toolbar.isVisible = true
-                toolbar.menu.findItem(R.id.btSearch)?.isVisible = false
-                supportActionBar?.setDisplayHomeAsUpEnabled(false)
-            } else if (destination.id in arrayOf(R.id.eventDetailFragment)){
-                toolbar_title.text = "News & Events"
-                toolbar.isVisible = true
-                toolbar.menu.findItem(R.id.btSearch)?.isVisible = false
-                supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                    val manager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+                    val searchItem = menu.findItem(R.id.btSearch)
+                    val searchView = searchItem?.actionView as SearchView
+                }
+                in arrayOf(R.id.shopDetailFragment) -> {
+                    toolbar_title.text = ""
+                    toolbar.isVisible = true
+                    toolbar.menu.findItem(R.id.btSearch)?.isVisible = false
+                    toolbar.menu.findItem(R.id.btn_start_nav)?.isVisible = true
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                }
+                in arrayOf(R.id.mapRouteFragment) -> {
+                    toolbar_title.text = ""
+                    toolbar.isVisible = true
+                    toolbar.menu.findItem(R.id.btSearch)?.isVisible = false
+                    toolbar.menu.findItem(R.id.btn_start_nav)?.isVisible = false
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                }
+                in arrayOf(R.id.ArtOverviewFragment) -> {
+                    toolbar_title.text = "Art"
+                    toolbar.isVisible = true
+                    toolbar.menu.findItem(R.id.btSearch)?.isVisible = false
+                    toolbar.menu.findItem(R.id.btn_start_nav)?.isVisible = false
+                    supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                }
+                in arrayOf(R.id.ArtDetailFragment) -> {
+                    toolbar_title.text = "Art"
+                    toolbar.isVisible = true
+                    toolbar.menu.findItem(R.id.btSearch)?.isVisible = false
+                    toolbar.menu.findItem(R.id.btn_start_nav)?.isVisible = false
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                }
+                in arrayOf(R.id.EventFragment) -> {
+                    toolbar_title.text = "News & Events"
+                    toolbar.isVisible = true
+                    toolbar.menu.findItem(R.id.btSearch)?.isVisible = false
+                    toolbar.menu.findItem(R.id.btn_start_nav)?.isVisible = false
+                    supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                }
+                in arrayOf(R.id.eventDetailFragment) -> {
+                    toolbar_title.text = "News & Events"
+                    toolbar.isVisible = true
+                    toolbar.menu.findItem(R.id.btSearch)?.isVisible = false
+                    toolbar.menu.findItem(R.id.btn_start_nav)?.isVisible = false
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                }
             }
         }
     }
