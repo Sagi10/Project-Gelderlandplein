@@ -1,58 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingTop="65dp">
+    android:layout_height="wrap_content"
+    android:fillViewport="false"
+    android:paddingTop="55dp">
 
-    <ImageView
-        android:id="@+id/iv_detail_event"
-        android:layout_width="356dp"
-        android:layout_height="229dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <TextView
-        android:id="@+id/tv_event_geldig"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="Geldigheid wordt hier weergeven"
-        app:layout_constraintStart_toStartOf="@+id/iv_detail_event"
-        app:layout_constraintTop_toBottomOf="@+id/iv_detail_event" />
+        android:orientation="vertical"
+        android:paddingLeft="15dp"
+        android:paddingEnd="15dp"
+        android:paddingBottom="15dp">
 
-    <TextView
-        android:id="@+id/tv_detail_event_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="De titel wordt hier weergeven"
-        app:layout_constraintStart_toStartOf="@+id/tv_event_geldig"
-        app:layout_constraintTop_toBottomOf="@+id/tv_event_geldig" />
+        <ImageView
+            android:id="@+id/iv_detail_event"
+            android:layout_width="match_parent"
+            android:layout_height="229dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
 
-    <TextView
-        android:id="@+id/tv_detail_event_beschrijving"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Hier komen de details"
-        app:layout_constraintStart_toStartOf="@+id/tv_detail_event_title"
-        app:layout_constraintTop_toBottomOf="@+id/tv_detail_event_title"
-        app:layout_constraintWidth_percent="0.9" />
+        <TextView
+            android:id="@+id/tv_event_geldig"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Geldigheid wordt hier weergeven"
+            app:layout_constraintStart_toStartOf="@+id/iv_detail_event"
+            app:layout_constraintTop_toBottomOf="@+id/iv_detail_event" />
 
-    <TextView
-        android:id="@+id/tv_detail_event_link"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:autoLink="web"
-        android:text="Hier komt de linkt"
-        app:layout_constraintStart_toStartOf="@+id/tv_detail_event_beschrijving"
-        app:layout_constraintTop_toBottomOf="@+id/tv_detail_event_beschrijving"
-        app:layout_constraintWidth_percent="0.9" />
+        <TextView
+            android:id="@+id/tv_detail_event_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="De titel wordt hier weergeven"
+            android:textAlignment="center"
+            app:layout_constraintStart_toStartOf="@+id/tv_event_geldig"
+            app:layout_constraintTop_toBottomOf="@+id/tv_event_geldig" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tv_detail_event_beschrijving"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Hier komen de details"
+            app:layout_constraintStart_toStartOf="@+id/tv_detail_event_title"
+            app:layout_constraintTop_toBottomOf="@+id/tv_detail_event_title"
+            app:layout_constraintWidth_percent="0.9" />
+
+        <TextView
+            android:id="@+id/tv_detail_event_link"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:autoLink="web"
+            android:text="Hier komt de linkt"
+            app:layout_constraintStart_toStartOf="@+id/tv_detail_event_beschrijving"
+            app:layout_constraintTop_toBottomOf="@+id/tv_detail_event_beschrijving"
+            app:layout_constraintWidth_percent="0.9" />
+    </LinearLayout>
+</ScrollView>
