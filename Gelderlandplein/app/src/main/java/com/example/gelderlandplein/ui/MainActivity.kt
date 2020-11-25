@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
                     toolbar.isVisible = false
                 }
                 in arrayOf(R.id.SearchFragment) -> {
-                    toolbar_title.text = "Shops"
+                    toolbar_title.text = ""
                     toolbar.isVisible = true
                     toolbar.menu.findItem(R.id.btSearch)?.isVisible = true
                     toolbar.menu.findItem(R.id.btn_start_nav)?.isVisible = false
