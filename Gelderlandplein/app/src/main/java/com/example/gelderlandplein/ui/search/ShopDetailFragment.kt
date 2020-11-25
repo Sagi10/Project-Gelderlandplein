@@ -3,13 +3,13 @@ package com.example.gelderlandplein.ui.search
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.location.Location
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
@@ -19,11 +19,13 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.*
 import com.example.gelderlandplein.R
+import com.example.gelderlandplein.helpers.NetworkMonitorHelper
 import com.example.gelderlandplein.models.Shop
 import com.example.gelderlandplein.ui.GoogleMapDTO
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.*
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.item_shop_detail.*
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -34,22 +36,29 @@ import kotlinx.android.synthetic.main.item_detail_event.*
 
 const val REQ_SHOP_KEY = "req_shop"
 const val BUNDLE_SHOP_KEY = "bundle_shop"
+const val REQ_ICON_KEY = "req_icon"
+const val BUNDLE_ICON_KEY = "bundle_icon"
+
 
 class ShopDetailFragment : Fragment(), OnMapReadyCallback {
     private lateinit var mapView: MapView
     private lateinit var map: GoogleMap
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
+    private var shopLogo: Bitmap? = null
     private var locationPermissionGranted = false
     private var REQUEST_LOCATION = 1
     private val gelderlandLatLng = LatLng(52.331164, 4.877550)
     private var destinationLatLng: LatLng? = null
     private val mapBound = LatLngBounds(LatLng(52.330440, 4.875695), LatLng(52.332053, 4.879335))
+    private val minZoom = 17f
+    private val maxZoom = 20f
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         fusedLocationProviderClient =
             activity?.let { LocationServices.getFusedLocationProviderClient(it) }!!
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
@@ -70,8 +79,26 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
 
         observeShopFragmentResult()
-        bt_nav.setOnClickListener{
-            destinationLatLng?.let { it1 -> goToRoute(it1) }
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val btnStartNavigationMenuItem = menu.findItem(R.id.btn_start_nav)
+
+        if (NetworkMonitorHelper.isConnectedToNetwork(requireContext())) {
+            // let the user navigate to store when there is a internet connection.
+            btnStartNavigationMenuItem.setOnMenuItemClickListener {
+                destinationLatLng?.let { it1 -> shopLogo?.let { it2 -> goToRoute(it1, it2) } }
+                true
+            }
+        } else {
+            // Disable navigation button is there is no internet connection.
+            // and show a toast message for extra info for the user.
+            btnStartNavigationMenuItem.isVisible = false
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.connection_message),
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 
@@ -87,7 +114,8 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
                 tv_openingstijden.text = it.openingstijden.toString()
                 tv_productenlijst.text = it.inventory.toString()
 
-                //TODO adres van winkels in Firebase plaatsen
+                //TODO adres van winkels in Firebase plaatsen??
+
                 destinationLatLng = LatLng(it.latitude, it.longitude)
             }
         }
@@ -96,7 +124,6 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
     override fun onResume() {
         super.onResume()
         mapView.onResume()
-
     }
 
     override fun onStart() {
@@ -123,13 +150,24 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
         map.setMapStyle(MapStyleOptions.loadRawResourceStyle(context, R.raw.style))
 
         //Sets the bound on what the user can see
-        map.setMinZoomPreference(17f)
-        map.setMaxZoomPreference(20f)
+        map.setMinZoomPreference(minZoom)
+        map.setMaxZoomPreference(maxZoom)
         map.setLatLngBoundsForCameraTarget(mapBound)
         //Sets the camera on gelderlandplein
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(gelderlandLatLng, 17f))
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(gelderlandLatLng, minZoom))
 
         map.addGroundOverlay(gelderlandOverlay)
+
+        map.apply {
+            val drawable: BitmapDrawable = iv_shop_detail.drawable as BitmapDrawable
+            shopLogo = drawable.bitmap
+            addMarker(
+                destinationLatLng?.let {
+                    MarkerOptions().position(it)
+                        .icon(BitmapDescriptorFactory.fromBitmap(shopLogo)).anchor(0f, 1f)
+                }
+            )
+        }
     }
 
     override fun onPause() {
@@ -175,8 +213,9 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun goToRoute(shopLatLng: LatLng) {
+    private fun goToRoute(shopLatLng: LatLng, shopLogo: Bitmap) {
         setFragmentResult(REQ_SHOP_KEY, bundleOf(Pair(BUNDLE_SHOP_KEY, shopLatLng)))
+        setFragmentResult(REQ_ICON_KEY, bundleOf(Pair(BUNDLE_ICON_KEY, shopLogo)))
         findNavController().navigate(R.id.action_shopDetailFragment_to_mapRouteFragment)
     }
 
@@ -184,3 +223,4 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
         private const val MAPVIEW_BUNDLE_KEY = "MapViewBundleKey"
     }
 }
+
