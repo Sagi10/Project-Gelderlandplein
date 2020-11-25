@@ -75,7 +75,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layoutManager="LinearLayoutManager"
-            tools:listitem="@layout/item_art_carousel_content" />
+            tools:listitem="@layout/item_art_carousel_content"
+            android:paddingBottom="60dp"/>
 
     </LinearLayout>
 </ScrollView>
