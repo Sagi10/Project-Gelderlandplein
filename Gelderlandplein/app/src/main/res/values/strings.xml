@@ -24,4 +24,5 @@
     <string name="openingstijden">Openingstijden:</string>
     <string name="productenlijst">Productenlijst:</string>
     <string name="shop_name">SHOP NAME</string>
+    <string name="connection_message">Navigatie niet mogelijk! Controleer verbinding.</string>
 </resources>
