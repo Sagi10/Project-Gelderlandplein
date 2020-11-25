@@ -59,5 +59,6 @@
     <fragment
         android:id="@+id/mapRouteFragment"
         android:name="com.example.gelderlandplein.dummy.MapRouteFragment"
-        android:label="MapRouteFragment" />
+        android:label="MapRouteFragment"
+        tools:layout="@layout/fragment_map_route"/>
 </navigation>
