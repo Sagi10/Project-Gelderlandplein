@@ -173,7 +173,7 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
                 .target(destinationLatLng)
                 .zoom(18f)
                 .build()
-        map.animateCamera(CameraUpdateFactory.newCameraPosition())
+        map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPos))
     }
 
     override fun onPause() {
