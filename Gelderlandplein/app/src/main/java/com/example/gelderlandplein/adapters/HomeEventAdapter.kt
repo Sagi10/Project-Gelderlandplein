@@ -16,6 +16,10 @@ class HomeEventAdapter(private val events: List<Event>, private val onClick: OnE
             Picasso.get().load(event.image).into(itemView.iv_item_event)
             itemView.tv_item_event_title.text = event.title
             itemView.tv_item_event_info.text = event.beschrijving
+
+            itemView.setOnClickListener {
+                action.onEventCardViewClick(event, adapterPosition)
+            }
         }
     }
 

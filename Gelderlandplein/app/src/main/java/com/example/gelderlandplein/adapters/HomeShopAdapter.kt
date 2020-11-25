@@ -14,6 +14,10 @@ class HomeShopAdapter(private val shops: List<Shop>, private val onClick: OnShop
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun databind(shop: Shop, action: OnShopsEventClickListener){
             Picasso.get().load(shop.image).into(itemView.iv_shop_logo)
+
+            itemView.setOnClickListener {
+                action.onShopsCardViewClick(shop, adapterPosition)
+            }
         }
     }
 

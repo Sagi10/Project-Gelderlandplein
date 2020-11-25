@@ -16,6 +16,9 @@ class HomeArtAdapter(private val arts: List<Art>,private val onClick: OnArtCardV
         fun dataBind(art: Art, action: OnArtCardViewClickListener){
             Picasso.get().load(art.image).into(itemView.iv_item_art)
             itemView.tv_item_art_title.text = art.name
+            itemView.setOnClickListener {
+                action.onArtCardViewClick(art, adapterPosition)
+            }
         }
     }
 

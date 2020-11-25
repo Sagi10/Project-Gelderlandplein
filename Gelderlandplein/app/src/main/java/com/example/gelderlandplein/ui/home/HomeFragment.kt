@@ -16,8 +16,12 @@ import com.example.gelderlandplein.adapters.*
 import com.example.gelderlandplein.models.Art
 import com.example.gelderlandplein.models.Event
 import com.example.gelderlandplein.models.Shop
+import com.example.gelderlandplein.ui.art.BUNDLE_ART_KEY
+import com.example.gelderlandplein.ui.art.REQ_ART_KEY
 import com.example.gelderlandplein.ui.event.BUNDLE_EVENT_KEY
 import com.example.gelderlandplein.ui.event.REQ_EVENT_KEY
+import com.example.gelderlandplein.ui.search.BUNDLE_INFO_SHOP_KEY
+import com.example.gelderlandplein.ui.search.REQ_INFO_SHOP_KEY
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -34,12 +38,16 @@ import java.lang.Exception
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
+const val REQ_ART_KEY = "req_art"
+const val BUNDLE_ART_KEY = "bundle_art"
+
 /**
  * A simple [Fragment] subclass.
  * Use the [HomeFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener, HomeShopAdapter.OnShopsEventClickListener, HomeArtAdapter.OnArtCardViewClickListener {
+class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
+    HomeShopAdapter.OnShopsEventClickListener, HomeArtAdapter.OnArtCardViewClickListener {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -60,7 +68,6 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener, 
     private var storeListener: ValueEventListener? = null
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -79,6 +86,12 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener, 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (shops.isNotEmpty() || events.isNotEmpty() || artItems.isNotEmpty()){
+            pb_loading_home.isVisible = false
+        }
+        shopDatabase.keepSynced(true)
+        eventDatabase.keepSynced(true)
+        artDatabase.keepSynced(true)
         rv_events_carousel.adapter = eventAdapter
         rv_arts_carousel.adapter = artAdapter
         rv_shops_carousel.adapter = shopAdapter
@@ -95,11 +108,11 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener, 
                 for (currentEvent: DataSnapshot in snapshot.children) {
                     try {
                         val event = Event(
-                                currentEvent.child("name").value.toString(),
-                                currentEvent.child("image").value.toString(),
-                                currentEvent.child("geldigheid").value.toString(),
-                                currentEvent.child("beschrijving").value.toString(),
-                                currentEvent.child("link").value.toString()
+                            currentEvent.child("name").value.toString(),
+                            currentEvent.child("image").value.toString(),
+                            currentEvent.child("geldigheid").value.toString(),
+                            currentEvent.child("beschrijving").value.toString(),
+                            currentEvent.child("link").value.toString()
                         )
                         events.add(event)
                     } catch (exception: Exception) {
@@ -107,6 +120,9 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener, 
                     }
                 }
                 eventAdapter.notifyDataSetChanged()
+                if (pb_loading_home != null) {
+                    pb_loading_home.isVisible = false
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -137,6 +153,9 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener, 
                     }
                 }
                 artAdapter.notifyDataSetChanged()
+                if (pb_loading_home != null) {
+                    pb_loading_home.isVisible = false
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -158,7 +177,8 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener, 
                         "Maandag: " + currentShop.child("openingstijden").child("maandag").value,
                         "Dinsdag: " + currentShop.child("openingstijden").child("dinsdag").value,
                         "Woensdag: " + currentShop.child("openingstijden").child("woensdag").value,
-                        "Donderdag: " + currentShop.child("openingstijden").child("donderdag").value,
+                        "Donderdag: " + currentShop.child("openingstijden")
+                            .child("donderdag").value,
                         "Vrijdag: " + currentShop.child("openingstijden").child("vrijdag").value,
                         "Zaterdag: " + currentShop.child("openingstijden").child("zaterdag").value,
                         "Zondag: " + currentShop.child("openingstijden").child("zondag").value
@@ -183,6 +203,9 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener, 
                     }
                 }
                 shopAdapter.notifyDataSetChanged()
+                if (pb_loading_home != null) {
+                    pb_loading_home.isVisible = false
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -220,28 +243,63 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener, 
 
     private fun goEventToDetail(event: Event) {
         setFragmentResult(
-                REQ_EVENT_KEY,
-                bundleOf(
-                        Pair(
-                                BUNDLE_EVENT_KEY,
-                                Event(
-                                        event.title,
-                                        event.image,
-                                        event.actieGeldig,
-                                        event.beschrijving,
-                                        event.link
-                                )
-                        )
+            REQ_EVENT_KEY,
+            bundleOf(
+                Pair(
+                    BUNDLE_EVENT_KEY,
+                    Event(
+                        event.title,
+                        event.image,
+                        event.actieGeldig,
+                        event.beschrijving,
+                        event.link
+                    )
                 )
+            )
         )
-        findNavController().navigate(R.id.action_EventFragment_to_eventDetailFragment)
+        findNavController().navigate(R.id.action_homeFragment_to_eventDetailFragment)
     }
 
     override fun onShopsCardViewClick(shop: Shop, position: Int) {
-        TODO("Not yet implemented")
+        goToShopDetail(shop)
     }
 
     override fun onArtCardViewClick(art: Art, position: Int) {
-        TODO("Not yet implemented")
+        goToArtDetail(art)
+    }
+
+    private fun goToArtDetail(art: Art) {
+        setFragmentResult(
+            com.example.gelderlandplein.ui.home.REQ_ART_KEY,
+            bundleOf(
+                Pair(
+                    com.example.gelderlandplein.ui.home.BUNDLE_ART_KEY,
+                    Art(art.name, art.image, art.beschrijving, art.artist)
+                )
+            )
+        )
+        findNavController().navigate(R.id.action_homeFragment_to_ArtDetailFragment)
+    }
+
+
+    private fun goToShopDetail(shop: Shop) {
+        setFragmentResult(
+            REQ_INFO_SHOP_KEY,
+            bundleOf(
+                Pair(
+                    BUNDLE_INFO_SHOP_KEY,
+                    Shop(
+                        shop.name,
+                        shop.tag,
+                        shop.image,
+                        shop.openingstijden,
+                        shop.latitude,
+                        shop.longitude,
+                        shop.inventory
+                    )
+                )
+            )
+        )
+        findNavController().navigate(R.id.action_homeFragment_to_shopDetailFragment)
     }
 }

@@ -41,7 +41,17 @@
         android:id="@+id/homeFragment"
         android:name="com.example.gelderlandplein.ui.home.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home"/>
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homeFragment_to_ArtDetailFragment"
+            app:destination="@id/ArtDetailFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_eventDetailFragment"
+            app:destination="@id/eventDetailFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_shopDetailFragment"
+            app:destination="@id/shopDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/eventDetailFragment"
         android:name="com.example.gelderlandplein.ui.event.EventDetailFragment"
