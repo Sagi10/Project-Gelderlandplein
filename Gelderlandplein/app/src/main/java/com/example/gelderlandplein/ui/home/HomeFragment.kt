@@ -89,7 +89,6 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
         if (shops.isNotEmpty() || events.isNotEmpty() || artItems.isNotEmpty()){
             pb_loading_home.isVisible = false
         }
-        Firebase.database.setPersistenceEnabled(true)
         shopDatabase.keepSynced(true)
         eventDatabase.keepSynced(true)
         artDatabase.keepSynced(true)
