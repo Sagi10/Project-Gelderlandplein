@@ -19,11 +19,13 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.*
 import com.example.gelderlandplein.R
+import com.example.gelderlandplein.helpers.NetworkMonitorHelper
 import com.example.gelderlandplein.models.Shop
 import com.example.gelderlandplein.ui.GoogleMapDTO
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.*
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.item_shop_detail.*
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -43,7 +45,7 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
     private lateinit var map: GoogleMap
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
-    private var shopLogo : Bitmap? = null
+    private var shopLogo: Bitmap? = null
     private var locationPermissionGranted = false
     private var REQUEST_LOCATION = 1
     private val gelderlandLatLng = LatLng(52.331164, 4.877550)
@@ -77,16 +79,26 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
 
         observeShopFragmentResult()
-        bt_nav.setOnClickListener{
-            destinationLatLng?.let { it1 -> shopLogo?.let { it2 -> goToRoute(it1, it2) } }
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         val btnStartNavigationMenuItem = menu.findItem(R.id.btn_start_nav)
 
-        btnStartNavigationMenuItem.setOnMenuItemClickListener {
-            destinationLatLng?.let { it1 -> goToRoute(it1) }
-            true
+        if (NetworkMonitorHelper.isConnectedToNetwork(requireContext())) {
+            // let the user navigate to store when there is a internet connection.
+            btnStartNavigationMenuItem.setOnMenuItemClickListener {
+                destinationLatLng?.let { it1 -> shopLogo?.let { it2 -> goToRoute(it1, it2) } }
+                true
+            }
+        } else {
+            // Disable navigation button is there is no internet connection.
+            // and show a toast message for extra info for the user.
+            btnStartNavigationMenuItem.isVisible = false
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.connection_message),
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 
@@ -102,7 +114,8 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
                 tv_openingstijden.text = it.openingstijden.toString()
                 tv_productenlijst.text = it.inventory.toString()
 
-                //TODO adres van winkels in Firebase plaatsen
+                //TODO adres van winkels in Firebase plaatsen??
+
                 destinationLatLng = LatLng(it.latitude, it.longitude)
             }
         }
@@ -111,7 +124,6 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
     override fun onResume() {
         super.onResume()
         mapView.onResume()
-
     }
 
     override fun onStart() {
@@ -147,12 +159,13 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
         map.addGroundOverlay(gelderlandOverlay)
 
         map.apply {
-            val drawable : BitmapDrawable = iv_shop_detail.drawable as BitmapDrawable
+            val drawable: BitmapDrawable = iv_shop_detail.drawable as BitmapDrawable
             shopLogo = drawable.bitmap
             addMarker(
-                    destinationLatLng?.let {
-                        MarkerOptions().position(it).icon(BitmapDescriptorFactory.fromBitmap(shopLogo)).anchor(0f, 1f)
-                    }
+                destinationLatLng?.let {
+                    MarkerOptions().position(it)
+                        .icon(BitmapDescriptorFactory.fromBitmap(shopLogo)).anchor(0f, 1f)
+                }
             )
         }
     }
@@ -210,3 +223,4 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
         private const val MAPVIEW_BUNDLE_KEY = "MapViewBundleKey"
     }
 }
+
