@@ -25,13 +25,15 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        FirebaseDatabase.getInstance().setPersistenceEnabled(true)
         setContentView(R.layout.activity_main)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         setSupportActionBar(findViewById(R.id.toolbar))
         setSupportActionBar(toolbar)
         supportActionBar?.title = "Test"
         toolbar.title = ""
+
+        //Hou dit onder de toolbar anders zie je die heel eventjes tot Firebase klaar is zegmaar.
+        //FirebaseDatabase.getInstance().setPersistenceEnabled(true)
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         navController = findNavController(R.id.fragment)
@@ -54,7 +56,7 @@ class MainActivity : AppCompatActivity() {
                     toolbar.isVisible = false
                 }
                 in arrayOf(R.id.SearchFragment) -> {
-                    toolbar_title.text = ""
+                    toolbar_title.text = "Shops"
                     toolbar.isVisible = true
                     toolbar.menu.findItem(R.id.btSearch)?.isVisible = true
                     toolbar.menu.findItem(R.id.btn_start_nav)?.isVisible = false

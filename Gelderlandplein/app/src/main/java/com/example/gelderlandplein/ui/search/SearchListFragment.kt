@@ -78,6 +78,7 @@ class SearchListFragment : Fragment(), ShopAdapter.OnShopsEventClickListener {
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         val searchMenuItem = menu.findItem(R.id.btSearch)
+        val toolbarTitle = menu.findItem(R.id.toolbar_title)
         val btnSearch = searchMenuItem.actionView as SearchView
 
         btnSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {

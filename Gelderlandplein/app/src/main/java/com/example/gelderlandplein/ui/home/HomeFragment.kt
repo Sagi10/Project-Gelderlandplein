@@ -87,7 +87,9 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (shops.isNotEmpty() || events.isNotEmpty() || artItems.isNotEmpty()){
-            pb_loading_home.isVisible = false
+            pb_loading_shops.isVisible = false
+            pb_loading_events.isVisible = false
+            pb_loading_arts.isVisible = false
         }
         shopDatabase.keepSynced(true)
         eventDatabase.keepSynced(true)
@@ -120,8 +122,8 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
                     }
                 }
                 eventAdapter.notifyDataSetChanged()
-                if (pb_loading_home != null) {
-                    pb_loading_home.isVisible = false
+                if (pb_loading_events != null ) {
+                    pb_loading_events.isVisible = false
                 }
             }
 
@@ -153,8 +155,8 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
                     }
                 }
                 artAdapter.notifyDataSetChanged()
-                if (pb_loading_home != null) {
-                    pb_loading_home.isVisible = false
+                if (pb_loading_arts != null) {
+                    pb_loading_arts.isVisible = false
                 }
             }
 
@@ -203,8 +205,8 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
                     }
                 }
                 shopAdapter.notifyDataSetChanged()
-                if (pb_loading_home != null) {
-                    pb_loading_home.isVisible = false
+                if (pb_loading_shops != null ) {
+                    pb_loading_shops.isVisible = false
                 }
             }
 
