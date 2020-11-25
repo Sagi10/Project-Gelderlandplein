@@ -29,10 +29,9 @@ class MainActivity : AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         setSupportActionBar(findViewById(R.id.toolbar))
         setSupportActionBar(toolbar)
-        supportActionBar?.title = "Test"
+        toolbar.isVisible = false
         toolbar.title = ""
-
-        //Hou dit onder de toolbar anders zie je die heel eventjes tot Firebase klaar is zegmaar.
+        
         //FirebaseDatabase.getInstance().setPersistenceEnabled(true)
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
