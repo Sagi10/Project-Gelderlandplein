@@ -168,6 +168,12 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
                 }
             )
         }
+
+        val cameraPos = CameraPosition.builder()
+                .target(destinationLatLng)
+                .zoom(18f)
+                .build()
+        map.animateCamera(CameraUpdateFactory.newCameraPosition())
     }
 
     override fun onPause() {
