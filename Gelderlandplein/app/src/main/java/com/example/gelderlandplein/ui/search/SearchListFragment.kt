@@ -37,7 +37,7 @@ const val BUNDLE_INFO_SHOP_KEY = "bundle_info_shop"
  * Use the [SearchListFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class SearchListFragment : Fragment(), ShopAdapter.OnShopsEventClickListener {
+class SearchListFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -45,7 +45,7 @@ class SearchListFragment : Fragment(), ShopAdapter.OnShopsEventClickListener {
     private var storeListener: ValueEventListener? = null
 
     private val shops = arrayListOf<Shop>()
-    private var shopsAdapter = ShopAdapter(shops, this)
+    private var shopsAdapter = ShopAdapter(shops, ::goToShopDetail)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -108,7 +108,7 @@ class SearchListFragment : Fragment(), ShopAdapter.OnShopsEventClickListener {
             ) {
                 filterdShops.add(shop)
             }
-            shopsAdapter = ShopAdapter(filterdShops, this)
+            shopsAdapter = ShopAdapter(filterdShops, ::goToShopDetail)
             rv_search_list.adapter = shopsAdapter
         }
     }
@@ -161,10 +161,6 @@ class SearchListFragment : Fragment(), ShopAdapter.OnShopsEventClickListener {
         }
         database.addValueEventListener(storeListener)
         this.storeListener = storeListener
-    }
-
-    override fun onCardViewClick(shop: Shop, position: Int) {
-        goToShopDetail(shop)
     }
 
     private fun goToShopDetail(shop: Shop) {

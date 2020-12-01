@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.item_event_list_content.view.*
 /**
  * This adapter is using dummy data
  */
-class EventAdapter(private val events: List<Event>, private val onClick: OnEventCardViewClickListener)
+class EventAdapter(private val events: List<Event>, private val onClick: (Event) -> Unit)
     : RecyclerView.Adapter<EventAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -21,27 +21,25 @@ class EventAdapter(private val events: List<Event>, private val onClick: OnEvent
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.dataBind(events[position], onClick)
+        holder.dataBind(events[position])
     }
 
     override fun getItemCount(): Int {
         return events.size
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
 
-        fun dataBind(event: Event, action: OnEventCardViewClickListener){
+        init {
+            itemView.setOnClickListener {
+                onClick(events[adapterPosition])
+            }
+        }
+
+        fun dataBind(event: Event){
             Picasso.get().load(event.image).into(itemView.iv_event)
             itemView.tv_event_title.text = event.title
-
-            itemView.setOnClickListener {
-                action.onCardViewClick(event, adapterPosition)
-            }
             itemView.tv_event_beschrijving.text = event.beschrijving
         }
-    }
-
-    interface OnEventCardViewClickListener {
-        fun onCardViewClick(dummyEvent: Event, position: Int)
     }
 }

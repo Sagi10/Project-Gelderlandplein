@@ -40,13 +40,13 @@ const val BUNDLE_EVENT_KEY = "bundle_event"
  * Use the [EventFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class EventFragment : Fragment(), EventAdapter.OnEventCardViewClickListener {
+class EventFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
     private val events = arrayListOf<Event>()
-    private val eventAdapter = EventAdapter(events, this)
+    private val eventAdapter = EventAdapter(events, ::goToDetailEvent)
 
     private lateinit var database: DatabaseReference
     private var eventListener: ValueEventListener? = null
@@ -113,11 +113,7 @@ class EventFragment : Fragment(), EventAdapter.OnEventCardViewClickListener {
         this.eventListener = eventListener
     }
 
-    override fun onCardViewClick(dummyEvent: Event, position: Int) {
-        goToDetail(dummyEvent)
-    }
-
-    private fun goToDetail(event: Event) {
+    private fun goToDetailEvent(event: Event) {
         setFragmentResult(
             REQ_EVENT_KEY,
             bundleOf(

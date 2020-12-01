@@ -37,13 +37,13 @@ const val BUNDLE_ART_KEY = "bundle_art"
  * Use the [ArtFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ArtFragment : Fragment(), ArtAdapter.OnArtCardViewClickListener {
+class ArtFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
     private val artItems = arrayListOf<Art>()
-    private val artAdapter = ArtAdapter(artItems, this)
+    private val artAdapter = ArtAdapter(artItems, ::goToDetailArt)
     private lateinit var database: DatabaseReference
     private var artListener: ValueEventListener? = null
 
@@ -108,11 +108,7 @@ class ArtFragment : Fragment(), ArtAdapter.OnArtCardViewClickListener {
         this.artListener = artListener
     }
 
-    override fun onCardViewClick(art: Art, position: Int) {
-        goToDetail(art)
-    }
-
-    private fun goToDetail(art: Art) {
+    private fun goToDetailArt(art: Art) {
         setFragmentResult(
             REQ_ART_KEY,
             bundleOf(Pair(BUNDLE_ART_KEY, Art(art.name, art.image, art.beschrijving, art.artist)))
