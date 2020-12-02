@@ -2,6 +2,7 @@ package com.example.gelderlandplein.viewmodel
 
 import android.app.Application
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -21,9 +22,17 @@ class FirebaseViewModel(application: Application) : AndroidViewModel(application
     private val _events: MutableLiveData<ArrayList<Event>> = MutableLiveData()
     private val _arts: MutableLiveData<ArrayList<Art>> = MutableLiveData()
 
+    private val _shopDetail: MutableLiveData<Shop> = MutableLiveData()
+    private val _eventDetail: MutableLiveData<Event> = MutableLiveData()
+    private val _artsDetail: MutableLiveData<Art> = MutableLiveData()
+
     val shops = _shops
     val events = _events
     val arts = _arts
+
+    val shopDetail = _shopDetail
+    val eventDetail = _eventDetail
+    val artDetail = _artsDetail
 
     fun getAllShops() {
         viewModelScope.launch {
@@ -157,6 +166,36 @@ class FirebaseViewModel(application: Application) : AndroidViewModel(application
                             Log.d(ContentValues.TAG, "Er gaat iets mis met het ophalen van de arts")
                         }
                     })
+            }
+        }
+    }
+
+    fun sendDetailShop(shopDetail: Shop) {
+        viewModelScope.launch {
+            try {
+                _shopDetail.value = shopDetail
+            } catch (e: Throwable) {
+                Log.e(TAG, "ERROR MET VERSTUREN DETAIL SHOP: ${e.message}")
+            }
+        }
+    }
+
+    fun sendDetailEvent(eventDetail: Event) {
+        viewModelScope.launch {
+            try {
+                _eventDetail.value = eventDetail
+            } catch (e: Throwable){
+                Log.e(TAG, "ERROR MET VERSTUREN DETAIL EVENT: ${e.message}")
+            }
+        }
+    }
+
+    fun sendDetailArt(artDetail: Art) {
+        viewModelScope.launch {
+            try {
+                _artsDetail.value = artDetail
+            } catch (e: Throwable){
+                Log.e(TAG, "ERROR MET VERSTUREN DETAIL ART: ${e.message}")
             }
         }
     }

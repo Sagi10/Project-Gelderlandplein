@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
@@ -22,6 +23,7 @@ import com.example.gelderlandplein.R
 import com.example.gelderlandplein.helpers.NetworkMonitorHelper
 import com.example.gelderlandplein.models.Shop
 import com.example.gelderlandplein.ui.GoogleMapDTO
+import com.example.gelderlandplein.viewmodel.FirebaseViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.*
@@ -53,6 +55,8 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
     private val mapBound = LatLngBounds(LatLng(52.330440, 4.875695), LatLng(52.332053, 4.879335))
     private val minZoom = 17f
     private val maxZoom = 20f
+
+    private val firebaseViewModel: FirebaseViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,22 +107,19 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun observeShopFragmentResult() {
-        setFragmentResultListener(REQ_INFO_SHOP_KEY) { key, bundle ->
-            bundle.getParcelable<Shop>(BUNDLE_INFO_SHOP_KEY)?.let {
-                if (it.image.isNullOrEmpty()) {
-                    iv_detail_event.setImageResource(R.drawable.image_not_found)
-                } else Picasso.get().load(it.image).into(iv_shop_detail)
-                tv_shop_name_detail.text = it.name
-                // Sommige openingstijden komen niet helemaal goed.
-                // Denk dat het ligt aan hoe het is ingevoerd in firebase?
-                tv_openingstijden.text = it.openingstijden.toString()
-                tv_productenlijst.text = it.inventory.toString()
+        firebaseViewModel.shopDetail.observe(viewLifecycleOwner, {
+            if (it.image.isNullOrEmpty()) {
+                iv_detail_event.setImageResource(R.drawable.image_not_found)
+            } else Picasso.get().load(it.image).into(iv_shop_detail)
+            tv_shop_name_detail.text = it.name
 
-                //TODO adres van winkels in Firebase plaatsen??
+            // Sommige openingstijden komen niet helemaal goed.
+            // Denk dat het ligt aan hoe het is ingevoerd in firebase?
+            tv_openingstijden.text = it.openingstijden.toString()
+            tv_productenlijst.text = it.inventory.toString()
 
-                destinationLatLng = LatLng(it.latitude, it.longitude)
-            }
-        }
+            destinationLatLng = LatLng(it.latitude, it.longitude)
+        })
     }
 
     override fun onResume() {

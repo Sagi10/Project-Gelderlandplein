@@ -1,15 +1,12 @@
 package com.example.gelderlandplein.ui.home
 
-import android.content.ContentValues
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.gelderlandplein.R
@@ -17,26 +14,10 @@ import com.example.gelderlandplein.adapters.*
 import com.example.gelderlandplein.models.Art
 import com.example.gelderlandplein.models.Event
 import com.example.gelderlandplein.models.Shop
-import com.example.gelderlandplein.ui.art.BUNDLE_ART_KEY
-import com.example.gelderlandplein.ui.art.REQ_ART_KEY
-import com.example.gelderlandplein.ui.event.BUNDLE_EVENT_KEY
-import com.example.gelderlandplein.ui.event.REQ_EVENT_KEY
-import com.example.gelderlandplein.ui.search.BUNDLE_INFO_SHOP_KEY
-import com.example.gelderlandplein.ui.search.REQ_INFO_SHOP_KEY
 import com.example.gelderlandplein.viewmodel.FirebaseViewModel
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_art_list.*
 import kotlinx.android.synthetic.main.fragment_items_overview_carousel.*
 import kotlinx.android.synthetic.main.fragment_search_list.*
-import java.lang.Exception
-
-const val REQ_ART_KEY = "req_art"
-const val BUNDLE_ART_KEY = "bundle_art"
 
 class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
     HomeShopAdapter.OnShopsEventClickListener, HomeArtAdapter.OnArtCardViewClickListener {
@@ -50,7 +31,7 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
     private val shops = arrayListOf<Shop>()
     private val shopAdapter = HomeShopAdapter(shops, this)
 
-    private val firebaseViewModel : FirebaseViewModel by viewModels()
+    private val firebaseViewModel : FirebaseViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -114,25 +95,6 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
         goEventToDetail(dummyEvent)
     }
 
-    private fun goEventToDetail(event: Event) {
-        setFragmentResult(
-            REQ_EVENT_KEY,
-            bundleOf(
-                Pair(
-                    BUNDLE_EVENT_KEY,
-                    Event(
-                        event.title,
-                        event.image,
-                        event.actieGeldig,
-                        event.beschrijving,
-                        event.link
-                    )
-                )
-            )
-        )
-        findNavController().navigate(R.id.action_homeFragment_to_eventDetailFragment)
-    }
-
     override fun onShopsCardViewClick(shop: Shop, position: Int) {
         goToShopDetail(shop)
     }
@@ -141,38 +103,18 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
         goToArtDetail(art)
     }
 
+    private fun goEventToDetail(event: Event) {
+        firebaseViewModel.sendDetailEvent(event)
+        findNavController().navigate(R.id.action_homeFragment_to_eventDetailFragment)
+    }
+
     private fun goToArtDetail(art: Art) {
-        setFragmentResult(
-            com.example.gelderlandplein.ui.home.REQ_ART_KEY,
-            bundleOf(
-                Pair(
-                    com.example.gelderlandplein.ui.home.BUNDLE_ART_KEY,
-                    Art(art.name, art.image, art.beschrijving, art.artist)
-                )
-            )
-        )
+        firebaseViewModel.sendDetailArt(art)
         findNavController().navigate(R.id.action_homeFragment_to_ArtDetailFragment)
     }
 
-
     private fun goToShopDetail(shop: Shop) {
-        setFragmentResult(
-            REQ_INFO_SHOP_KEY,
-            bundleOf(
-                Pair(
-                    BUNDLE_INFO_SHOP_KEY,
-                    Shop(
-                        shop.name,
-                        shop.tag,
-                        shop.image,
-                        shop.openingstijden,
-                        shop.latitude,
-                        shop.longitude,
-                        shop.inventory
-                    )
-                )
-            )
-        )
+        firebaseViewModel.sendDetailShop(shop)
         findNavController().navigate(R.id.action_homeFragment_to_shopDetailFragment)
     }
 }

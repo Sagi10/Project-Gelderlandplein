@@ -27,14 +27,11 @@ import kotlinx.android.synthetic.main.fragment_search_list.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-const val REQ_INFO_SHOP_KEY = "req_info_shop"
-const val BUNDLE_INFO_SHOP_KEY = "bundle_info_shop"
-
 class SearchListFragment : Fragment() {
     private val shops = arrayListOf<Shop>()
     private var shopsAdapter = ShopAdapter(shops, ::goToShopDetail)
 
-    private val firebaseViewModel: FirebaseViewModel by viewModels()
+    private val firebaseViewModel: FirebaseViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,15 +58,6 @@ class SearchListFragment : Fragment() {
         rv_search_list.adapter = shopsAdapter
 
         observeShopsList()
-    }
-
-    private fun observeShopsList() {
-        firebaseViewModel.shops.observe(viewLifecycleOwner, {
-            this@SearchListFragment.shops.clear()
-            this@SearchListFragment.shops.addAll(it)
-            pb_loading.isVisible = false
-            shopsAdapter.notifyDataSetChanged()
-        })
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
@@ -109,25 +97,17 @@ class SearchListFragment : Fragment() {
         }
     }
 
+    private fun observeShopsList() {
+        firebaseViewModel.shops.observe(viewLifecycleOwner, {
+            this@SearchListFragment.shops.clear()
+            this@SearchListFragment.shops.addAll(it)
+            pb_loading.isVisible = false
+            shopsAdapter.notifyDataSetChanged()
+        })
+    }
 
     private fun goToShopDetail(shop: Shop) {
-        setFragmentResult(
-            REQ_INFO_SHOP_KEY,
-            bundleOf(
-                Pair(
-                    BUNDLE_INFO_SHOP_KEY,
-                    Shop(
-                        shop.name,
-                        shop.tag,
-                        shop.image,
-                        shop.openingstijden,
-                        shop.latitude,
-                        shop.longitude,
-                        shop.inventory
-                    )
-                )
-            )
-        )
+        firebaseViewModel.sendDetailShop(shop)
         findNavController().navigate(R.id.action_SearchFragment_to_shopDetailFragment)
     }
 }
