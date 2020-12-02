@@ -76,8 +76,7 @@ class MainActivity : AppCompatActivity() {
                     toolbar.isVisible = true
                     toolbar.menu.findItem(R.id.btSearch)?.isVisible = false
                     toolbar.menu.findItem(R.id.btn_start_nav)?.isVisible = false
-                    // Even een snelle fix zodat je vanuit de detailpage niet terug kan.
-                    supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 }
                 in arrayOf(R.id.ArtOverviewFragment) -> {
                     toolbar_title.text = "Art"
