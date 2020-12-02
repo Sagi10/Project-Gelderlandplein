@@ -31,8 +31,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         toolbar.isVisible = false
         toolbar.title = ""
-        
-        //FirebaseDatabase.getInstance().setPersistenceEnabled(true)
+
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         navController = findNavController(R.id.fragment)
