@@ -6,11 +6,13 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.location.Location
+import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -47,6 +49,7 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
     private lateinit var map: GoogleMap
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
+    private var shopUrl: String? = null
     private var shopLogo: Bitmap? = null
     private var locationPermissionGranted = false
     private var REQUEST_LOCATION = 1
@@ -87,6 +90,7 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         val btnStartNavigationMenuItem = menu.findItem(R.id.btn_start_nav)
+        val btnWebsiteMenuItem = menu.findItem(R.id.btn_website)
 
         if (NetworkMonitorHelper.isConnectedToNetwork(requireContext())) {
             // let the user navigate to store when there is a internet connection.
@@ -94,10 +98,19 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
                 destinationLatLng?.let { it1 -> shopLogo?.let { it2 -> goToRoute(it1, it2) } }
                 true
             }
+
+            btnWebsiteMenuItem.setOnMenuItemClickListener {
+                val builder = CustomTabsIntent.Builder()
+                val customTabsIntent = builder.build()
+
+                context?.let{customTabsIntent.launchUrl(it, Uri.parse(Uri.decode("http://${shopUrl}")))}
+                true
+            }
         } else {
             // Disable navigation button is there is no internet connection.
             // and show a toast message for extra info for the user.
             btnStartNavigationMenuItem.isVisible = false
+            btnWebsiteMenuItem.isVisible = false
             Toast.makeText(
                 requireContext(),
                 getString(R.string.connection_message),
@@ -117,6 +130,7 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
             // Denk dat het ligt aan hoe het is ingevoerd in firebase?
             tv_openingstijden.text = it.openingstijden.toString()
             tv_productenlijst.text = it.inventory.toString()
+            shopUrl = it.website
 
             destinationLatLng = LatLng(it.latitude, it.longitude)
         })
