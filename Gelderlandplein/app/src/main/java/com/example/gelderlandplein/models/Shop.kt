@@ -14,7 +14,7 @@ data class Shop(
     var latitude: Double,
     var longitude: Double,
     var inventory: ArrayList<String>?,
-    var website: String? = ""
+    var website: String?
 
 ) : Parcelable {
 

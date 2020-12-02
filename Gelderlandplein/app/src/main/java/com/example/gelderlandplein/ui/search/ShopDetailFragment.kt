@@ -92,6 +92,8 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
         val btnStartNavigationMenuItem = menu.findItem(R.id.btn_start_nav)
         val btnWebsiteMenuItem = menu.findItem(R.id.btn_website)
 
+        if (shopUrl == "null") btnWebsiteMenuItem.isVisible = false
+
         if (NetworkMonitorHelper.isConnectedToNetwork(requireContext())) {
             // let the user navigate to store when there is a internet connection.
             btnStartNavigationMenuItem.setOnMenuItemClickListener {
