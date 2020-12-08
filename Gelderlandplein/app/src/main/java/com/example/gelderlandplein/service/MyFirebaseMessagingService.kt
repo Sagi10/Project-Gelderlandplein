@@ -51,12 +51,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val image: String = data.getValue("image")
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel1 =
+            val notificationChannel =
                 NotificationChannel(NOTIFICATION_CHANNEL, "Notification channel", NotificationManager.IMPORTANCE_HIGH)
-            channel1.description = "Notification channel of Gelderlandplein"
+            notificationChannel.description = "Notification channel of Gelderlandplein"
 
             val notificationManager = getSystemService(NotificationManager::class.java)
-            notificationManager.createNotificationChannel(channel1)
+            notificationManager.createNotificationChannel(notificationChannel)
 
             val notification = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL)
                 .setSmallIcon(R.drawable.ic_logo)
