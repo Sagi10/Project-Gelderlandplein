@@ -2,13 +2,12 @@ package com.example.gelderlandplein.ui.search
 
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
-import android.location.Location
-import android.os.AsyncTask
+import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -16,23 +15,15 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.*
 import com.example.gelderlandplein.R
 import com.example.gelderlandplein.helpers.NetworkMonitorHelper
-import com.example.gelderlandplein.models.Shop
-import com.example.gelderlandplein.ui.GoogleMapDTO
 import com.example.gelderlandplein.viewmodel.FirebaseViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.*
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.item_shop_detail.*
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import java.lang.Exception
-import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_detail_event.*
 
@@ -91,7 +82,11 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
         if (NetworkMonitorHelper.isConnectedToNetwork(requireContext())) {
             // let the user navigate to store when there is a internet connection.
             btnStartNavigationMenuItem.setOnMenuItemClickListener {
-                destinationLatLng?.let { it1 -> shopLogo?.let { it2 -> goToRoute(it1, it2) } }
+                //destinationLatLng?.let { it1 -> shopLogo?.let { it2 -> goToRoute(it1, it2) } }
+                val gmIntentUri = Uri.parse("google.navigation:q=${destinationLatLng?.latitude},${destinationLatLng?.longitude}&mode=w")
+                val mapIntent = Intent(Intent.ACTION_VIEW, gmIntentUri)
+                mapIntent.setPackage("com.google.android.apps.maps")
+                startActivity(mapIntent)
                 true
             }
         } else {
@@ -119,6 +114,7 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
             tv_productenlijst.text = it.inventory.toString()
 
             destinationLatLng = LatLng(it.latitude, it.longitude)
+
         })
     }
 
