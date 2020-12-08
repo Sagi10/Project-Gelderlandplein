@@ -21,6 +21,8 @@ import java.net.URL
 @SuppressLint("MissingFirebaseInstanceTokenRefresh")
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
+    private val NOTIFICATION_ID = 1
+
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
 
         Log.d(TAG, "From: " + remoteMessage.from)
@@ -65,7 +67,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 .setCategory(NotificationCompat.CATEGORY_PROMO)
                 .build()
 
-            notificationManager.notify(1, notification)
+            notificationManager.notify(NOTIFICATION_ID, notification)
         }
     }
 
