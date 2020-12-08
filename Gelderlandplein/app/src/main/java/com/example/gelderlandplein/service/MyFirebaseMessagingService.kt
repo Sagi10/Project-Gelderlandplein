@@ -50,13 +50,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel1 =
-                NotificationChannel(CHANNEL_1_ID, "Channel 1", NotificationManager.IMPORTANCE_HIGH)
-            channel1.description = "This is Channel 1"
+                NotificationChannel(NOTIFICATION_CHANNEL, "Notification channel", NotificationManager.IMPORTANCE_HIGH)
+            channel1.description = "Notification channel of Gelderlandplein"
 
             val notificationManager = getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(channel1)
 
-            val notification = NotificationCompat.Builder(this, CHANNEL_1_ID)
+            val notification = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL)
                 .setSmallIcon(R.drawable.ic_logo)
                 .setContentTitle(title)
                 .setContentText(content)
@@ -84,6 +84,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     companion object {
-        const val CHANNEL_1_ID = "channel1"
+        const val NOTIFICATION_CHANNEL = "notification_channel"
     }
 }
