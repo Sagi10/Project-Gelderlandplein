@@ -18,22 +18,18 @@ import kotlinx.coroutines.launch
 
 class FirebaseViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val _viewedShops: MutableLiveData<ArrayList<Shop>> = MutableLiveData()
     private val _shops: MutableLiveData<ArrayList<Shop>> = MutableLiveData()
     private val _events: MutableLiveData<ArrayList<Event>> = MutableLiveData()
     private val _arts: MutableLiveData<ArrayList<Art>> = MutableLiveData()
 
-    private val _lastViewed: MutableLiveData<Shop> = MutableLiveData()
     private val _shopDetail: MutableLiveData<Shop> = MutableLiveData()
     private val _eventDetail: MutableLiveData<Event> = MutableLiveData()
     private val _artsDetail: MutableLiveData<Art> = MutableLiveData()
 
-    val viewedShops = _viewedShops
     val shops = _shops
     val events = _events
     val arts = _arts
 
-    //val lastViewed = _lastViewed
     val shopDetail = _shopDetail
     val eventDetail = _eventDetail
     val artDetail = _artsDetail
@@ -173,16 +169,6 @@ class FirebaseViewModel(application: Application) : AndroidViewModel(application
                     })
             }
         }
-    }
-
-    fun sendLastViewed(shop : Shop){
-        val allShops = ArrayList<Shop>()
-        try {
-            allShops.add(shop)
-        } catch (e: Throwable) {
-            Log.e(TAG, "ERROR MET VERSTUREN LAST VIEWED SHOP: ${e.message}")
-        }
-        _viewedShops.value = allShops
     }
 
     fun sendDetailShop(shopDetail: Shop) {

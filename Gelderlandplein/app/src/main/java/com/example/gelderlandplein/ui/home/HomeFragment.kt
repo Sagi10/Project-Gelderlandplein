@@ -15,6 +15,7 @@ import com.example.gelderlandplein.models.Art
 import com.example.gelderlandplein.models.Event
 import com.example.gelderlandplein.models.Shop
 import com.example.gelderlandplein.viewmodel.FirebaseViewModel
+import com.example.gelderlandplein.viewmodel.ShopViewModel
 import kotlinx.android.synthetic.main.fragment_items_overview_carousel.*
 
 class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
@@ -30,6 +31,7 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
     private val shopAdapter = HomeShopAdapter(shops, this)
 
     private val firebaseViewModel : FirebaseViewModel by activityViewModels()
+    private val shopViewModel: ShopViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,7 +90,7 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
             shopAdapter.notifyDataSetChanged()
         })*/
 
-        firebaseViewModel.viewedShops.observe(viewLifecycleOwner, {
+        shopViewModel.shops.observe(viewLifecycleOwner, {
             this@HomeFragment.shops.addAll(it)
             pb_loading_shops.isVisible = false
             shopAdapter.notifyDataSetChanged()
