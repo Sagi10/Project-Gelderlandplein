@@ -25,4 +25,6 @@
     <string name="productenlijst">Productenlijst:</string>
     <string name="shop_name">SHOP NAME</string>
     <string name="connection_message">Navigatie niet mogelijk! Controleer verbinding.</string>
+    <string name="shops">Shops</string>
+    <string name="show_all">Show all</string>
 </resources>
