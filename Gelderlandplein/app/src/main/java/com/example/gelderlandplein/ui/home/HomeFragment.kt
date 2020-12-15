@@ -51,10 +51,6 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // hide all buttons untill data is loaded.
-        btn_show_all_shops.isVisible = false
-        btn_show_all_events.isVisible = false
-        btn_show_all_arts.isVisible = false
 
         if (shops.isNotEmpty() || events.isNotEmpty() || arts.isNotEmpty()){
             pb_loading_shops.isVisible = false

@@ -55,7 +55,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/show_all"
-                            android:textColor="#2196F3" />
+                            android:textColor="#2196F3"
+                            android:visibility="invisible" />
 
                     </LinearLayout>
 
@@ -110,7 +111,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/show_all"
-                            android:textColor="#2196F3" />
+                            android:textColor="#2196F3"
+                            android:visibility="invisible" />
 
                     </LinearLayout>
 
@@ -163,8 +165,9 @@
                             style="@style/Widget.MaterialComponents.Button.TextButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:text="@string/show_all"
                             android:textColor="#2196F3"
-                            android:text="@string/show_all" />
+                            android:visibility="invisible" />
 
                     </LinearLayout>
 
