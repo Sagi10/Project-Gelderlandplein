@@ -6,24 +6,36 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
+import android.location.Location
 import android.net.Uri
+import android.os.AsyncTask
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.*
 import com.example.gelderlandplein.R
 import com.example.gelderlandplein.helpers.NetworkMonitorHelper
+import com.example.gelderlandplein.models.Shop
+import com.example.gelderlandplein.dummy.GoogleMapDTO
 import com.example.gelderlandplein.viewmodel.FirebaseViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.*
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.item_shop_detail.*
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import java.lang.Exception
+import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_detail_event.*
 
@@ -38,6 +50,7 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
     private lateinit var map: GoogleMap
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
+    private var shopUrl: String? = null
     private var shopLogo: Bitmap? = null
     private var locationPermissionGranted = false
     private var REQUEST_LOCATION = 1
@@ -78,6 +91,9 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         val btnStartNavigationMenuItem = menu.findItem(R.id.btn_start_nav)
+        val btnWebsiteMenuItem = menu.findItem(R.id.btn_website)
+
+        if (shopUrl == "null") btnWebsiteMenuItem.isVisible = false
 
         if (NetworkMonitorHelper.isConnectedToNetwork(requireContext())) {
             // let the user navigate to store when there is a internet connection.
@@ -89,10 +105,19 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
                 startActivity(mapIntent)
                 true
             }
+
+            btnWebsiteMenuItem.setOnMenuItemClickListener {
+                val builder = CustomTabsIntent.Builder()
+                val customTabsIntent = builder.build()
+
+                context?.let{customTabsIntent.launchUrl(it, Uri.parse(Uri.decode("http://${shopUrl}")))}
+                true
+            }
         } else {
             // Disable navigation button is there is no internet connection.
             // and show a toast message for extra info for the user.
             btnStartNavigationMenuItem.isVisible = false
+            btnWebsiteMenuItem.isVisible = false
             Toast.makeText(
                 requireContext(),
                 getString(R.string.connection_message),
@@ -112,9 +137,9 @@ class ShopDetailFragment : Fragment(), OnMapReadyCallback {
             // Denk dat het ligt aan hoe het is ingevoerd in firebase?
             tv_openingstijden.text = it.openingstijden.toString()
             tv_productenlijst.text = it.inventory.toString()
+            shopUrl = it.website
 
             destinationLatLng = LatLng(it.latitude, it.longitude)
-
         })
     }
 

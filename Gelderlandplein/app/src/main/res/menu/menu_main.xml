@@ -13,9 +13,18 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:title="Go to Website"
+        android:id="@+id/btn_website"
+        android:icon="@drawable/ic_website"
+        android:visible="true"
+        app:showAsAction="ifRoom"/>
+
+    <item
         android:id="@+id/btn_start_nav"
         android:icon="@drawable/ic_navigation"
         android:title="Start Navigatie"
         android:visible="true"
         app:showAsAction="ifRoom" />
+
+
 </menu>

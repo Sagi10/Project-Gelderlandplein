@@ -75,7 +75,8 @@ class FirebaseViewModel(application: Application) : AndroidViewModel(application
                                                 .toDouble(),
                                             currentShop.child("longitude").value.toString()
                                                 .toDouble(),
-                                            inventory
+                                            inventory,
+                                            currentShop.child("website").value.toString()
                                         )
                                         allShops.add(shop)
 
