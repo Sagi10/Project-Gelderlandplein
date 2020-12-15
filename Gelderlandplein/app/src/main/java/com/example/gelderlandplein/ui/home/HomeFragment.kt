@@ -59,7 +59,7 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
 
         rv_events_carousel.adapter = eventAdapter
         rv_arts_carousel.adapter = artAdapter
-        //rv_shops_carousel.adapter = shopAdapter
+        rv_shops_carousel.adapter = shopAdapter
 
         observeEvents()
         observeArts()
