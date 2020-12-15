@@ -13,7 +13,8 @@ data class Shop(
     var openingstijden: ArrayList<String>?,
     var latitude: Double,
     var longitude: Double,
-    var inventory: ArrayList<String>?
+    var inventory: ArrayList<String>?,
+    var website: String?
 
 ) : Parcelable {
 

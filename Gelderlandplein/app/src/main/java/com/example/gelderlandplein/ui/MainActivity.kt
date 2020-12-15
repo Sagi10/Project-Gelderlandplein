@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity() {
                     toolbar.isVisible = true
                     toolbar.menu.findItem(R.id.btSearch)?.isVisible = true
                     toolbar.menu.findItem(R.id.btn_start_nav)?.isVisible = false
+                    toolbar.menu.findItem(R.id.btn_website)?.isVisible = false
                     supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
                     val manager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
@@ -69,6 +70,7 @@ class MainActivity : AppCompatActivity() {
                     toolbar.isVisible = true
                     toolbar.menu.findItem(R.id.btSearch)?.isVisible = false
                     toolbar.menu.findItem(R.id.btn_start_nav)?.isVisible = true
+                    toolbar.menu.findItem(R.id.btn_website)?.isVisible = true
                     supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 }
                 in arrayOf(R.id.mapRouteFragment) -> {
@@ -76,6 +78,7 @@ class MainActivity : AppCompatActivity() {
                     toolbar.isVisible = true
                     toolbar.menu.findItem(R.id.btSearch)?.isVisible = false
                     toolbar.menu.findItem(R.id.btn_start_nav)?.isVisible = false
+                    toolbar.menu.findItem(R.id.btn_website)?.isVisible = false
                     supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 }
                 in arrayOf(R.id.ArtOverviewFragment) -> {
@@ -83,6 +86,7 @@ class MainActivity : AppCompatActivity() {
                     toolbar.isVisible = true
                     toolbar.menu.findItem(R.id.btSearch)?.isVisible = false
                     toolbar.menu.findItem(R.id.btn_start_nav)?.isVisible = false
+                    toolbar.menu.findItem(R.id.btn_website)?.isVisible = false
                     supportActionBar?.setDisplayHomeAsUpEnabled(false)
                 }
                 in arrayOf(R.id.ArtDetailFragment) -> {
@@ -90,6 +94,7 @@ class MainActivity : AppCompatActivity() {
                     toolbar.isVisible = true
                     toolbar.menu.findItem(R.id.btSearch)?.isVisible = false
                     toolbar.menu.findItem(R.id.btn_start_nav)?.isVisible = false
+                    toolbar.menu.findItem(R.id.btn_website)?.isVisible = false
                     supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 }
                 in arrayOf(R.id.EventFragment) -> {
@@ -97,6 +102,7 @@ class MainActivity : AppCompatActivity() {
                     toolbar.isVisible = true
                     toolbar.menu.findItem(R.id.btSearch)?.isVisible = false
                     toolbar.menu.findItem(R.id.btn_start_nav)?.isVisible = false
+                    toolbar.menu.findItem(R.id.btn_website)?.isVisible = false
                     supportActionBar?.setDisplayHomeAsUpEnabled(false)
                 }
                 in arrayOf(R.id.eventDetailFragment) -> {
@@ -104,6 +110,7 @@ class MainActivity : AppCompatActivity() {
                     toolbar.isVisible = true
                     toolbar.menu.findItem(R.id.btSearch)?.isVisible = false
                     toolbar.menu.findItem(R.id.btn_start_nav)?.isVisible = false
+                    toolbar.menu.findItem(R.id.btn_website)?.isVisible = false
                     supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 }
             }
