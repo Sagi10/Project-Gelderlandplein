@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
 import android.location.Location
 import android.os.AsyncTask
 import android.os.Bundle
@@ -18,7 +17,6 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import com.example.gelderlandplein.R
-import com.example.gelderlandplein.ui.GoogleMapDTO
 import com.example.gelderlandplein.ui.search.BUNDLE_ICON_KEY
 import com.example.gelderlandplein.ui.search.BUNDLE_SHOP_KEY
 import com.example.gelderlandplein.ui.search.REQ_ICON_KEY
@@ -31,8 +29,6 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.*
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.item_detail_event.*
-import kotlinx.android.synthetic.main.item_shop_detail.*
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.lang.Exception
