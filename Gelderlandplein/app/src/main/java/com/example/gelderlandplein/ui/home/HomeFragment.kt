@@ -69,7 +69,10 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
         observeEvents()
         observeArts()
         observeShops()
-
+        setAllButtonOnClickListeners()
+    }
+    
+    private fun setAllButtonOnClickListeners(){
         btn_show_all_shops.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_SearchFragment)
         }
@@ -79,7 +82,6 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
         btn_show_all_arts.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_ArtOverviewFragment)
         }
-
     }
 
     private fun observeEvents() {
