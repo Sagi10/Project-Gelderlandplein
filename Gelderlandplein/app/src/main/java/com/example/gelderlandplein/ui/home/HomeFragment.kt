@@ -15,9 +15,7 @@ import com.example.gelderlandplein.models.Art
 import com.example.gelderlandplein.models.Event
 import com.example.gelderlandplein.models.Shop
 import com.example.gelderlandplein.viewmodel.FirebaseViewModel
-import kotlinx.android.synthetic.main.fragment_art_list.*
 import kotlinx.android.synthetic.main.fragment_items_overview_carousel.*
-import kotlinx.android.synthetic.main.fragment_search_list.*
 
 class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
     HomeShopAdapter.OnShopsEventClickListener, HomeArtAdapter.OnArtCardViewClickListener {
@@ -84,7 +82,13 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
     }
 
     private fun observeShops() {
-        firebaseViewModel.shops.observe(viewLifecycleOwner, {
+        /*firebaseViewModel.shops.observe(viewLifecycleOwner, {
+            this@HomeFragment.shops.addAll(it)
+            pb_loading_shops.isVisible = false
+            shopAdapter.notifyDataSetChanged()
+        })*/
+
+        firebaseViewModel.viewedShops.observe(viewLifecycleOwner, {
             this@HomeFragment.shops.addAll(it)
             pb_loading_shops.isVisible = false
             shopAdapter.notifyDataSetChanged()

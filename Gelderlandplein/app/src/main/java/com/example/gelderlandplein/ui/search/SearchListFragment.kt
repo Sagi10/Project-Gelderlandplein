@@ -108,6 +108,7 @@ class SearchListFragment : Fragment() {
 
     private fun goToShopDetail(shop: Shop) {
         firebaseViewModel.sendDetailShop(shop)
+        firebaseViewModel.sendLastViewed(shop)
         findNavController().navigate(R.id.action_SearchFragment_to_shopDetailFragment)
     }
 }
