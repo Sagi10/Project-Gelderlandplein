@@ -14,8 +14,9 @@ import com.example.gelderlandplein.adapters.*
 import com.example.gelderlandplein.models.Art
 import com.example.gelderlandplein.models.Event
 import com.example.gelderlandplein.models.Shop
+import com.example.gelderlandplein.models.ShopList
 import com.example.gelderlandplein.viewmodel.FirebaseViewModel
-import com.example.gelderlandplein.viewmodel.ShopViewModel
+//import com.example.gelderlandplein.viewmodel.ShopViewModel
 import kotlinx.android.synthetic.main.fragment_items_overview_carousel.*
 
 class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
@@ -30,12 +31,16 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
     private val shops = arrayListOf<Shop>()
     private val shopAdapter = HomeShopAdapter(shops, this)
 
+    private var lastViewedShops: ShopList? = null
+
     private val firebaseViewModel : FirebaseViewModel by activityViewModels()
-    private val shopViewModel: ShopViewModel by activityViewModels()
+    //private val shopViewModel: ShopViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        lastViewedShops = ShopList(firebaseViewModel.viewedShops.value)
+        
         firebaseViewModel.getAllShops()
         firebaseViewModel.getAllEvents()
         firebaseViewModel.getAllArts()
@@ -84,13 +89,7 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
     }
 
     private fun observeShops() {
-        /*firebaseViewModel.shops.observe(viewLifecycleOwner, {
-            this@HomeFragment.shops.addAll(it)
-            pb_loading_shops.isVisible = false
-            shopAdapter.notifyDataSetChanged()
-        })*/
-
-        shopViewModel.shops.observe(viewLifecycleOwner, {
+        firebaseViewModel.viewedShops.observe(viewLifecycleOwner, {
             this@HomeFragment.shops.addAll(it)
             pb_loading_shops.isVisible = false
             shopAdapter.notifyDataSetChanged()

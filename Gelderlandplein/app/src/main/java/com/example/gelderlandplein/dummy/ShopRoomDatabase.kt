@@ -1,12 +1,16 @@
+/*
 package com.example.gelderlandplein.dummy
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.example.gelderlandplein.models.Shop
+import com.example.gelderlandplein.models.ShopList
 
-@Database(entities = [Shop::class], version = 1, exportSchema = false)
+@Database(entities = [ShopList::class], version = 1, exportSchema = false)
+@TypeConverters(Converters::class)
 abstract class ShopRoomDatabase : RoomDatabase() {
 
     abstract fun shopDao(): ShopDao
@@ -34,3 +38,4 @@ abstract class ShopRoomDatabase : RoomDatabase() {
         }
     }
 }
+*/

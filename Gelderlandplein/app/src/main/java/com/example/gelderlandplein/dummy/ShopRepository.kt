@@ -1,9 +1,11 @@
+/*
 package com.example.gelderlandplein.dummy
 
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.gelderlandplein.models.Shop
+import com.example.gelderlandplein.models.ShopList
 
 class ShopRepository(context: Context) {
     private var shopDao: ShopDao?
@@ -13,21 +15,22 @@ class ShopRepository(context: Context) {
         shopDao = shopRoomDatabase?.shopDao()
     }
 
-    fun getAllShops() : LiveData<List<Shop>> {
-        return shopDao?.getAllShops() ?: MutableLiveData(emptyList())
+    fun getAllShops() : LiveData<ShopList> {
+        return shopDao?.getAllShops() ?: MutableLiveData()
     }
 
-    suspend fun insertShop(shop: Shop) {
+    suspend fun insertShop(shop: ShopList) {
         shopDao?.insertShop(shop)
     }
 
 
-    suspend fun deleteShop(shop: Shop) {
+    suspend fun deleteShop(shop: ShopList) {
         shopDao?.deleteShop(shop)
     }
 
-    suspend fun updateShop(shop: Shop) {
+    suspend fun updateShop(shop: ShopList) {
         shopDao?.updateShop(shop)
     }
 
 }
+*/
