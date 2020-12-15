@@ -24,7 +24,6 @@ import com.google.android.gms.maps.*
 import com.example.gelderlandplein.R
 import com.example.gelderlandplein.helpers.NetworkMonitorHelper
 import com.example.gelderlandplein.models.Shop
-import com.example.gelderlandplein.ui.GoogleMapDTO
 import com.example.gelderlandplein.viewmodel.FirebaseViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
