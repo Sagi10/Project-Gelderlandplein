@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.example.gelderlandplein.R
 import com.example.gelderlandplein.adapters.*
@@ -51,6 +52,7 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         if (shops.isNotEmpty() || events.isNotEmpty() || arts.isNotEmpty()){
             pb_loading_shops.isVisible = false
             pb_loading_events.isVisible = false
@@ -64,12 +66,26 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
         observeEvents()
         observeArts()
         observeShops()
+        setAllButtonOnClickListeners()
+    }
+    
+    private fun setAllButtonOnClickListeners(){
+        btn_show_all_shops.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_SearchFragment)
+        }
+        btn_show_all_events.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_EventFragment)
+        }
+        btn_show_all_arts.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_ArtOverviewFragment)
+        }
     }
 
     private fun observeEvents() {
         firebaseViewModel.events.observe(viewLifecycleOwner, {
             this@HomeFragment.events.addAll(it)
             pb_loading_events.isVisible = false
+            btn_show_all_events.isVisible = true
             eventAdapter.notifyDataSetChanged()
         })
     }
@@ -79,6 +95,7 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
             this@HomeFragment.arts.clear()
             this@HomeFragment.arts.addAll(it)
             pb_loading_arts.isVisible = false
+            btn_show_all_arts.isVisible = true
             artAdapter.notifyDataSetChanged()
         })
     }
@@ -87,6 +104,7 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
         firebaseViewModel.shops.observe(viewLifecycleOwner, {
             this@HomeFragment.shops.addAll(it)
             pb_loading_shops.isVisible = false
+            btn_show_all_shops.isVisible = true
             shopAdapter.notifyDataSetChanged()
         })
     }
