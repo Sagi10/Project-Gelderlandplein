@@ -54,6 +54,7 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
         firebaseViewModel.getAllEvents()
         firebaseViewModel.getAllArts()
         //loadData()
+        Log.d("SAVEDSIZE", shops.size.toString())
     }
 
     override fun onCreateView(
@@ -95,30 +96,33 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
             this@HomeFragment.arts.addAll(it)
             pb_loading_arts.isVisible = false
             artAdapter.notifyDataSetChanged()
+            Log.d("REFRESH","AAAAAAAAAAAAAAAAAAAAAAAART")
         })
     }
 
     private fun observeShops() {
         firebaseViewModel.viewedShops.observe(viewLifecycleOwner, { so ->
-            val viewedList = ShopList(so)
-            Log.d("DIT",viewedList.toString())
+            Log.d("REFRESH","RUUUUUUUUUUN")
             this@HomeFragment.shops.addAll(so)
-
-            //---------------------------CRASH OORZAAK (DOOR CONVERTER)----------------------------------
-            shopViewModel.insertShop(viewedList)
-            shopViewModel.shopList.observe(viewLifecycleOwner, {
-                Log.d("SAVED", it.toString())
-            })
+            Log.d("SAVED2", shops.toString())
+            saveData()
 
             pb_loading_shops.isVisible = false
-            Log.d("ARRAYO", shops.toString())
             shopAdapter.notifyDataSetChanged()
         })
+            //---------------------------CRASH OORZAAK (DOOR CONVERTER)----------------------------------
+            /*shopViewModel.insertShop(viewedList)
+            shopViewModel.shopList.observe(viewLifecycleOwner, {
+                Log.d("SAVED", it.toString())
+            })*/
+
+
         /*shopViewModel.shopList.observe(viewLifecycleOwner, {
             it.viewedShops?.let { it1 -> this@HomeFragment.shops.addAll(it1) }
             pb_loading_shops.isVisible = false
             shopAdapter.notifyDataSetChanged()
         })*/
+        Log.d("REFRESH","SHOOOOOOOOOOOOOOOOOOOOOOOOOOOPS")
     }
 
     override fun onEventCardViewClick(dummyEvent: Event, position: Int) {
@@ -155,6 +159,7 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
         val json = gson.toJson(shops)
         editor?.putString("shop list", json)
         editor?.apply()
+        Log.d("SAVED3", json)
     }
 
     private fun loadData(){
@@ -162,8 +167,9 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
         val gson = Gson()
         val json = sharedPreferences?.getString("shop list", null)
         val type: Type = object : TypeToken<ArrayList<Shop>>() {}.type
-        shops = gson.fromJson(json, type)
-
-        if (shops.size == 0) shops = arrayListOf()
+        if (json != null){
+            shops = gson.fromJson(json, type)
+        }
+        Log.d("SAVED1", shops.toString())
     }
 }
