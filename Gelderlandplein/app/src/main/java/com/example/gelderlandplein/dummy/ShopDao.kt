@@ -1,6 +1,6 @@
-/*
-package com.example.gelderlandplein.dummy
 
+package com.example.gelderlandplein.dummy
+/*
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.gelderlandplein.models.Shop

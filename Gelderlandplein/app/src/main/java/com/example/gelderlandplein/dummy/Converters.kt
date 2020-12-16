@@ -1,6 +1,6 @@
-/*
-package com.example.gelderlandplein.dummy
 
+package com.example.gelderlandplein.dummy
+/*
 import androidx.room.TypeConverter
 import com.example.gelderlandplein.models.ShopList
 import com.google.gson.Gson

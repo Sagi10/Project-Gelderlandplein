@@ -1,23 +1,30 @@
 package com.example.gelderlandplein.ui.home
 
+//import com.example.gelderlandplein.viewmodel.ShopViewModel
+
+import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.gelderlandplein.R
-import com.example.gelderlandplein.adapters.*
+import com.example.gelderlandplein.adapters.HomeArtAdapter
+import com.example.gelderlandplein.adapters.HomeEventAdapter
+import com.example.gelderlandplein.adapters.HomeShopAdapter
 import com.example.gelderlandplein.models.Art
 import com.example.gelderlandplein.models.Event
 import com.example.gelderlandplein.models.Shop
-import com.example.gelderlandplein.models.ShopList
 import com.example.gelderlandplein.viewmodel.FirebaseViewModel
-//import com.example.gelderlandplein.viewmodel.ShopViewModel
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.fragment_items_overview_carousel.*
+import java.lang.reflect.Type
+
 
 class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
     HomeShopAdapter.OnShopsEventClickListener, HomeArtAdapter.OnArtCardViewClickListener {
@@ -28,10 +35,10 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
     private val arts = arrayListOf<Art>()
     private val artAdapter = HomeArtAdapter(arts, this)
 
-    private val shops = arrayListOf<Shop>()
+    private var shops = arrayListOf<Shop>()
     private val shopAdapter = HomeShopAdapter(shops, this)
 
-    private var lastViewedShops: ShopList? = null
+    //private var lastViewedShops: ShopList? = null
 
     private val firebaseViewModel : FirebaseViewModel by activityViewModels()
     //private val shopViewModel: ShopViewModel by activityViewModels()
@@ -39,16 +46,15 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        lastViewedShops = ShopList(firebaseViewModel.viewedShops.value)
-        
         firebaseViewModel.getAllShops()
         firebaseViewModel.getAllEvents()
         firebaseViewModel.getAllArts()
+        loadData()
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false)
@@ -91,7 +97,9 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
     private fun observeShops() {
         firebaseViewModel.viewedShops.observe(viewLifecycleOwner, {
             this@HomeFragment.shops.addAll(it)
+            saveData()
             pb_loading_shops.isVisible = false
+            Log.d("ARRAYO", shops.toString())
             shopAdapter.notifyDataSetChanged()
         })
     }
@@ -121,5 +129,26 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
     private fun goToShopDetail(shop: Shop) {
         firebaseViewModel.sendDetailShop(shop)
         findNavController().navigate(R.id.action_homeFragment_to_shopDetailFragment)
+    }
+
+    private fun saveData(){
+        val sharedPreferences = activity?.getSharedPreferences("shared preferences", MODE_PRIVATE)
+        val editor = sharedPreferences?.edit()
+        val gson = Gson()
+        val json = gson.toJson(shops)
+        editor?.putString("shop list", json)
+        editor?.apply()
+    }
+
+    private fun loadData(){
+        val sharedPreferences = activity?.getSharedPreferences("shared preferences", MODE_PRIVATE)
+        val gson = Gson()
+        val json = sharedPreferences?.getString("shop list", null)
+        val type: Type = object : TypeToken<ArrayList<Shop>>() {}.type
+        shops = gson.fromJson(json, type)
+
+        if (shops == null) {
+            shops = ArrayList()
+        }
     }
 }
