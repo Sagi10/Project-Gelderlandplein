@@ -28,4 +28,6 @@
     <string name="search">Search</string>
     <string name="art">Art</string>
     <string name="news_and_events"><![CDATA[News & Events]]></string>
+    <string name="shops">Shops</string>
+    <string name="show_all">Show all</string>
 </resources>
