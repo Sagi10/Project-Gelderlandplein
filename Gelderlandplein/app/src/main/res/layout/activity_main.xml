@@ -37,7 +37,6 @@
             app:popupTheme="@style/Theme.Gelderlandplein.PopupOverlay"
             app:subtitleTextColor="#FFFFFF">
 
-
             <TextView
                 android:id="@+id/toolbar_title"
                 android:layout_width="wrap_content"
