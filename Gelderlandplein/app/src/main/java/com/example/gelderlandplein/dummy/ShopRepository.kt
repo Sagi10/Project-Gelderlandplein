@@ -1,6 +1,6 @@
 
 package com.example.gelderlandplein.dummy
-/*
+
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -33,4 +33,4 @@ class ShopRepository(context: Context) {
     }
 
 }
-*/
+

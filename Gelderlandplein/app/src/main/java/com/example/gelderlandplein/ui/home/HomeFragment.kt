@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.gelderlandplein.R
 import com.example.gelderlandplein.adapters.HomeArtAdapter
@@ -19,7 +20,9 @@ import com.example.gelderlandplein.adapters.HomeShopAdapter
 import com.example.gelderlandplein.models.Art
 import com.example.gelderlandplein.models.Event
 import com.example.gelderlandplein.models.Shop
+import com.example.gelderlandplein.models.ShopList
 import com.example.gelderlandplein.viewmodel.FirebaseViewModel
+import com.example.gelderlandplein.viewmodel.ShopViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.fragment_items_overview_carousel.*
@@ -28,6 +31,7 @@ import java.lang.reflect.Type
 
 class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
     HomeShopAdapter.OnShopsEventClickListener, HomeArtAdapter.OnArtCardViewClickListener {
+
 
     private val events = arrayListOf<Event>()
     private val eventAdapter = HomeEventAdapter(events, this)
@@ -38,10 +42,10 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
     private var shops = arrayListOf<Shop>()
     private val shopAdapter = HomeShopAdapter(shops, this)
 
-    //private var lastViewedShops: ShopList? = null
+    //private var lastViewedShops = ShopList(shops)
 
     private val firebaseViewModel : FirebaseViewModel by activityViewModels()
-    //private val shopViewModel: ShopViewModel by activityViewModels()
+    private val shopViewModel: ShopViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,13 +99,26 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
     }
 
     private fun observeShops() {
-        firebaseViewModel.viewedShops.observe(viewLifecycleOwner, {
-            this@HomeFragment.shops.addAll(it)
-            //saveData()
+        firebaseViewModel.viewedShops.observe(viewLifecycleOwner, { so ->
+            val viewedList = ShopList(so)
+            Log.d("DIT",viewedList.toString())
+            this@HomeFragment.shops.addAll(so)
+
+            //---------------------------CRASH OORZAAK (DOOR CONVERTER)----------------------------------
+            shopViewModel.insertShop(viewedList)
+            shopViewModel.shopList.observe(viewLifecycleOwner, {
+                Log.d("SAVED", it.toString())
+            })
+
             pb_loading_shops.isVisible = false
             Log.d("ARRAYO", shops.toString())
             shopAdapter.notifyDataSetChanged()
         })
+        /*shopViewModel.shopList.observe(viewLifecycleOwner, {
+            it.viewedShops?.let { it1 -> this@HomeFragment.shops.addAll(it1) }
+            pb_loading_shops.isVisible = false
+            shopAdapter.notifyDataSetChanged()
+        })*/
     }
 
     override fun onEventCardViewClick(dummyEvent: Event, position: Int) {

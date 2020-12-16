@@ -1,6 +1,6 @@
 
 package com.example.gelderlandplein.dummy
-/*
+
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.gelderlandplein.models.Shop
@@ -21,4 +21,4 @@ interface ShopDao {
     suspend fun updateShop(shop: ShopList)
 
 }
-*/
+

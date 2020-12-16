@@ -1,6 +1,6 @@
 
 package com.example.gelderlandplein.dummy
-/*
+
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
@@ -38,4 +38,4 @@ abstract class ShopRoomDatabase : RoomDatabase() {
         }
     }
 }
-*/
+
