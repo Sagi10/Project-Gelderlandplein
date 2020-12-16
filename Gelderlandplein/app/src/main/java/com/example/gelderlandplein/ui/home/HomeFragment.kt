@@ -49,7 +49,7 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
         firebaseViewModel.getAllShops()
         firebaseViewModel.getAllEvents()
         firebaseViewModel.getAllArts()
-        loadData()
+        //loadData()
     }
 
     override fun onCreateView(
@@ -97,7 +97,7 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
     private fun observeShops() {
         firebaseViewModel.viewedShops.observe(viewLifecycleOwner, {
             this@HomeFragment.shops.addAll(it)
-            saveData()
+            //saveData()
             pb_loading_shops.isVisible = false
             Log.d("ARRAYO", shops.toString())
             shopAdapter.notifyDataSetChanged()
@@ -147,8 +147,6 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
         val type: Type = object : TypeToken<ArrayList<Shop>>() {}.type
         shops = gson.fromJson(json, type)
 
-        if (shops == null) {
-            shops = ArrayList()
-        }
+        if (shops.size == 0) shops = arrayListOf()
     }
 }

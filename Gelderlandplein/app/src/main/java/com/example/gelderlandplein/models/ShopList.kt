@@ -10,6 +10,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class ShopList(
 
+    @ColumnInfo(name = "shopList")
     var viewedShops: ArrayList<Shop>?,
 
     @PrimaryKey(autoGenerate = true)

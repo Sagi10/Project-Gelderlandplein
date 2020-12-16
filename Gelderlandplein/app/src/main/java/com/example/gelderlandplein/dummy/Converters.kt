@@ -1,6 +1,6 @@
 
 package com.example.gelderlandplein.dummy
-/*
+
 import androidx.room.TypeConverter
 import com.example.gelderlandplein.models.ShopList
 import com.google.gson.Gson
@@ -14,4 +14,4 @@ object Converters {
 
     @TypeConverter
     fun jsonToList(value: String) = Gson().fromJson(value, Array<ShopList>::class.java).toList()
-}*/
+}
