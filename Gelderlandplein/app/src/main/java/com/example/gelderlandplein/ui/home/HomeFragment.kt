@@ -42,8 +42,6 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
     private var shops = arrayListOf<Shop>()
     private val shopAdapter = HomeShopAdapter(shops, this)
 
-    //private var lastViewedShops = ShopList(shops)
-
     private val firebaseViewModel : FirebaseViewModel by activityViewModels()
     private val shopViewModel: ShopViewModel by activityViewModels()
 
@@ -53,7 +51,7 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
         firebaseViewModel.getAllShops()
         firebaseViewModel.getAllEvents()
         firebaseViewModel.getAllArts()
-        //loadData()
+        loadData()
         Log.d("SAVEDSIZE", shops.size.toString())
     }
 
@@ -101,28 +99,13 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
     }
 
     private fun observeShops() {
-        firebaseViewModel.viewedShops.observe(viewLifecycleOwner, { so ->
-            Log.d("REFRESH","RUUUUUUUUUUN")
-            this@HomeFragment.shops.addAll(so)
-            Log.d("SAVED2", shops.toString())
+        firebaseViewModel.viewedShop.observe(viewLifecycleOwner, { so ->
+            Log.d("DITSHOP", so.toString())
+            this@HomeFragment.shops.add(so)
             saveData()
-
-            pb_loading_shops.isVisible = false
-            shopAdapter.notifyDataSetChanged()
         })
-            //---------------------------CRASH OORZAAK (DOOR CONVERTER)----------------------------------
-            /*shopViewModel.insertShop(viewedList)
-            shopViewModel.shopList.observe(viewLifecycleOwner, {
-                Log.d("SAVED", it.toString())
-            })*/
-
-
-        /*shopViewModel.shopList.observe(viewLifecycleOwner, {
-            it.viewedShops?.let { it1 -> this@HomeFragment.shops.addAll(it1) }
-            pb_loading_shops.isVisible = false
-            shopAdapter.notifyDataSetChanged()
-        })*/
-        Log.d("REFRESH","SHOOOOOOOOOOOOOOOOOOOOOOOOOOOPS")
+        pb_loading_shops.isVisible = false
+        shopAdapter.notifyDataSetChanged()
     }
 
     override fun onEventCardViewClick(dummyEvent: Event, position: Int) {
