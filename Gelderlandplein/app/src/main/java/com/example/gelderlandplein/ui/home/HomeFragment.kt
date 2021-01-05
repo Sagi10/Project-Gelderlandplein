@@ -36,10 +36,6 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        firebaseViewModel.getAllShops()
-        firebaseViewModel.getAllEvents()
-        firebaseViewModel.getAllArts()
     }
 
     override fun onCreateView(
@@ -47,25 +43,26 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        observeEvents()
+        observeArts()
+        observeShops()
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initViews()
+    }
 
+    private fun initViews(){
         if (shops.isNotEmpty() || events.isNotEmpty() || arts.isNotEmpty()){
             pb_loading_shops.isVisible = false
             pb_loading_events.isVisible = false
             pb_loading_arts.isVisible = false
         }
-
         rv_events_carousel.adapter = eventAdapter
         rv_arts_carousel.adapter = artAdapter
         rv_shops_carousel.adapter = shopAdapter
-
-        observeEvents()
-        observeArts()
-        observeShops()
         setAllButtonOnClickListeners()
     }
     
