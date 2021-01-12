@@ -27,7 +27,7 @@ import java.lang.reflect.Type
 
 
 class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
-    HomeShopAdapter.OnShopsEventClickListener, HomeArtAdapter.OnArtCardViewClickListener {
+        HomeShopAdapter.OnShopsEventClickListener, HomeArtAdapter.OnArtCardViewClickListener {
 
 
     private val events = arrayListOf<Event>()

@@ -41,8 +41,8 @@ class SearchListFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_search_list, container, false)
@@ -83,7 +83,7 @@ class SearchListFragment : Fragment() {
             val inventorySearch = shop.inventory.toString().trim().toLowerCase(Locale.ROOT)
 
             if (nameSearch.contains(filterQuery) || tagSearch.contains(filterQuery)
-                || inventorySearch.contains(filterQuery)
+                    || inventorySearch.contains(filterQuery)
             ) {
                 filterdShops.add(shop)
             }
