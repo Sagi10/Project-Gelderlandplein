@@ -43,9 +43,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:text="@string/toolbar_title"
-                android:textColor="#FFFFFF"
-                android:textSize="28sp"
-                android:textStyle="normal" />
+                style="@style/toolbarTitleStyle"
+                />
 
         </androidx.appcompat.widget.Toolbar>
 
