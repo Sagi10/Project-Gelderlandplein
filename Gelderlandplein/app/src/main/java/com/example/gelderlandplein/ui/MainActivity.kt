@@ -6,6 +6,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.os.Bundle
 import android.view.Menu
+import android.widget.Button
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -25,7 +26,6 @@ import kotlinx.android.synthetic.main.fragment_home.*
 class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
-    private var showKeyboard: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,10 +56,6 @@ class MainActivity : AppCompatActivity() {
             when (destination.id) {
                 in arrayOf(R.id.homeFragment) -> {
                     toolbar.isVisible = false
-                    val searchItem = menu.findItem(R.id.btSearch)
-                    val searchView = searchItem?.actionView as SearchView
-                    val manager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-                    searchView.clearFocus()
                 }
                 in arrayOf(R.id.SearchFragment) -> {
                     toolbar_title.text = ""
@@ -68,15 +64,6 @@ class MainActivity : AppCompatActivity() {
                     toolbar.menu.findItem(R.id.btn_start_nav)?.isVisible = false
                     toolbar.menu.findItem(R.id.btn_website)?.isVisible = false
                     supportActionBar?.setDisplayHomeAsUpEnabled(false)
-
-                    val manager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-                    val searchItem = menu.findItem(R.id.btSearch)
-                    val searchView = searchItem?.actionView as SearchView
-                    searchView.clearFocus()
-//                    if(showKeyboard){
-//                        searchView.requestFocus()
-//                        showKeyboard = false
-//                    }
                 }
                 in arrayOf(R.id.shopDetailFragment) -> {
                     toolbar_title.text = ""
