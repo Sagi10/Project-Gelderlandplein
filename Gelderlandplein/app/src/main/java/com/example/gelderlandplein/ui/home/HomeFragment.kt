@@ -1,7 +1,5 @@
 package com.example.gelderlandplein.ui.home
 
-//import com.example.gelderlandplein.viewmodel.ShopViewModel
-
 import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
 import android.util.Log
@@ -24,7 +22,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.fragment_items_overview_carousel.*
 import java.lang.reflect.Type
-
 
 class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
         HomeShopAdapter.OnShopsEventClickListener, HomeArtAdapter.OnArtCardViewClickListener {
@@ -97,7 +94,7 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
 
     private fun observeShops() {
         firebaseViewModel.viewedShop.observe(viewLifecycleOwner, {
-            this@HomeFragment.viewedShops.add(4,it)
+            this@HomeFragment.viewedShops.add(it)
             saveData()
         })
     }
@@ -130,11 +127,13 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
     }
 
     private fun saveData(){
+        val maxSize = 5
+
         val sharedPreferences = activity?.getSharedPreferences("shared preferences", MODE_PRIVATE)
         val editor = sharedPreferences?.edit()
         val gson = Gson()
-        if (viewedShops.size > 5) {
-            viewedShops.removeAt(0)
+        if (viewedShops.size > maxSize) {
+            viewedShops.remove(viewedShops.first())
         }
         val json = gson.toJson(viewedShops)
         editor?.putString("shop list", json)

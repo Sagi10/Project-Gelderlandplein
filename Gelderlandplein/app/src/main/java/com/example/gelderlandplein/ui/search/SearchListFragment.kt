@@ -11,11 +11,6 @@ import com.example.gelderlandplein.R
 import com.example.gelderlandplein.adapters.ShopAdapter
 import com.example.gelderlandplein.models.Shop
 import com.example.gelderlandplein.viewmodel.FirebaseViewModel
-//import com.example.gelderlandplein.viewmodel.ShopViewModel
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_search_list.*
 import java.util.*
@@ -26,7 +21,6 @@ class SearchListFragment : Fragment() {
     private var shopsAdapter = ShopAdapter(shops, ::goToShopDetail)
 
     private val firebaseViewModel: FirebaseViewModel by activityViewModels()
-    //private val shopViewModel: ShopViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,7 +98,6 @@ class SearchListFragment : Fragment() {
     private fun goToShopDetail(shop: Shop) {
         firebaseViewModel.sendDetailShop(shop)
         firebaseViewModel.sendLastViewed(shop.name)
-        //shopViewModel.insertShop(shop)
         findNavController().navigate(R.id.action_SearchFragment_to_shopDetailFragment)
     }
 }
