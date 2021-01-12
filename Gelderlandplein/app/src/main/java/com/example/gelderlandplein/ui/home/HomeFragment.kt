@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.gelderlandplein.R
 import com.example.gelderlandplein.adapters.HomeArtAdapter
@@ -20,9 +19,7 @@ import com.example.gelderlandplein.adapters.HomeShopAdapter
 import com.example.gelderlandplein.models.Art
 import com.example.gelderlandplein.models.Event
 import com.example.gelderlandplein.models.Shop
-import com.example.gelderlandplein.models.ShopList
 import com.example.gelderlandplein.viewmodel.FirebaseViewModel
-import com.example.gelderlandplein.viewmodel.ShopViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.fragment_items_overview_carousel.*
@@ -42,8 +39,9 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
     private var shops = arrayListOf<Shop>()
     private val shopAdapter = HomeShopAdapter(shops, this)
 
+    private var viewedShops = arrayListOf<String>()
+
     private val firebaseViewModel : FirebaseViewModel by activityViewModels()
-    private val shopViewModel: ShopViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +50,6 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
         firebaseViewModel.getAllEvents()
         firebaseViewModel.getAllArts()
         loadData()
-        Log.d("SAVEDSIZE", shops.size.toString())
     }
 
     override fun onCreateView(
@@ -78,6 +75,7 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
         observeEvents()
         observeArts()
         observeShops()
+        addShops(viewedShops)
     }
 
     private fun observeEvents() {
@@ -94,18 +92,14 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
             this@HomeFragment.arts.addAll(it)
             pb_loading_arts.isVisible = false
             artAdapter.notifyDataSetChanged()
-            Log.d("REFRESH","AAAAAAAAAAAAAAAAAAAAAAAART")
         })
     }
 
     private fun observeShops() {
-        firebaseViewModel.viewedShop.observe(viewLifecycleOwner, { so ->
-            Log.d("DITSHOP", so.toString())
-            this@HomeFragment.shops.add(so)
+        firebaseViewModel.viewedShop.observe(viewLifecycleOwner, {
+            this@HomeFragment.viewedShops.add(4,it)
             saveData()
         })
-        pb_loading_shops.isVisible = false
-        shopAdapter.notifyDataSetChanged()
     }
 
     override fun onEventCardViewClick(dummyEvent: Event, position: Int) {
@@ -139,20 +133,33 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
         val sharedPreferences = activity?.getSharedPreferences("shared preferences", MODE_PRIVATE)
         val editor = sharedPreferences?.edit()
         val gson = Gson()
-        val json = gson.toJson(shops)
+        if (viewedShops.size > 5) {
+            viewedShops.removeAt(0)
+        }
+        val json = gson.toJson(viewedShops)
         editor?.putString("shop list", json)
         editor?.apply()
-        Log.d("SAVED3", json)
     }
 
     private fun loadData(){
         val sharedPreferences = activity?.getSharedPreferences("shared preferences", MODE_PRIVATE)
         val gson = Gson()
         val json = sharedPreferences?.getString("shop list", null)
-        val type: Type = object : TypeToken<ArrayList<Shop>>() {}.type
+        val type: Type = object : TypeToken<ArrayList<String>>() {}.type
         if (json != null){
-            shops = gson.fromJson(json, type)
+            viewedShops = gson.fromJson(json, type)
         }
-        Log.d("SAVED1", shops.toString())
+    }
+
+    private fun addShops(shopList: ArrayList<String>){
+        firebaseViewModel.getShop(shopList)
+
+        firebaseViewModel.lastSeenShops.observe(viewLifecycleOwner, {
+            this@HomeFragment.shops.clear()
+            this@HomeFragment.shops.addAll(it)
+            pb_loading_shops.isVisible = false
+            shopAdapter.notifyDataSetChanged()
+        })
+
     }
 }

@@ -1,24 +1,17 @@
 package com.example.gelderlandplein.ui.search
 
-import android.content.ContentValues.TAG
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.SearchView
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.gelderlandplein.R
 import com.example.gelderlandplein.adapters.ShopAdapter
 import com.example.gelderlandplein.models.Shop
 import com.example.gelderlandplein.viewmodel.FirebaseViewModel
 //import com.example.gelderlandplein.viewmodel.ShopViewModel
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
@@ -110,7 +103,7 @@ class SearchListFragment : Fragment() {
 
     private fun goToShopDetail(shop: Shop) {
         firebaseViewModel.sendDetailShop(shop)
-        firebaseViewModel.sendLastViewed(shop)
+        firebaseViewModel.sendLastViewed(shop.name)
         //shopViewModel.insertShop(shop)
         findNavController().navigate(R.id.action_SearchFragment_to_shopDetailFragment)
     }
