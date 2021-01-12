@@ -33,7 +33,7 @@ class FirebaseRepository {
         _arts
     }
 
-    fun getAllShops() {
+    private fun getAllShops() {
         if (_shops.value == null) {
             FirebaseDatabase.getInstance().reference.child("shops")
                 .addValueEventListener(object : ValueEventListener {
@@ -97,7 +97,7 @@ class FirebaseRepository {
         }
     }
 
-    fun getAllEvents() {
+    private fun getAllEvents() {
         if (_events.value == null) {
             FirebaseDatabase.getInstance().reference.child("events")
                 .addValueEventListener(object : ValueEventListener {
@@ -134,7 +134,7 @@ class FirebaseRepository {
         }
     }
 
-    fun getAllArts() {
+    private fun getAllArts() {
         if (_arts.value == null) {
             FirebaseDatabase.getInstance().reference.child("arts")
                 .addValueEventListener(object : ValueEventListener {
