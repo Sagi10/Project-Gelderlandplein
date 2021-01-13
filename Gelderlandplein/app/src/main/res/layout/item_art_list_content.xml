@@ -41,22 +41,16 @@
                 android:id="@+id/tv_art_title"
                 android:layout_width="186dp"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:singleLine="true"
                 android:text="@string/art_titel"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                style="@style/tvArtItemTitle"/>
 
             <TextView
                 android:id="@+id/tv_art_beschrijving"
                 android:layout_width="195dp"
                 android:layout_height="90dp"
-                android:ellipsize="end"
-                android:maxLines="4"
-                android:minLines="4"
-                android:paddingEnd="20dp"
+                style="@style/tvArtItemBeschrijving"
                 android:text="Beschrijving komt hier"
-                android:textSize="18sp" />
+                />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

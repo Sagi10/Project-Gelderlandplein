@@ -9,20 +9,18 @@ import com.example.gelderlandplein.models.Shop
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_shop_carousel_content.view.*
 
-class HomeShopAdapter(private val shops: List<Shop>, private val onClick: OnShopsEventClickListener) : RecyclerView.Adapter<HomeShopAdapter.ViewHolder>() {
+class HomeShopAdapter(private val shops: List<Shop>, private val onClick: (Shop) -> Unit) : RecyclerView.Adapter<HomeShopAdapter.ViewHolder>() {
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        fun databind(shop: Shop, action: OnShopsEventClickListener){
-            Picasso.get().load(shop.image).into(itemView.iv_shop_logo)
-
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+        init {
             itemView.setOnClickListener {
-                action.onShopsCardViewClick(shop, adapterPosition)
+                onClick(shops[adapterPosition])
             }
         }
-    }
 
-    interface OnShopsEventClickListener {
-        fun onShopsCardViewClick(shop: Shop, position: Int)
+        fun databind(shop: Shop){
+            Picasso.get().load(shop.image).into(itemView.iv_shop_logo)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -30,7 +28,7 @@ class HomeShopAdapter(private val shops: List<Shop>, private val onClick: OnShop
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.databind(shops[position], onClick)
+        holder.databind(shops[position])
     }
 
     override fun getItemCount(): Int {

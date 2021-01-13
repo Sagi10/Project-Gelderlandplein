@@ -1,11 +1,6 @@
 package com.example.gelderlandplein.ui.home
 
-import android.app.SearchManager
-import android.content.Context
 import android.os.Bundle
-import android.view.*
-import android.widget.SearchView
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +8,6 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.example.gelderlandplein.R
@@ -23,30 +17,24 @@ import com.example.gelderlandplein.models.Event
 import com.example.gelderlandplein.models.Shop
 import com.example.gelderlandplein.viewmodel.FirebaseViewModel
 import kotlinx.android.synthetic.main.fragment_art_list.*
-import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_items_overview_carousel.*
 import kotlinx.android.synthetic.main.fragment_search_list.*
 
-class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
-    HomeShopAdapter.OnShopsEventClickListener, HomeArtAdapter.OnArtCardViewClickListener {
+class HomeFragment : Fragment(){
 
     private val events = arrayListOf<Event>()
-    private val eventAdapter = HomeEventAdapter(events, this)
+    private val eventAdapter = HomeEventAdapter(events, ::goEventToDetail)
 
     private val arts = arrayListOf<Art>()
-    private val artAdapter = HomeArtAdapter(arts, this)
+    private val artAdapter = HomeArtAdapter(arts, ::goToArtDetail)
 
     private val shops = arrayListOf<Shop>()
-    private val shopAdapter = HomeShopAdapter(shops, this)
+    private val shopAdapter = HomeShopAdapter(shops, ::goToShopDetail)
 
     private val firebaseViewModel : FirebaseViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        firebaseViewModel.getAllShops()
-        firebaseViewModel.getAllEvents()
-        firebaseViewModel.getAllArts()
     }
 
     override fun onCreateView(
@@ -54,37 +42,29 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        observeEvents()
+        observeArts()
+        observeShops()
         return inflater.inflate(R.layout.fragment_home, container, false)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initViews()
+    }
 
-        val searchView = sv_home
-        searchView.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_SearchFragment)
-        }
-
+    private fun initViews(){
         if (shops.isNotEmpty() || events.isNotEmpty() || arts.isNotEmpty()){
             pb_loading_shops.isVisible = false
             pb_loading_events.isVisible = false
             pb_loading_arts.isVisible = false
         }
-
         rv_events_carousel.adapter = eventAdapter
         rv_arts_carousel.adapter = artAdapter
         rv_shops_carousel.adapter = shopAdapter
-
-        observeEvents()
-        observeArts()
-        observeShops()
         setAllButtonOnClickListeners()
     }
-
+    
     private fun setAllButtonOnClickListeners(){
         btn_show_all_shops.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_SearchFragment)
@@ -125,17 +105,6 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
         })
     }
 
-    override fun onEventCardViewClick(dummyEvent: Event, position: Int) {
-        goEventToDetail(dummyEvent)
-    }
-
-    override fun onShopsCardViewClick(shop: Shop, position: Int) {
-        goToShopDetail(shop)
-    }
-
-    override fun onArtCardViewClick(art: Art, position: Int) {
-        goToArtDetail(art)
-    }
 
     private fun goEventToDetail(event: Event) {
         firebaseViewModel.sendDetailEvent(event)

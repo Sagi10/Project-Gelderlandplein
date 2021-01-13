@@ -36,8 +36,6 @@ class SearchListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        firebaseViewModel.getAllShops()
-
         setHasOptionsMenu(true)
 
         if (shops.isNotEmpty()) {
@@ -50,6 +48,7 @@ class SearchListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        observeShopsList()
         return inflater.inflate(R.layout.fragment_search_list, container, false)
     }
 
@@ -57,7 +56,6 @@ class SearchListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         rv_search_list.adapter = shopsAdapter
 
-        observeShopsList()
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {

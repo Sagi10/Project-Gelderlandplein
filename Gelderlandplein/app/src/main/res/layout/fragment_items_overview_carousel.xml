@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".ui.search.SearchListFragment">
 
     <ScrollView
@@ -19,7 +19,7 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <ProgressBar
                     android:id="@+id/pb_loading_shops"
@@ -46,8 +46,8 @@
                             android:layout_margin="4dp"
                             android:layout_weight="1"
                             android:text="@string/shops"
-                            android:textSize="24sp"
-                            android:textStyle="bold" />
+                            style="@style/tvHomeTitleForRv"
+                             />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_show_all_shops"
@@ -75,7 +75,7 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <ProgressBar
                     android:id="@+id/pb_loading_events"
@@ -102,8 +102,8 @@
                             android:layout_margin="4dp"
                             android:layout_weight="1"
                             android:text="@string/titel_events"
-                            android:textSize="24sp"
-                            android:textStyle="bold" />
+                            style="@style/tvHomeTitleForRv"
+                             />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_show_all_events"
@@ -130,7 +130,7 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <ProgressBar
                     android:id="@+id/pb_loading_arts"
@@ -157,8 +157,8 @@
                             android:layout_margin="4dp"
                             android:layout_weight="1"
                             android:text="@string/titel_arts"
-                            android:textSize="24sp"
-                            android:textStyle="bold" />
+                            style="@style/tvHomeTitleForRv"
+                            />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_show_all_arts"

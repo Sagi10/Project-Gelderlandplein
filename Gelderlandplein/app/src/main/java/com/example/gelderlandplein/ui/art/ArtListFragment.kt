@@ -24,8 +24,6 @@ class ArtFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        firebaseViewModel.getAllArts()
-
         if (arts.isNotEmpty()) {
             pb_loading_art.isVisible = false
         }
@@ -36,6 +34,7 @@ class ArtFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        observeArts()
         return inflater.inflate(R.layout.fragment_art_list, container, false)
     }
 
@@ -43,7 +42,6 @@ class ArtFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         rv_arts_list.adapter = artAdapter
-        observeArts()
     }
 
     private fun observeArts() {
