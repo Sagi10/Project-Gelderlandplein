@@ -28,8 +28,6 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         toolbar.isVisible = false
         toolbar.title = ""
-
-
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         navController = findNavController(R.id.fragment)
         supportActionBar?.setDisplayShowHomeEnabled(true);

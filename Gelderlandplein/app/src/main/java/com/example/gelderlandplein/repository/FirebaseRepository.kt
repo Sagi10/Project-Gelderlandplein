@@ -135,6 +135,7 @@ class FirebaseRepository {
     }
 
     private fun getAllArts() {
+
         if (_arts.value == null) {
             FirebaseDatabase.getInstance().reference.child("arts")
                 .addValueEventListener(object : ValueEventListener {

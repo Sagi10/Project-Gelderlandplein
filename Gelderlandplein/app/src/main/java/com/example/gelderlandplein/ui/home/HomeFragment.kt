@@ -20,17 +20,16 @@ import kotlinx.android.synthetic.main.fragment_art_list.*
 import kotlinx.android.synthetic.main.fragment_items_overview_carousel.*
 import kotlinx.android.synthetic.main.fragment_search_list.*
 
-class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
-    HomeShopAdapter.OnShopsEventClickListener, HomeArtAdapter.OnArtCardViewClickListener {
+class HomeFragment : Fragment(){
 
     private val events = arrayListOf<Event>()
-    private val eventAdapter = HomeEventAdapter(events, this)
+    private val eventAdapter = HomeEventAdapter(events, ::goEventToDetail)
 
     private val arts = arrayListOf<Art>()
-    private val artAdapter = HomeArtAdapter(arts, this)
+    private val artAdapter = HomeArtAdapter(arts, ::goToArtDetail)
 
     private val shops = arrayListOf<Shop>()
-    private val shopAdapter = HomeShopAdapter(shops, this)
+    private val shopAdapter = HomeShopAdapter(shops, ::goToShopDetail)
 
     private val firebaseViewModel : FirebaseViewModel by activityViewModels()
 
@@ -106,17 +105,6 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
         })
     }
 
-    override fun onEventCardViewClick(dummyEvent: Event, position: Int) {
-        goEventToDetail(dummyEvent)
-    }
-
-    override fun onShopsCardViewClick(shop: Shop, position: Int) {
-        goToShopDetail(shop)
-    }
-
-    override fun onArtCardViewClick(art: Art, position: Int) {
-        goToArtDetail(art)
-    }
 
     private fun goEventToDetail(event: Event) {
         firebaseViewModel.sendDetailEvent(event)
