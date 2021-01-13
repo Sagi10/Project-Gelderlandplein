@@ -1,8 +1,12 @@
 package com.example.gelderlandplein.ui
 
 import android.annotation.SuppressLint
+import android.app.SearchManager
+import android.content.ComponentName
+import android.content.Context
 import android.os.Bundle
 import android.view.Menu
+import android.widget.Button
 import android.view.View
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
@@ -12,8 +16,13 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.gelderlandplein.R
+import com.example.gelderlandplein.ui.search.SearchListFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_home.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -44,7 +53,7 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun switchMenu(menu: Menu) {
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            val unit = when (destination.id) {
+            when (destination.id) {
                 in arrayOf(R.id.homeFragment) -> {
                     toolbar.isVisible = false
                 }

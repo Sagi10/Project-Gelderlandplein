@@ -62,6 +62,7 @@ class SearchListFragment : Fragment() {
         val searchMenuItem = menu.findItem(R.id.btSearch)
         val toolbarTitle = menu.findItem(R.id.toolbar_title)
         val btnSearch = searchMenuItem.actionView as SearchView
+        btnSearch.isIconified = false
 
         btnSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
