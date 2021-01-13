@@ -1,6 +1,11 @@
 package com.example.gelderlandplein.ui.home
 
+import android.app.SearchManager
+import android.content.Context
 import android.os.Bundle
+import android.view.*
+import android.widget.SearchView
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +13,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.example.gelderlandplein.R
@@ -17,6 +23,7 @@ import com.example.gelderlandplein.models.Event
 import com.example.gelderlandplein.models.Shop
 import com.example.gelderlandplein.viewmodel.FirebaseViewModel
 import kotlinx.android.synthetic.main.fragment_art_list.*
+import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_items_overview_carousel.*
 import kotlinx.android.synthetic.main.fragment_search_list.*
 
@@ -50,8 +57,17 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val searchView = sv_home
+        searchView.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_SearchFragment)
+        }
 
         if (shops.isNotEmpty() || events.isNotEmpty() || arts.isNotEmpty()){
             pb_loading_shops.isVisible = false
@@ -68,7 +84,7 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
         observeShops()
         setAllButtonOnClickListeners()
     }
-    
+
     private fun setAllButtonOnClickListeners(){
         btn_show_all_shops.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_SearchFragment)
