@@ -135,6 +135,9 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
         if (viewedShops.size > maxSize) {
             viewedShops.remove(viewedShops.first())
         }
+        Log.d("ARRAY", viewedShops.toString())
+        viewedShops.reverse()
+        Log.d("ARRAY", viewedShops.toString())
         val json = gson.toJson(viewedShops)
         editor?.putString("shop list", json)
         editor?.apply()
@@ -156,6 +159,7 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
         firebaseViewModel.lastSeenShops.observe(viewLifecycleOwner, {
             this@HomeFragment.shops.clear()
             this@HomeFragment.shops.addAll(it)
+            shops.reverse()
             pb_loading_shops.isVisible = false
             shopAdapter.notifyDataSetChanged()
         })
