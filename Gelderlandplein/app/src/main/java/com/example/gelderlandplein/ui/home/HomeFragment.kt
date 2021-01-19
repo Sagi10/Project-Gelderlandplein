@@ -52,7 +52,6 @@ class HomeFragment : Fragment(){
         observeEvents()
         observeArts()
         observeShops()
-        addShops()
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
@@ -67,6 +66,7 @@ class HomeFragment : Fragment(){
             pb_loading_events.isVisible = false
             pb_loading_arts.isVisible = false
         }
+        addShops()
         rv_events_carousel.adapter = eventAdapter
         rv_arts_carousel.adapter = artAdapter
         rv_shops_carousel.adapter = shopAdapter
@@ -104,17 +104,22 @@ class HomeFragment : Fragment(){
         })
     }
 
-    private fun observeShops() {
-//        firebaseViewModel.shops.observe(viewLifecycleOwner, {
-//            this@HomeFragment.shops.addAll(it)
-//            pb_loading_shops.isVisible = false
-//            btn_show_all_shops.isVisible = true
-//            shopAdapter.notifyDataSetChanged()
-//        })
-        firebaseViewModel.viewedShop.observe(viewLifecycleOwner, {
-            this@HomeFragment.viewedShops.add(it)
+    private fun observeShops(){
+        firebaseViewModel.sendShopList(viewedShops)
+
+        firebaseViewModel.lastSeenShops.observe(viewLifecycleOwner, {
+            this@HomeFragment.shops.clear()
+            this@HomeFragment.shops.addAll(it)
+            shops.reverse()
             pb_loading_shops.isVisible = false
             btn_show_all_shops.isVisible = true
+            shopAdapter.notifyDataSetChanged()
+        })
+    }
+
+    private fun addShops() {
+        firebaseViewModel.viewedShop.observe(viewLifecycleOwner, {
+            this@HomeFragment.viewedShops.add(it)
             saveData()
         })
     }
@@ -145,7 +150,6 @@ class HomeFragment : Fragment(){
             viewedShops.remove(viewedShops.first())
         }
         viewedShops.reverse()
-        firebaseViewModel.sendShopList(viewedShops)
         val json = gson.toJson(viewedShops)
         editor?.putString("shop list", json)
         editor?.apply()
@@ -161,14 +165,5 @@ class HomeFragment : Fragment(){
         }
     }
 
-    private fun addShops(){
-        firebaseViewModel.lastSeenShops.observe(viewLifecycleOwner, {
-            this@HomeFragment.shops.clear()
-            this@HomeFragment.shops.addAll(it)
-            shops.reverse()
-            pb_loading_shops.isVisible = false
-            btn_show_all_shops.isVisible = true
-            shopAdapter.notifyDataSetChanged()
-        })
-    }
+
 }
