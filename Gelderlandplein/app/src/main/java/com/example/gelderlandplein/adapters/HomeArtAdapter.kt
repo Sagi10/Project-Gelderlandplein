@@ -10,20 +10,20 @@ import com.example.gelderlandplein.models.Event
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_art_carousel_content.view.*
 
-class HomeArtAdapter(private val arts: List<Art>,private val onClick: OnArtCardViewClickListener) : RecyclerView.Adapter<HomeArtAdapter.ViewHolder>(){
+class HomeArtAdapter(private val arts: List<Art>, private val onClick: (Art) -> Unit) : RecyclerView.Adapter<HomeArtAdapter.ViewHolder>(){
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        fun dataBind(art: Art, action: OnArtCardViewClickListener){
-            Picasso.get().load(art.image).into(itemView.iv_item_art)
-            itemView.tv_item_art_title.text = art.name
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+
+        init {
             itemView.setOnClickListener {
-                action.onArtCardViewClick(art, adapterPosition)
+                onClick(arts[adapterPosition])
             }
         }
-    }
 
-    interface OnArtCardViewClickListener {
-        fun onArtCardViewClick(art: Art, position: Int)
+        fun dataBind(art: Art){
+            Picasso.get().load(art.image).into(itemView.iv_item_art)
+            itemView.tv_item_art_title.text = art.name
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -31,7 +31,7 @@ class HomeArtAdapter(private val arts: List<Art>,private val onClick: OnArtCardV
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.dataBind(arts[position], onClick)
+        holder.dataBind(arts[position])
     }
 
     override fun getItemCount(): Int {

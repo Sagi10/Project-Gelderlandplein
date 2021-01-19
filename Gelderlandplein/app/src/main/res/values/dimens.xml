@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="navigation_bar_height">58dp</dimen>
+    <dimen name="android_spacing_24">24dp</dimen>
+    <dimen name="android_spacing_16">16dp</dimen>
+    <dimen name="android_spacing_8">8dp</dimen>
+</resources>

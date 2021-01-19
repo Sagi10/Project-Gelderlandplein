@@ -9,13 +9,13 @@
     <include
         layout="@layout/fragment_items_overview_carousel"
         android:layout_width="match_parent"
-        android:layout_height="527dp"
+        android:layout_marginTop="160dp"
+        android:layout_height="match_parent"
         android:theme="@style/ThemeOverlay.AppCompat.Light"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_background" />
-
 
     <View
         android:id="@+id/logo_background"
@@ -39,7 +39,9 @@
 
     <View
         android:id="@+id/sv_home"
-        android:layout_width="360dp"
+        android:layout_width="match_parent"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
         android:layout_height="50dp"
         android:background="@drawable/searchview_rounded"
         android:queryHint="@string/search_hint"

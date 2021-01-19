@@ -1,27 +1,16 @@
 package com.example.gelderlandplein.ui.search
 
-import android.content.ContentValues.TAG
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.SearchView
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.gelderlandplein.R
 import com.example.gelderlandplein.adapters.ShopAdapter
 import com.example.gelderlandplein.models.Shop
 import com.example.gelderlandplein.viewmodel.FirebaseViewModel
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_search_list.*
 import java.util.*
@@ -36,8 +25,6 @@ class SearchListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        firebaseViewModel.getAllShops()
-
         setHasOptionsMenu(true)
 
         if (shops.isNotEmpty()) {
@@ -46,10 +33,11 @@ class SearchListFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        observeShopsList()
         return inflater.inflate(R.layout.fragment_search_list, container, false)
     }
 
@@ -57,7 +45,6 @@ class SearchListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         rv_search_list.adapter = shopsAdapter
 
-        observeShopsList()
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
@@ -89,7 +76,7 @@ class SearchListFragment : Fragment() {
             val inventorySearch = shop.inventory.toString().trim().toLowerCase(Locale.ROOT)
 
             if (nameSearch.contains(filterQuery) || tagSearch.contains(filterQuery)
-                || inventorySearch.contains(filterQuery)
+                    || inventorySearch.contains(filterQuery)
             ) {
                 filterdShops.add(shop)
             }
@@ -109,6 +96,7 @@ class SearchListFragment : Fragment() {
 
     private fun goToShopDetail(shop: Shop) {
         firebaseViewModel.sendDetailShop(shop)
+        firebaseViewModel.sendLastViewed(shop.name)
         findNavController().navigate(R.id.action_SearchFragment_to_shopDetailFragment)
     }
 }

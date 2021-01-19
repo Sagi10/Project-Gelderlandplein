@@ -1,19 +1,15 @@
 package com.example.gelderlandplein.ui.home
 
-import android.app.SearchManager
-import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
-import android.view.*
-import android.widget.SearchView
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.example.gelderlandplein.R
@@ -21,32 +17,31 @@ import com.example.gelderlandplein.adapters.*
 import com.example.gelderlandplein.models.Art
 import com.example.gelderlandplein.models.Event
 import com.example.gelderlandplein.models.Shop
+import com.example.gelderlandplein.repository.FirebaseRepository
 import com.example.gelderlandplein.viewmodel.FirebaseViewModel
-import kotlinx.android.synthetic.main.fragment_art_list.*
-import kotlinx.android.synthetic.main.fragment_home.*
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.fragment_items_overview_carousel.*
-import kotlinx.android.synthetic.main.fragment_search_list.*
+import java.lang.reflect.Type
 
-class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
-    HomeShopAdapter.OnShopsEventClickListener, HomeArtAdapter.OnArtCardViewClickListener {
+class HomeFragment : Fragment(){
 
     private val events = arrayListOf<Event>()
-    private val eventAdapter = HomeEventAdapter(events, this)
+    private val eventAdapter = HomeEventAdapter(events, ::goEventToDetail)
 
     private val arts = arrayListOf<Art>()
-    private val artAdapter = HomeArtAdapter(arts, this)
+    private val artAdapter = HomeArtAdapter(arts, ::goToArtDetail)
 
     private val shops = arrayListOf<Shop>()
-    private val shopAdapter = HomeShopAdapter(shops, this)
+    private val shopAdapter = HomeShopAdapter(shops, ::goToShopDetail)
+
+    private var viewedShops = arrayListOf<String>()
 
     private val firebaseViewModel : FirebaseViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        firebaseViewModel.getAllShops()
-        firebaseViewModel.getAllEvents()
-        firebaseViewModel.getAllArts()
+        loadData()
     }
 
     override fun onCreateView(
@@ -54,34 +49,27 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        observeEvents()
+        observeArts()
+        observeShops()
         return inflater.inflate(R.layout.fragment_home, container, false)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initViews()
+    }
 
-        val searchView = sv_home
-        searchView.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_SearchFragment)
-        }
-
+    private fun initViews(){
         if (shops.isNotEmpty() || events.isNotEmpty() || arts.isNotEmpty()){
             pb_loading_shops.isVisible = false
             pb_loading_events.isVisible = false
             pb_loading_arts.isVisible = false
         }
-
+        addShops()
         rv_events_carousel.adapter = eventAdapter
         rv_arts_carousel.adapter = artAdapter
         rv_shops_carousel.adapter = shopAdapter
-
-        observeEvents()
-        observeArts()
-        observeShops()
         setAllButtonOnClickListeners()
     }
 
@@ -116,26 +104,26 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
         })
     }
 
-    private fun observeShops() {
-        firebaseViewModel.shops.observe(viewLifecycleOwner, {
+    private fun observeShops(){
+        firebaseViewModel.sendShopList(viewedShops)
+
+        firebaseViewModel.lastSeenShops.observe(viewLifecycleOwner, {
+            this@HomeFragment.shops.clear()
             this@HomeFragment.shops.addAll(it)
+            shops.reverse()
             pb_loading_shops.isVisible = false
             btn_show_all_shops.isVisible = true
             shopAdapter.notifyDataSetChanged()
         })
     }
 
-    override fun onEventCardViewClick(dummyEvent: Event, position: Int) {
-        goEventToDetail(dummyEvent)
+    private fun addShops() {
+        firebaseViewModel.viewedShop.observe(viewLifecycleOwner, {
+            this@HomeFragment.viewedShops.add(it)
+            saveData()
+        })
     }
 
-    override fun onShopsCardViewClick(shop: Shop, position: Int) {
-        goToShopDetail(shop)
-    }
-
-    override fun onArtCardViewClick(art: Art, position: Int) {
-        goToArtDetail(art)
-    }
 
     private fun goEventToDetail(event: Event) {
         firebaseViewModel.sendDetailEvent(event)
@@ -151,4 +139,31 @@ class HomeFragment : Fragment(), HomeEventAdapter.OnEventCardViewClickListener,
         firebaseViewModel.sendDetailShop(shop)
         findNavController().navigate(R.id.action_homeFragment_to_shopDetailFragment)
     }
+
+    private fun saveData(){
+        val maxSize = 5
+
+        val sharedPreferences = activity?.getSharedPreferences("shared preferences", MODE_PRIVATE)
+        val editor = sharedPreferences?.edit()
+        val gson = Gson()
+        if (viewedShops.size > maxSize) {
+            viewedShops.remove(viewedShops.first())
+        }
+        viewedShops.reverse()
+        val json = gson.toJson(viewedShops)
+        editor?.putString("shop list", json)
+        editor?.apply()
+    }
+
+    private fun loadData(){
+        val sharedPreferences = activity?.getSharedPreferences("shared preferences", MODE_PRIVATE)
+        val gson = Gson()
+        val json = sharedPreferences?.getString("shop list", null)
+        val type: Type = object : TypeToken<ArrayList<String>>() {}.type
+        if (json != null){
+            viewedShops = gson.fromJson(json, type)
+        }
+    }
+
+
 }

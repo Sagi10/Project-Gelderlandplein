@@ -18,25 +18,15 @@
 
     <TextView
         android:id="@+id/tv_shop_name_detail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:fontFamily="@font/roboto"
+        style="@style/tvShopDetailTitle"
         android:text="@string/shop_name"
-        android:textColor="#000000"
-        android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@+id/iv_shop_detail"
         app:layout_constraintTop_toTopOf="@+id/iv_shop_detail" />
 
     <TextView
         android:id="@+id/tv_shop_address"
-        android:layout_width="173dp"
-        android:layout_height="54dp"
-        android:layout_marginTop="10dp"
-        android:fontFamily="@font/roboto"
+        style="@style/tvShopDetailAddress"
         android:text="@string/example_adres"
-        android:textColor="#000000"
-        android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="@+id/iv_shop_detail"
         app:layout_constraintStart_toStartOf="@+id/tv_shop_name_detail"
         app:layout_constraintTop_toBottomOf="@+id/tv_shop_name_detail" />
