@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="160dp"
     app:cardCornerRadius="8dp"
     app:cardElevation="4dp"
-    app:cardUseCompatPadding="true"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    app:cardUseCompatPadding="true">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,15 +30,8 @@
 
         <TextView
             android:id="@+id/tv_event_title"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:ellipsize="end"
-            android:paddingEnd="55dp"
-            android:singleLine="true"
+            style="@style/tvEventListItemTitle"
             android:text="Event titel"
-            android:textSize="24sp"
-            android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@id/iv_event"
             app:layout_constraintTop_toTopOf="@id/iv_event" />
 
@@ -55,15 +47,8 @@
 
         <TextView
             android:id="@+id/tv_event_beschrijving"
-            android:layout_width="240dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="5dp"
-            android:ellipsize="end"
-            android:maxLines="4"
-            android:minLines="4"
-            android:paddingEnd="55dp"
+            style="@style/tvEventListItemBeschrijving"
             android:text="Hier komt de beschrijving"
-            android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@id/tv_event_extrainfo"
             app:layout_constraintTop_toBottomOf="@id/tv_event_extrainfo" />
     </androidx.constraintlayout.widget.ConstraintLayout>

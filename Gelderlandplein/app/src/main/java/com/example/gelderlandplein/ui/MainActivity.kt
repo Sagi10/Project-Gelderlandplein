@@ -2,9 +2,12 @@ package com.example.gelderlandplein.ui
 
 import android.annotation.SuppressLint
 import android.app.SearchManager
+import android.content.ComponentName
 import android.content.Context
 import android.os.Bundle
 import android.view.Menu
+import android.widget.Button
+import android.view.View
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -13,11 +16,14 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.gelderlandplein.R
+import com.example.gelderlandplein.ui.search.SearchListFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_home.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,8 +37,6 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         toolbar.isVisible = false
         toolbar.title = ""
-
-
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         navController = findNavController(R.id.fragment)
         supportActionBar?.setDisplayShowHomeEnabled(true);
@@ -54,16 +58,25 @@ class MainActivity : AppCompatActivity() {
                     toolbar.isVisible = false
                 }
                 in arrayOf(R.id.SearchFragment) -> {
-                    toolbar_title.text = ""
+                    toolbar_title.text = getString(R.string.search)
                     toolbar.isVisible = true
                     toolbar.menu.findItem(R.id.btSearch)?.isVisible = true
                     toolbar.menu.findItem(R.id.btn_start_nav)?.isVisible = false
                     toolbar.menu.findItem(R.id.btn_website)?.isVisible = false
                     supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
-                    val manager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
                     val searchItem = menu.findItem(R.id.btSearch)
                     val searchView = searchItem?.actionView as SearchView
+//                    searchView.isIconifiedByDefault = false    <--- makes searchbar expanded by default if needed
+
+                    searchView.setOnQueryTextFocusChangeListener { _ , hasFocus ->
+                        if (hasFocus) {
+                            toolbar_title.text = ""
+                        } else {
+                            toolbar_title.text = getString(R.string.search)
+                        }
+                    }
+
                 }
                 in arrayOf(R.id.shopDetailFragment) -> {
                     toolbar_title.text = ""
@@ -82,7 +95,7 @@ class MainActivity : AppCompatActivity() {
                     supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 }
                 in arrayOf(R.id.ArtOverviewFragment) -> {
-                    toolbar_title.text = "Art"
+                    toolbar_title.text = getString(R.string.art)
                     toolbar.isVisible = true
                     toolbar.menu.findItem(R.id.btSearch)?.isVisible = false
                     toolbar.menu.findItem(R.id.btn_start_nav)?.isVisible = false
@@ -90,7 +103,7 @@ class MainActivity : AppCompatActivity() {
                     supportActionBar?.setDisplayHomeAsUpEnabled(false)
                 }
                 in arrayOf(R.id.ArtDetailFragment) -> {
-                    toolbar_title.text = "Art"
+                    toolbar_title.text = getString(R.string.art)
                     toolbar.isVisible = true
                     toolbar.menu.findItem(R.id.btSearch)?.isVisible = false
                     toolbar.menu.findItem(R.id.btn_start_nav)?.isVisible = false
@@ -98,7 +111,7 @@ class MainActivity : AppCompatActivity() {
                     supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 }
                 in arrayOf(R.id.EventFragment) -> {
-                    toolbar_title.text = "News & Events"
+                    toolbar_title.text = getString(R.string.news_and_events)
                     toolbar.isVisible = true
                     toolbar.menu.findItem(R.id.btSearch)?.isVisible = false
                     toolbar.menu.findItem(R.id.btn_start_nav)?.isVisible = false
@@ -106,12 +119,15 @@ class MainActivity : AppCompatActivity() {
                     supportActionBar?.setDisplayHomeAsUpEnabled(false)
                 }
                 in arrayOf(R.id.eventDetailFragment) -> {
-                    toolbar_title.text = "News & Events"
+                    toolbar_title.text = getString(R.string.news_and_events)
                     toolbar.isVisible = true
                     toolbar.menu.findItem(R.id.btSearch)?.isVisible = false
                     toolbar.menu.findItem(R.id.btn_start_nav)?.isVisible = false
                     toolbar.menu.findItem(R.id.btn_website)?.isVisible = false
                     supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                }
+                else -> {
+                    toolbar.isVisible = false
                 }
             }
         }

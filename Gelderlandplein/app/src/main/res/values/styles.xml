@@ -11,4 +11,110 @@
         <item name="android:layout_height">0dp</item>
         <item name="android:background">@color/black</item>
     </style>
+
+    <style name="toolbarTitleStyle">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">28sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="tvHomeTitleForRv">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="tvArtTitle">
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="maxLines">1</item>
+        <item name="android:minLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="tvArtItemTitle">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:ellipsize">end</item>
+        <item name="singleLine">true</item>
+    </style>
+
+    <style name="tvArtItemBeschrijving">
+        <item name="android:textSize">18sp</item>
+        <item name="maxLines">4</item>
+        <item name="android:minLines">4</item>
+        <item name="paddingEnd">20dp</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="tvArtDetailItemArtistName">
+        <item name="android:textStyle">italic|bold</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:layout_marginTop">5dp</item>
+    </style>
+
+    <style name="tvEventCarouselItemTitle">
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:layout_marginEnd">10dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:layout_width">167dp</item>
+        <item name="android:layout_height">36dp</item>
+    </style>
+
+    <style name="tvItemCarouselEventInfo">
+        <item name="android:layout_width">59dp</item>
+        <item name="android:layout_height">88dp</item>
+        <item name="android:layout_marginStart">5dp</item>
+        <item name="android:layout_marginEnd">10dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:maxLines">4</item>
+        <item name="android:minLines">4</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="tvEventListItemTitle">
+        <item name="android:layout_width">240dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="paddingEnd">55dp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="tvEventListItemBeschrijving">
+        <item name="android:layout_width">240dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">4</item>
+        <item name="android:minLines">4</item>
+        <item name="paddingEnd">55dp</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="tvShopDetailTitle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">15dp</item>
+        <item name="fontFamily">@font/roboto</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="tvShopDetailAddress">
+        <item name="android:layout_width">173dp</item>
+        <item name="android:layout_height">54dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="fontFamily">@font/roboto</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+
 </resources>

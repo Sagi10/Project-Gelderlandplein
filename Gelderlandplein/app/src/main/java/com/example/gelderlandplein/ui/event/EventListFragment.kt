@@ -26,8 +26,6 @@ class EventFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        firebaseViewModel.getAllEvents()
-
         if (events.isNotEmpty()) {
             pb_loading_event.isVisible = false
         }
@@ -38,14 +36,13 @@ class EventFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        observeEvents()
         return inflater.inflate(R.layout.fragment_event_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         rv_events_list.adapter = eventAdapter
-
-        observeEvents()
     }
 
     private fun observeEvents() {
