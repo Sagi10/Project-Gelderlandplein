@@ -5,6 +5,7 @@ import android.app.SearchManager
 import android.content.ComponentName
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.view.Menu
 import android.widget.Button
 import android.view.View
@@ -18,9 +19,11 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.gelderlandplein.R
 import com.example.gelderlandplein.ui.search.SearchListFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.viniciusmo.keyboardvisibility.keyboard
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -71,11 +74,17 @@ class MainActivity : AppCompatActivity() {
                     val searchView = searchItem?.actionView as SearchView
 //                    searchView.isIconifiedByDefault = false    <--- makes searchbar expanded by default if needed
 
-                    searchView.setOnQueryTextFocusChangeListener { _ , hasFocus ->
-                        if (hasFocus) {
+                    keyboard{
+                        onOpened {
                             toolbar_title.text = ""
-                        } else {
-                            toolbar_title.text = getString(R.string.search)
+                        }
+                        onClosed {
+                            val handler = Handler()
+                            handler.postDelayed(Runnable {
+                                toolbar_title.text = getString(R.string.search)
+                                searchView.clearFocus()
+                                searchView.isIconified = true
+                            }, 50)
                         }
                     }
 
