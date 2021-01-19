@@ -19,6 +19,7 @@ class FirebaseRepository {
     private val _shops: MutableLiveData<ArrayList<Shop>> = MutableLiveData()
     private val _events: MutableLiveData<ArrayList<Event>> = MutableLiveData()
     private val _arts: MutableLiveData<ArrayList<Art>> = MutableLiveData()
+    private val _lastSeenShops: MutableLiveData<ArrayList<Shop>> = MutableLiveData()
 
     val shops: LiveData<ArrayList<Shop>> by lazy {
         getAllShops()
@@ -31,6 +32,10 @@ class FirebaseRepository {
     val arts: LiveData<ArrayList<Art>> by lazy {
         getAllArts()
         _arts
+    }
+    val lastSeenShops: LiveData<ArrayList<Shop>> by lazy {
+        getAllShops()
+        _lastSeenShops
     }
 
     private fun getAllShops() {
@@ -166,5 +171,69 @@ class FirebaseRepository {
                 })
         }
 
+    }
+
+    fun getLastSeenShops(shopNames: ArrayList<String>) {
+        FirebaseDatabase.getInstance().reference.child("shops")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val allShops = ArrayList<Shop>()
+
+                    if (snapshot.exists()) {
+                        for (currentShop: DataSnapshot in snapshot.children) {
+                            for (currentName in shopNames) {
+                                if (currentShop.child("name").value.toString() == currentName) {
+                                    val openingstijden = arrayListOf(
+                                        "Maandag: " + currentShop.child("openingstijden")
+                                            .child("maandag").value,
+                                        "Dinsdag: " + currentShop.child("openingstijden")
+                                            .child("dinsdag").value,
+                                        "Woensdag: " + currentShop.child("openingstijden")
+                                            .child("woensdag").value,
+                                        "Donderdag: " + currentShop.child("openingstijden")
+                                            .child("donderdag").value,
+                                        "Vrijdag: " + currentShop.child("openingstijden")
+                                            .child("vrijdag").value,
+                                        "Zaterdag: " + currentShop.child("openingstijden")
+                                            .child("zaterdag").value,
+                                        "Zondag: " + currentShop.child("openingstijden")
+                                            .child("zondag").value
+                                    )
+                                    val inventory = ArrayList<String>()
+                                    for (inventoryItem: DataSnapshot in currentShop.child("inventory").children) {
+                                        inventory.add(inventoryItem.value.toString())
+                                    }
+                                    try {
+                                        val shop = Shop(
+                                            currentShop.child("name").value.toString(),
+                                            currentShop.child("tag").value.toString(),
+                                            currentShop.child("logo").value.toString(),
+                                            openingstijden,
+                                            currentShop.child("latitude").value.toString()
+                                                .toDouble(),
+                                            currentShop.child("longitude").value.toString()
+                                                .toDouble(),
+                                            inventory,
+                                            currentShop.child("website").value.toString()
+                                        )
+                                        allShops.add(shop)
+
+                                    } catch (exception: Exception) {
+                                        Log.e(ContentValues.TAG, exception.toString())
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    _lastSeenShops.value = allShops
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.d(
+                        ContentValues.TAG,
+                        "Er gaat iets mis met het ophalen van de shops"
+                    )
+                }
+            })
     }
 }
