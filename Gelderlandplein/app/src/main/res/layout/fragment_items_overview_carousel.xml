@@ -41,13 +41,12 @@
 
                         <TextView
                             android:id="@+id/tv_titel_shops"
+                            style="@style/tvHomeTitleForRv"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_margin="4dp"
                             android:layout_weight="1"
-                            android:text="@string/shops"
-                            style="@style/tvHomeTitleForRv"
-                             />
+                            android:text="@string/last_seen_shops" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_show_all_shops"
